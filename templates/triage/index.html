@@ -1,0 +1,65 @@
+{% extends "layouts/timeline_layout.html" %}
+{% from "govuk_frontend_jinja/templates/components/button/macro.html" import govukButton %}
+{% set service_name = "Business Case Triage" %}
+{% set page_title = "Find the right Business Case process" %}
+
+{#
+## TODO: USE TO ADD backlinks, etc. before main content
+{% block before_content %}
+<a href="{{ url('index') }}" class="govuk-back-link">Back to home</a>
+{% endblock %}
+#}
+
+{% block main_content %}
+
+
+<h1 class="govuk-heading-l">
+  Find a business case template </h1>
+
+<h2 class="govuk-heading-m">Before you start</h2>
+
+<ul class="govuk-list govuk-list--bullet">
+  <li>There are different business case templates depending on your proposal. Whole life cost is the main factor in
+    determining what business case template you'll need and what approvals will apply. </li>
+  <li>Business cases should be a collaborative effort! Before you start drafting, you should involve your Finance
+    Business Partner and a Commercial colleague to let them know what you are doing. Depending on your proposal, you
+    may also need to engage and seek assurance from other Subject Matter Experts. </li>
+  <li>Plan enough time for assurance and approvals - depending on what you're asking for, the business case process
+    can take 12+ weeks. </li>
+</ul>
+
+<p class="govuk-body">If your proposal is over £2m and you're unsure which template to use, speak to your Finance
+  Business Partner or a
+  Commercial colleague first to identify the correct template. You can then come back to this service to access the
+  template. </p>
+
+<p class="govuk-body">For proposals under £2m, this service will help you find the right template. </p>
+
+<h2 class="govuk-heading-m">
+  What to expect using this service </h2>
+
+<p class="govuk-body">We will ask you a few questions, including: </p>
+
+<ul class="govuk-list govuk-list--bullet">
+
+  <li>the total value of your business case </li>
+
+  <li>whether the spend is part of an existing project or programme </li>
+
+  <li>whether it's novel, contentious, sets precedent or repercussive </li>
+
+</ul>
+
+<p class="govuk-body">Based on your answers, you'll understand which template you need, who to speak to in order to
+  start drafting your
+  business case and what approvals will apply. </p>
+
+{{ govukButton({
+"text": "Start",
+"href": url("triage:start")
+}) }}
+<p class="govuk-body">Find everything about business cases at MHCLG on the <a class="govuk-link"
+    href="{{external_links.project_delivery_hub}}" target="_blank" rel="noopener noreferrer">Project Delivery
+    Hub</a>
+</p>
+{% endblock %}

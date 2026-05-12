@@ -1,0 +1,103 @@
+{% extends "layouts/base_layout.html" %}
+{% from "govuk_frontend_jinja/templates/components/error-summary/macro.html" import govukErrorSummary %}
+{% from "govuk_frontend_jinja/templates/components/radios/macro.html" import govukRadios %}
+{% from "govuk_frontend_jinja/templates/components/checkboxes/macro.html" import govukCheckboxes %}
+{% from "govuk_frontend_jinja/templates/components/select/macro.html" import govukSelect %}
+{% from "govuk_frontend_jinja/templates/components/details/macro.html" import govukDetails %}
+{% from "govuk_frontend_jinja/templates/components/button/macro.html" import govukButton %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <form method="post" novalidate>
+      {{ csrf_field(request) }}
+
+      {% if error %}
+      {{ govukErrorSummary({
+      "titleText": "There is a problem",
+      "errorList": [{"text": error, "href": "#answer"}]
+      }) }}
+      {% endif %}
+
+      {# Build items list for radios and checkboxes #}
+      {% set items = [] %}
+      {% for value, label in question.choices %}
+      {% set _ = items.append({
+      "value": value,
+      "text": label,
+      "checked": selected == value
+      }) %}
+      {% endfor %}
+
+      {# Radios #}
+      {% if question.type == "radio" %}
+      {{ govukRadios({
+      "name": "answer",
+      "fieldset": {
+      "legend": {
+      "text": question.title,
+      "isPageHeading": true,
+      "classes": "govuk-fieldset__legend--l"
+      }
+      },
+      "errorMessage": {"text": error} if error else {},
+      "hint": {"html": question.hint} if question.hint else {},
+      "items": items
+      }) }}
+
+      {# Checkboxes #}
+      {% elif question.type == "checkbox" %}
+      {{ govukCheckboxes({
+      "name": "answer",
+      "fieldset": {
+      "legend": {
+      "text": question.title,
+      "isPageHeading": true,
+      "classes": "govuk-fieldset__legend--l"
+      }
+      },
+      "errorMessage": {"text": error} if error else {},
+      "hint": {"text": question.hint} if question.hint else {},
+      "items": items
+      }) }}
+
+      {# Select dropdown #}
+      {% elif question.type == "select" %}
+      {% set select_items = [{"value": "", "text": "Please select"}] %}
+      {% for value, label in question.choices %}
+      {% set _ = select_items.append({
+      "value": value,
+      "text": label,
+      "selected": selected == value
+      }) %}
+      {% endfor %}
+      {{ govukSelect({
+      "id": "answer",
+      "name": "answer",
+      "label": {
+      "text": question.title,
+      "isPageHeading": true,
+      "classes": "govuk-label--l"
+      },
+      "errorMessage": {"text": error} if error else {},
+      "hint": {"text": question.hint} if question.hint else {},
+      "items": select_items
+      }) }}
+
+      {% endif %}
+
+      {% if question.help_text %}
+      {{ govukDetails({
+      "summaryText": "Help with this question",
+      "html": "<p class='govuk-body'>" + question.help_text + "</p>"
+      }) }}
+      {% endif %}
+
+      {{ govukButton({"text": "Continue"}) }}
+
+    </form>
+
+  </div>
+</div>
+{% endblock %}
