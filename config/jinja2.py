@@ -23,16 +23,17 @@ def csrf_field(request):
 def environment(**options):
     options.pop("loader", None)
     options.pop("undefined", None)
+    options["autoescape"] = True
 
     env = Environment(
         loader=ChoiceLoader(
             [
-                # Your own templates
+                # Our own templates
                 FileSystemLoader(str(BASE_DIR / "templates")),
-                # For your imports: govuk_frontend_jinja/templates/components/...
+                # gov imports: govuk_frontend_jinja/templates/components/...
                 FileSystemLoader(str(GOVUK_SITE_PACKAGES)),
                 # For internal package imports: govuk_frontend_jinja/macros/...
-                # maps to templates/macros/... inside the package
+                # this maps to the templates/macros/... folder inside the package
                 FileSystemLoader(str(GOVUK_PACKAGE / "templates")),
             ]
         ),
