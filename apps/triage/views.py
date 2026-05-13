@@ -1,6 +1,6 @@
 from django.shortcuts import redirect, render
 from django.utils import timezone
-from django.http import JsonResponse
+from django.http import JsonResponse, Http404
 
 from .flow import (
     QUESTION_SLUGS,
@@ -95,7 +95,12 @@ def question(request, slug: str):
 
 
 def result(request, slug):
-    return render(request, f"triage/results/{slug}.html")
+    try:
+        return render(request, f"triage/results/{slug}.html")
+    except Exception as e:
+        print(f"RESULT ERROR for slug '{slug}': {type(e).__name__}: {e}")
+
+        raise Http404
 
 
 def debug_session(request):

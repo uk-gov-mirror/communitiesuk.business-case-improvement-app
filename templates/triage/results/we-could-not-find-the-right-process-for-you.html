@@ -1,0 +1,15 @@
+{% extends "layouts/base_layout.html" %}
+
+{% block content %}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+        <h1 class="govuk-heading-l">There has been an issue finding the right process</h1>
+
+        <p class='govuk-body'>Unfortunately we haven't been able to identify the right process for you</p>
+
+        <a href="{{ url('index') }}" class="govuk-button">Please try again</a>
+
+    </div>
+</div>
+{% endblock %}

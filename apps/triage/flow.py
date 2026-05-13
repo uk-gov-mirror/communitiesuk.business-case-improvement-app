@@ -181,6 +181,7 @@ ROUTING = {
         "total-value-of-business-case",
         "above-12k",
     ): "have-you-spoken-to-finance-business-partner",
+    ("new-project-or-programme", "*"): "where-is-the-budget-held",
     (
         "have-you-spoken-to-finance-business-partner",
         "yes",
@@ -265,7 +266,7 @@ def get_result_from_answers(answers: dict) -> str:
 
     # Exit 1
     if total_value == "below-12k" and new_project == "no":
-        return "you-dont-need-a-business-case"
+        return "you-do-not-need-a-business-case"
 
     # Exit 2
     elif total_value == "below-12k" and new_project == "yes":
@@ -286,3 +287,6 @@ def get_result_from_answers(answers: dict) -> str:
     # Exit 5b
     elif total_value == "above-12k" and less_than_2m == "no" and novel == "yes":
         return "you-need-to-start-a-full-business-case-novel-or-complex"
+
+    else:
+        return "we-could-not-find-the-right-process-for-you"
