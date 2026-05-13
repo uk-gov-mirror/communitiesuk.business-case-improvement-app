@@ -1,0 +1,35 @@
+[project]
+name = "business-case-improvement"
+version = "0.1.0"
+requires-python = ">=3.12"
+dependencies = [
+    "django>=5.0",
+    "jinja2>=3.1",
+    "markupsafe>=2.1",
+    "whitenoise>=6.7",
+    "gunicorn>=22.0",
+    "python-dotenv>=1.0",
+    "govuk-frontend-jinja>=4.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "ruff>=0.4",
+    "pytest>=8.0",
+    "pytest-django>=4.8",
+    "django-debug-toolbar>=4.4",
+     "django-browser-reload>=1.12",
+]
+
+[tool.ruff]
+target-version = "py312"
+line-length = 88
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W", "UP", "B", "SIM", "RUF", "DJ"]
+ignore = ["E501", "RUF012", "DJ012", "RUF005"]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "config.settings"
+testpaths = ["tests"]
+pythonpath = ["."]

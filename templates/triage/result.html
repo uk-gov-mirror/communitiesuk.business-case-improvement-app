@@ -1,0 +1,36 @@
+{% extends "layouts/govuk_base.html" %}
+{% from "components/macros.html" import govuk_button, govuk_tag %}
+{% set service_name = "Triage tool" %}
+{% set page_title = result.title %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <div class="govuk-panel govuk-panel--confirmation">
+      <h1 class="govuk-panel__title">{{ result.panel_title }}</h1>
+      <div class="govuk-panel__body">
+        {{ govuk_tag(result.tag_text, result.tag_colour) }}
+      </div>
+    </div>
+
+    <p class="govuk-body govuk-!-margin-top-6">{{ result.body }}</p>
+
+    <h2 class="govuk-heading-m">Next steps</h2>
+    <ol class="govuk-list govuk-list--number">
+      {% for step in result.next_steps %}
+        <li>{{ step }}</li>
+      {% endfor %}
+    </ol>
+
+    <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+
+    <p class="govuk-body">
+      <a class="govuk-link" href="{{ url('triage:start') }}">Start again</a>
+    </p>
+
+    {{ govuk_button("Back to home", href=url("index"), classes="govuk-button--secondary") }}
+
+  </div>
+</div>
+{% endblock %}

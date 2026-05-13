@@ -1,0 +1,99 @@
+{% extends "layouts/timeline_layout.html" %}
+{% from "govuk_frontend_jinja/templates/components/accordion/macro.html" import govukAccordion %}
+
+{% block main_content %}
+
+<h1 class="govuk-heading-l">
+    You don't need a business case. </h1>
+
+<p class='govuk-body'>Because the whole life cost is less than £12,000 and is not part of an existing project or
+    programme, a business
+    case isn’t required.   </p>
+
+<p class='govuk-body'>Depending on what you want to spend money on, you may still need to follow certain approval
+    processes. </p>
+
+<p class='govuk-body'>If your costs increase to over £12k (incl. VAT), you'll need to return to this service as your
+    result will
+    differ. </p>
+
+
+<h2 class="govuk-heading-m">
+    What to do next:</h2>
+
+<h3 class="govuk-heading-s">If you want to buy something of low value (between £1,000 and £12,000 incl VAT):</h3>
+<ul class="govuk-list govuk-list--bullet">
+    <li>You need to follow the Low Value Purchase process. This can require setting up a supplier on SAP and
+        gathering additional quotes from alternative suppliers.
+    </li>
+    <li>For guidance on the steps to do this, visit the <a class="govuk-link" href="{{external_links.p2p}}"
+            target="_blank" rel="noopener noreferrer">Finance Knowledge Centre</a>
+    </li>
+</ul>
+
+
+<h3 class="govuk-heading-s">If you want to procure consultancy and professional services (C&PS): </h3>
+<ul class="govuk-list govuk-list--bullet">
+    <li>If your spend is over £10,000 for C&PS, you may need to speak to the team. Further guidance and next steps can
+        be found on the intranet<a class="govuk-link" href="{{external_links.speakToTheTeam}}" target="_blank"
+            rel="noopener noreferrer"> here.</a>
+    </li>
+</ul>
+
+
+
+<h3 class="govuk-heading-s">If you want to hire someone:</h3>
+
+<ul class="govuk-list govuk-list--bullet">
+    <li>
+        People, Capabilities & Change can help you. Contact them <a class="govuk-link"
+            href="https://intranet.communities.gov.uk/find-teams/recruitment/" target="_blank"
+            rel="noopener noreferrer">
+            here</a>
+    </li>
+</ul>
+
+<h3 class="govuk-heading-s">If you need external legal advice:</h3>
+<ul class="govuk-list govuk-list--bullet">
+    <li>
+        You need to get agreement from <a class="govuk-link" href="{{external_links.governmentLegalDepartment}}"
+            target="_blank" rel="noopener noreferrer"> Government Legal Department (GLD) </a>. This is due to HM
+        Treasury
+        rules around legal spend that we have to follow as a department.</li>
+
+    <li>You should also contact your Finance Business Partner.</li>
+</ul>
+
+<h3 class="govuk-heading-s">If you need to commission research: </h3>
+
+<ul class="govuk-list govuk-list--bullet">
+    <li>Contact <a class="govuk-link" href="{{external_links.researchGateway}}" target="_blank"
+            rel="noopener noreferrer">Research Gateway</a>.</li>
+
+    <li>You will need to fill in a proposal if the commission research and evaluation work is over £9,999 (excl.
+        VAT).</li>
+
+    <li>You can find the template on the <a class="govuk-link" href="{{external_links.researchGateway}}" target="_blank"
+            rel="noopener noreferrer">Research Gateway
+            Intranet</a> in the section "Projects over £9,999"</li>
+</ul>
+
+<h3 class="govuk-heading-s">If this involves digital spend: </h3>
+<ul class="govuk-list govuk-list--bullet">
+    <li>Contact <a class="govuk-link" href="{{external_links.digitalFrontDoor}}" target="_blank"
+            rel="noopener noreferrer">Digital Front Door (DFD)</a>. They are
+        the starting point as they run spend controls on behalf of
+        Government Digital Service (GDS) and can advise whether you need further approvals, such as Pipeline Assurance
+        Board. </li>
+</ul>
+
+
+<p class='govuk-body'>Find everything about business cases at MHCLG on the <a class="govuk-link"
+        href="{{external_links.projectDeliveryHub}}" target="_blank" rel="noopener noreferrer">Project Delivery Hub</a>
+</p>
+
+<p class='govuk-body'><a class="govuk-link" href="{{external_links.feedbackSurvey}}"> What did you think of this
+        service? </a>(takes 30
+    seconds)</p>
+
+{% endblock %}
