@@ -8,7 +8,7 @@ from apps.triage.flow import (
     QUESTIONS,
 )
 
-# ── Question definitions ──────────────────────────────────────────────────────
+#  Question definitions
 
 
 def test_first_question_exists():
@@ -41,7 +41,7 @@ def test_all_question_slugs_are_unique():
     assert len(QUESTION_SLUGS) == len(set(QUESTION_SLUGS))
 
 
-# ── Routing ───────────────────────────────────────────────────────────────────
+#  Routing
 
 
 def test_routing_below_12k_continues_to_next_question():
@@ -82,7 +82,7 @@ def test_all_routing_rules_point_to_valid_questions_or_results():
         )
 
 
-# ── Result calculation ────────────────────────────────────────────────────────
+#  Result/Exit screen Routing
 
 
 def test_result_below_12k_not_part_of_programme():

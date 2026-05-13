@@ -17,7 +17,7 @@ def started_session(client):
     return client
 
 
-# ── Pages load ────────────────────────────────────────────────────────────────
+# Pages load
 
 
 def test_index_page_loads(client):
@@ -44,7 +44,7 @@ def test_invalid_question_slug_redirects(started_session, db):
     assert resp.status_code == 302
 
 
-# ── Validation ────────────────────────────────────────────────────────────────
+#  Validation
 
 
 def test_question_requires_answer(started_session, db):
@@ -66,7 +66,7 @@ def test_question_with_answer_redirects(started_session, db):
     assert resp.status_code == 302
 
 
-# ── Session / answer saving ───────────────────────────────────────────────────
+#  Session / answer saving
 
 
 def test_answers_are_saved_to_database(started_session, db):
@@ -117,7 +117,7 @@ def test_session_result_set_after_completion(client, db):
     assert session.result != ""
 
 
-# ── Result pages ──────────────────────────────────────────────────────────────
+#  Result pages
 
 
 def test_result_page_loads(client, db):
