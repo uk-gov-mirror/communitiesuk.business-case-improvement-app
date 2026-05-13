@@ -10,36 +10,39 @@
     <div class="govuk-grid-column-one-third">
         {% block timeline %}
         {% from "components/macros.html" import hmrcTimeline %}
+        <div class="timeline-compact">
 
-        {{ hmrcTimeline({
-        "headingLevel": "2",
-        "events": [
-        {
-        "title": "Identify the need for a business case"
-        },
-        {
-        "title": "Identify and engage with SMEs"
-        },
-        {
-        "title": "Agree the route to take"
-        },{
-        "title": "Start drafting",
-        "content": "<p class='govuk-body'>Allow approx. 2-3 weeks</p>"
-        },
-        {
-        "title":"SME co-authoring and assurance",
-        "content": "<p class='govuk-body'>Ongoing: allow up to 4 weeks</p>"
-        },
-        {
-        "title": "Approvals",
-        "content": "<p class='govuk-body'>Allow approx. 2-3 weeks</p>"
-        },{
-        "title": "Delivery"
-        },{
-        "title": "Evaluation"
-        }
-        ]
-        }) }}
+            {{ hmrcTimeline({
+            "headingLevel": "2",
+            "events": [
+            {
+            "title": "Identify the need for a business case"
+            },
+            {
+            "title": "Identify and engage with SMEs"
+            },
+            {
+            "title": "Agree the route to take"
+            },{
+            "title": "Start drafting",
+            "content": "<p class='govuk-body'>Allow approx. 2-3 weeks</p>"
+            },
+            {
+            "title":"SME co-authoring and assurance",
+            "content": "<p class='govuk-body'>Ongoing: allow up to 4 weeks</p>"
+            },
+            {
+            "title": "Approvals",
+            "content": "<p class='govuk-body'>Allow approx. 2-3 weeks</p>"
+            },{
+            "title": "Delivery"
+            },{
+            "title": "Evaluation"
+            }
+            ]
+            }) }}
+
+        </div>
 
         {% endblock %}
     </div>

@@ -45,6 +45,7 @@ def environment(**options):
             "get_messages": get_messages,
             "csrf_field": csrf_field,
             "external_links": external_links(None)["links"],
+            "Markup": Markup,
         }
     )
     return env

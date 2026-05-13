@@ -1,0 +1,250 @@
+{% extends "layouts/timeline_layout.html" %}
+{% from "govuk_frontend_jinja/templates/components/accordion/macro.html" import govukAccordion %}
+
+{% block main_content %}
+
+<h1 class="govuk-heading-l">You need to do a Business Justification Case (BJC)</h1>
+
+<p class='govuk-body'>Based on your answers, you need to complete a Business Justification Case (BJC) before any spend
+    can be approved.</p>
+
+<p class='govuk-body'>This is because your proposal:</p>
+<ol class="govuk-list govuk-list--number">
+    <li>is between £12,000 and £2 million, and</li>
+    <li>is not novel, repercussive or contentious</li>
+</ol>
+
+<p class='govuk-body'>Note: A Business Justification Case must relate to a single, standalone piece of spend. You should
+    not use a BJC to:
+</p>
+<ul class="govuk-list govuk-list--bullet">
+    <li>manage changes to an existing approved business case</li>
+    <li>handle scope or funding changes within an ongoing project or programme</li>
+</ul>
+
+<p class='govuk-body'>If your spend is part of a wider programme, you should speak with your Senior Responsible Officer.
+</p>
+
+<div class="govuk-inset-text">
+    There are specific templates for different business justification cases. Find the option below that best describes
+    your spend for the appropriate template and guidance on what to do next.
+</div>
+
+{{ govukAccordion({
+"id": "bjc-accordion",
+"items": [
+{
+"heading": {
+"html": "<h2 class='govuk-heading-m'>If you need to commission research</h2>"
+},
+"content": {
+"html": "<h3 class='govuk-heading-s'>What to do next:</h3>
+<ol class='govuk-list govuk-list--number'>
+    <li>Contact the <a class='govuk-link' href='" + external_links.research_gateway + "' target='_blank'
+            rel='noopener noreferrer'>Research Gateway</a> team. They will work with you to develop your research
+        business case.</li>
+</ol>
+<h3 class='govuk-heading-s'>What template and guidance do I need?</h3>
+<p class='govuk-body'>Download the Research Gateway business case template. Do not start drafting until you have engaged
+    the research
+    gateway team.</p>
+<p class='govuk-body'>You can find the template on the Research Gateway Intranet in the section \"Projects over £9,999\"
+</p>
+<ul class='govuk-list govuk-list--bullet'>
+    <li>Avoid using an old template from a previous business case or one given to you by a colleague.</li>
+</ul>
+<h3 class='govuk-heading-s'>Who will need to approve this first?</h3>
+<ul class='govuk-list govuk-list--bullet'>
+    <li>You'll need to attend the Research Review Gateway Board as and when instructed.</li>
+</ul>
+<h3 class='govuk-heading-s'>Additional approvals and steps you might need:</h3>
+<ul class='govuk-list govuk-list--bullet'>
+    <li>Speak to the Research Gateway team about this so you can plan your work effectively.</li>
+</ul>"
+}
+},
+{
+"heading": {
+"html": "<h2 class='govuk-heading-m'>If you need to spend money on contracted workers to fill a capacity gap</h2>"
+},
+"content": {
+"html": "<h3 class='govuk-heading-s'>What to do next:</h3>
+<ol class='govuk-list govuk-list--number'>
+    <li><b>Engage the right people:</b>
+        <ul class='govuk-list govuk-list--bullet'>
+            <li><a class='govuk-link' href='mailto:HRBusinessPartners@communities.gov.uk'>Contact the HR Business
+                    Partners team.</a> Explain your activity and your total requested amount. They will assign you a
+                corporate partner to develop your BJC and provide a recommendation to proceed.</li>
+            <li>Contact your Finance Business Partner (FBP). Explain your activity and your total requested amount. They
+                will check it is in budget and passes accounting officer tests. Note: if you work within the Digital
+                Directorate and spending money from Digital budget, you'll need to contact the Digital Corporate Office
+                at <a class='govuk-link'
+                    href='mailto:digitalbusinesscase@communities.gov.uk'>digitalbusinesscase@communities.gov.uk</a>.
+            </li>
+            <li>Identify and contact the SRO or SCS in your area with the delegated authority to sign off this spend.
+            </li>
+            <li>If you are not from the Digital Directorate, but your proposal involves digital platforms, software or
+                services, contact the <a class='govuk-link'
+                    href='https://intranet.communities.gov.uk/find-teams/digital-front-door/'>Digital Front Door</a>
+                team.</li>
+        </ul>
+    </li>
+    <li><b>Download the appropriate template and supporting guidance:</b>
+        <ul class='govuk-list govuk-list--bullet'>
+            <li><a class='govuk-link'
+                    href='https://mhclg.sharepoint.com.mcas.ms/sites/ProjectDeliveryNetwork/SitePages/BJC-Contingent-Labour-Route.aspx'
+                    target='_blank' rel='noopener noreferrer'>Download the BJC HR/Finance template.</a> Do not start
+                drafting until you have been assigned your HR corporate partner and engaged your FBP.</li>
+        </ul>
+    </li>
+</ol>
+<h3 class='govuk-heading-s'>Who will need to approve this first?</h3>
+<ul class='govuk-list govuk-list--bullet'>
+    <li>After securing assurance sign off from your HR Corporate Partner and FBP, you will need to ask your SRO or SCS
+        to approve this.</li>
+</ul>"
+}
+},
+{
+"heading": {
+"html": "<h2 class='govuk-heading-m'>If you need to procure something else</h2>"
+},
+"content": {
+"html": "<h3 class='govuk-heading-s'>What to do next:</h3>
+<ol class='govuk-list govuk-list--number'>
+    <li><b>Engage the right people:</b>
+        <ul class='govuk-list govuk-list--bullet'>
+            <li>Contact the <a class='govuk-link' href='mailto:Commercial@communities.gov.uk'>Commercial Procurement</a>
+                team. Explain your activity and your total requested amount.</li>
+            <li>Contact your FBP. Explain your activity and your total requested amount.</li>
+            <li>Identify and contact the SRO or SCS in your area.</li>
+            <li>If your proposal involves digital platforms, software or services, contact the <a class='govuk-link'
+                    href='https://intranet.communities.gov.uk/find-teams/digital-front-door/'>Digital Front Door</a>
+                team.</li>
+        </ul>
+    </li>
+    <li><b>Download the appropriate template and supporting guidance:</b>
+        <ul class='govuk-list govuk-list--bullet'>
+            <li><a class='govuk-link'
+                    href='https://mhclg.sharepoint.com.mcas.ms/sites/ProjectDeliveryNetwork/SitePages/BJC-Procurement-Route.aspx'
+                    target='_blank' rel='noopener noreferrer'>Download the BJC procurement template</a>. Do not start
+                drafting until you have been assigned your Commercial procurement corporate partner and engaged your
+                FBP.</li>
+        </ul>
+    </li>
+</ol>
+<h3 class='govuk-heading-s'>Who will need to approve this first?</h3>
+<p class='govuk-body'>After securing assurance sign off from your Commercial Corporate Partner and FBP, you will need to
+    ask your SRO or
+    SCS to approve this.</p>"
+}
+},
+{
+"heading": {
+"html": "<h2 class='govuk-heading-m'>If you need to give money to another organisation to perform a specific activity or
+    function</h2>"
+},
+"content": {
+"html": "<h3 class='govuk-heading-s'>What to do next:</h3>
+<ol class='govuk-list govuk-list--number'>
+    <li><b>Engage the right people:</b>
+        <ul class='govuk-list govuk-list--bullet'>
+            <li>Contact the <a class='govuk-link' href='mailto:Commercial@communities.gov.uk'>Commercial Grants</a>
+                team.</li>
+            <li>Contact your Finance Business Partner (FBP).</li>
+            <li>Identify and contact the SRO or SCS in your area.</li>
+            <li>If your proposal involves digital platforms, software or services, contact the <a class='govuk-link'
+                    href='https://intranet.communities.gov.uk/find-teams/digital-front-door/'>Digital Front Door</a>
+                team.</li>
+        </ul>
+    </li>
+    <li><b>Download the appropriate template and supporting guidance:</b>
+        <ul class='govuk-list govuk-list--bullet'>
+            <li>Download the <a class='govuk-link'
+                    href='https://mhclg.sharepoint.com.mcas.ms/sites/ProjectDeliveryNetwork/SitePages/BJC-Grants-Route.aspx'
+                    target='_blank' rel='noopener noreferrer'>BJC Grants template</a>. Do not start drafting until you
+                have been assigned your Commercial procurement corporate partner and engaged your FBP.</li>
+        </ul>
+    </li>
+</ol>
+<h3 class='govuk-heading-s'>Who will need to approve this first?</h3>
+<p class='govuk-body'>After securing assurance sign off from your Commercial Corporate Partner and FBP, you will need to
+    ask your SRO or
+    SCS to approve this.</p>"
+}
+},
+{
+"heading": {
+"html": "<h2 class='govuk-heading-m'>If you are from Digital Directorate and want to spend Digital budget</h2>"
+},
+"content": {
+"html": "<p class='govuk-body'>The Digital Directorate has a dedicated process for low-risk, non-contentious spend
+    between £10,000 and £2
+    million. This is known as the Streamlined Business Case process.</p>
+<h3 class='govuk-heading-s'>What to do next</h3>
+<ol class='govuk-list govuk-list--number'>
+    <li>Download the right template:<ul class='govuk-list govuk-list--bullet'>
+            <li><a class='govuk-link'
+                    href='https://mhclg.sharepoint.com.mcas.ms/sites/ProjectDeliveryNetwork/SitePages/BJC-Contingent-Labour-Route.aspx'
+                    target='_blank' rel='noopener noreferrer'>BJC HR/Finance template</a> – if you're spending money on
+                contracted workers to fill a capacity gap</li>
+            <li><a class='govuk-link'
+                    href='https://mhclg.sharepoint.com.mcas.ms/sites/ProjectDeliveryNetwork/SitePages/BJC-Grants-Route.aspx'
+                    target='_blank' rel='noopener noreferrer'>BJC Grants template</a> – if you're giving money to
+                another organisation to deliver a specific activity or function</li>
+            <li><a class='govuk-link'
+                    href='https://mhclg.sharepoint.com.mcas.ms/sites/ProjectDeliveryNetwork/SitePages/BJC-Procurement-Route.aspx'
+                    target='_blank' rel='noopener noreferrer'>BJC Procurement template</a> – if you're procuring
+                something else</li>
+        </ul>
+    </li>
+    <li>Book a Digital Pipeline Assurance Board (PAB) slot if required — if your proposal is over £1 million, it must be
+        approved by the Digital PAB.</li>
+</ol>
+<h3 class='govuk-heading-s'>Who will need to approve this first?</h3>
+<ul class='govuk-list govuk-list--bullet'>
+    <li>Once your business case is complete and ready for approval, email it to the Corporate Office at <a
+            class='govuk-link'
+            href='mailto:digitalbusinesscase@communities.gov.uk'>digitalbusinesscase@communities.gov.uk</a>.</li>
+    <li>You'll be copied into all approval emails and <strong>you are responsible for responding to any questions from
+            subject matter experts or the Director.</strong></li>
+    <li>After approval, you'll receive confirmation so you can raise a buying request in SAP.</li>
+</ul>"
+}
+},
+{
+"heading": {
+"html": "<h2 class='govuk-heading-m'>If you aren't sure</h2>"
+},
+"content": {
+"html": "<h3 class='govuk-heading-s'>What to do next:</h3>
+<ul class='govuk-list govuk-list--bullet'>
+    <li>Read through the guidance in the above sections to see if you can find the information that best fits your
+        proposal.</li>
+</ul>
+<p class='govuk-body'>If you're still not sure after this, speak to the <a class='govuk-link'
+        href='mailto:projectdelivery@communities.gov.uk'>Assurance and Approvals team at
+        projectdelivery@communities.gov.uk</a></p>"
+}
+}
+]
+}) }}
+
+<h3 class="govuk-heading-s">Sound like a lot? This is a collaborative effort.</h3>
+
+<p class='govuk-body'>Engage early with your SMEs - they are there to work with you on this.</p>
+<p class='govuk-body'>Finance Business Partners are embedded in MHCLG (one per policy area) and should be engaged as
+    early as possible.
+    Everyone is working towards making a successful plan.</p>
+
+<p class='govuk-body'>Find everything about business cases at MHCLG on the
+    <a class="govuk-link" href="{{ external_links.project_delivery_hub }}" target="_blank" rel="noopener noreferrer">
+        Project Delivery Hub</a>
+</p>
+
+<p class='govuk-body'>
+    <a class="govuk-link" href="{{ external_links.feedback_survey }}">What did you think of this service?</a>
+    (takes 30 seconds)
+</p>
+
+{% endblock %}
