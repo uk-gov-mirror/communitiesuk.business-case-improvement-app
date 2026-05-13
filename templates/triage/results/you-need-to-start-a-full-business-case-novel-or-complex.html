@@ -1,0 +1,217 @@
+{% extends "layouts/timeline_layout.html" %}
+{% from "govuk_frontend_jinja/templates/components/accordion/macro.html" import govukAccordion %}
+
+{% block main_content %}
+
+<h1 class="govuk-heading-l">You need to engage with the 3-stage business case process.</h1>
+
+<p class="govuk-body">Based on your answers, it sounds like you need to engage with the 3-stage business case.</p>
+
+<p class="govuk-body">Because this proposal carries high risk or complexity, it must go to Investment Sub Committee
+    (ISC) for approval
+    and it will also likely require HM Treasury approval.</p>
+
+<p class="govuk-body">Depending on what stage your proposal is at, the template you'll need will either be the Project
+    Brief, Strategic
+    Outline Case (SOC), Outline Business Case (OBC) or the Full Business Case.</p>
+
+<p class="govuk-body">Avoid using an old template from a previous business case or one given to you by a colleague.</p>
+
+<h2 class="govuk-heading-m">What to do next</h2>
+
+<h3 class="govuk-heading-s">If you know the template you need:</h3>
+<ul class="govuk-list govuk-list--bullet">
+    <li>Engage with your SMEs as early as possible.</li>
+    <li>Download your template from the <a class="govuk-link"
+            href="https://mhclg.sharepoint.com.mcas.ms/sites/ProjectDeliveryNetwork/SitePages/Template-l.aspx"
+            target="_blank" rel="noopener noreferrer">template library</a></li>
+</ul>
+
+<h3 class="govuk-heading-s">If you don't know the template you need:</h3>
+<ul class="govuk-list govuk-list--bullet">
+    <li>Engage with your SMEs as early as possible. They can help you.</li>
+    <li>Visit the stage section on the <a class="govuk-link"
+            href="https://mhclg.sharepoint.com.mcas.ms/sites/ProjectDeliveryNetwork/SitePages/Business-cases.aspx#stage-gate-vs-business-case-(1)"
+            target="_blank" rel="noopener noreferrer">Project Delivery Hub</a> to see which stage your proposal fits in.
+    </li>
+    <li>If you're still unsure, contact the ISC Secretariat at
+        <a class="govuk-link" href="mailto:ISCSecretariat@communities.gov.uk">ISCSecretariat@communities.gov.uk</a>.
+        They can help you identify which template to start with and how to book an ISC slot for approval.
+    </li>
+</ul>
+
+<h2 class="govuk-heading-m">What approvals can I expect?</h2>
+
+{% set isc_thresholds %}
+<ul class="govuk-list govuk-list--bullet">
+    <li>£1m RDEL Admin</li>
+    <li>£5m Local Gov DEL</li>
+    <li>£10m RDEL Programme</li>
+    <li>£30m CDEL</li>
+    <li>£50m CDEL FT</li>
+</ul>
+{% endset %}
+{% set isc_thresholds = Markup(isc_thresholds) %}
+
+
+{% set hmt_required %}
+<p class="govuk-body">Note, HM Treasury approval is required if:</p>
+<ul class="govuk-list govuk-list--bullet">
+    <li>CDEL above £250m</li>
+    <li>RDEL above £80m</li>
+    <li>CDEL FT above £50m</li>
+    <li>RDEL Admin above £10m</li>
+    <li>Local Gov DEL including an S31 Grant</li>
+</ul>
+<p class="govuk-body">Not sure? Contact your Finance Business Partner.</p>
+{% endset %}
+{% set hmt_required = Markup(hmt_required) %}
+
+
+{{ govukAccordion({
+"id": "novel-business-case-accordion",
+"items": [
+{
+"heading": {
+"html": Markup("<h3 class='govuk-heading-s'>New or standalone projects or programmes with WLC equal or above:</h3>
+<ul class='govuk-list govuk-list--bullet'>
+    <li>£1m RDEL Admin</li>
+    <li>£5m Local Gov DEL</li>
+    <li>£10m RDEL Programme</li>
+    <li>£30m CDEL</li>
+    <li>£50m CDEL FT</li>
+</ul>")
+},
+"content": {
+"html": Markup("<div class='govuk-inset-text'>You need to go to Investment Sub-Committee (ISC). <a class='govuk-link'
+        href='mailto:ISCSecretariat@communities.gov.uk'>Contact the Secretariat</a> to book an ISC slot.</div>") +
+hmt_required
+}
+},
+{
+"heading": {
+"html": Markup("<h3 class='govuk-heading-s'>Already agreed by ISC projects or programmes with WLC equal or above:</h3>")
++
+isc_thresholds
+},
+"content": {
+"html": Markup("<div class='govuk-inset-text'>You can go straight to your Director General (DG) for approval. These
+    don't need
+    to go back through ISC.</div>") + hmt_required
+}
+},
+{
+"heading": {
+"html": Markup("<h3 class='govuk-heading-s'>Previously delegated by ISC or DG projects or programmes with WLC request
+    greater
+    than £2m but below the ISC thresholds:</h3>") + isc_thresholds
+},
+"content": {
+"html": "<div class='govuk-inset-text'>
+    <p class='govuk-body'>You can go straight to your SRO for approval. These don't need to go back through ISC.</p>
+</div>
+<p class='govuk-body'>HM Treasury is not required.</p>"
+}
+},
+{
+"heading": {
+"html": "<h3 class='govuk-heading-s'>Explicitly related to and executed by Homes England</h3>"
+},
+"content": {
+"html": "<div class='govuk-inset-text'>
+    <p class='govuk-body'>Projects or programmes already agreed to be delegated by ISC will be approved by Homes
+        England. Speak to your
+        Finance Business Partner if you have questions.</p>
+</div>
+<p class='govuk-body'>Note, HM Treasury approval is required if:</p>
+<ul class='govuk-list govuk-list--bullet'>
+    <li>CDEL above £250m</li>
+    <li>RDEL above £80m</li>
+    <li>CDEL FT above £50m</li>
+    <li>RDEL Admin above £10m</li>
+    <li>Local Gov DEL including an S31 Grant</li>
+</ul>"
+}
+},
+{
+"heading": {
+"html": "<h3 class='govuk-heading-s'>If you need external legal advice</h3>"
+},
+"content": {
+"html": "<p class='govuk-body'>You need to get agreement from <a class='govuk-link'
+        href='https://intranet.communities.gov.uk/guidance/contact-legal/'>Government Legal Department (GLD)</a>. This
+    is due to HM Treasury rules around legal spend that we have to follow as a department.</p>
+<p class='govuk-body'>You should also contact your Finance Business Partner.</p>"
+}
+},
+{
+"heading": {
+"html": "<h3 class='govuk-heading-s'>Help with acronyms</h3>"
+},
+"content": {
+"html": "<p class='govuk-body'>RDEL</p>
+<ul class='govuk-list govuk-list--bullet'>
+    <li>Resource Departmental Expenditure Limits (money spent on day-to-day resources and administration costs, usually
+        spent within one financial year)</li>
+</ul>
+<p class='govuk-body'>CDEL</p>
+<ul class='govuk-list govuk-list--bullet'>
+    <li>Capital Departmental Expenditure Limits (money spent on investment and things that will create growth in the
+        future)</li>
+</ul>
+<p class='govuk-body'>CDEL FT</p>
+<ul class='govuk-list govuk-list--bullet'>
+    <li>Capital Departmental Expenditure Limit Financial Transactions (Capital funding that is repaid or recovered, like
+        a loan or investment)</li>
+</ul>
+<p class='govuk-body'>RDEL Admin</p>
+<ul class='govuk-list govuk-list--bullet'>
+    <li>Resource Departmental Expenditure Limits for Administration (Running and administrative costs)</li>
+</ul>
+<p class='govuk-body'>Local Gov DEL</p>
+<ul class='govuk-list govuk-list--bullet'>
+    <li>Local Government Departmental Expenditure Limits for Local Authorities</li>
+</ul>
+<p class='govuk-body'>S31 grant</p>
+<ul class='govuk-list govuk-list--bullet'>
+    <li>A section 31 grant is money a government department gives to a local authority using powers in Section 31 of the
+        Local Government Act 2003</li>
+</ul>"
+}
+},
+{
+"heading": {
+"html": "<h3 class='govuk-heading-s'>What can I expect from an ISC meeting?</h3>"
+},
+"content": {
+"html": "<p class='govuk-body'>Before the meeting, the business case would have been submitted to the ISC secretariat,
+    who will share it
+    with the committee members. When booking a slot, you'll be given a time - join the meeting then (you aren't expected
+    to attend the whole meeting).</p>
+<p class='govuk-body'>Your SRO will present a summary of the business case. There's no need to create slides or visuals.
+</p>
+<p class='govuk-body'>Expect questions on any part of the business case. You can bring along an SME for support.</p>
+<p class='govuk-body'>After the meeting you'll receive next steps from the ISC secretariat.</p>"
+}
+}
+]
+}) }}
+
+<h3 class="govuk-heading-s">Sound like a lot? This is a collaborative effort.</h3>
+
+<p class='govuk-body'>Engage early with your SMEs - they are there to work with you on this.</p>
+<p class='govuk-body'>Finance Business Partners are embedded in MHCLG (one per policy area) and should be engaged as
+    early as possible.
+    Everyone is working towards making a successful plan.</p>
+
+<p class='govuk-body'>Find everything about business cases at MHCLG on the
+    <a class="govuk-link" href="{{ external_links.project_delivery_hub }}" target="_blank" rel="noopener noreferrer">
+        Project Delivery Hub</a>
+</p>
+
+<p class='govuk-body'>
+    <a class="govuk-link" href="{{ external_links.feedback_survey }}">What did you think of this service?</a>
+    (takes 30 seconds)
+</p>
+
+{% endblock %}

@@ -1,0 +1,55 @@
+{% macro govuk_button(text, href="", classes="", type="submit") %}
+{% if href %}
+<a href="{{ href }}" role="button" draggable="false" class="govuk-button {{ classes }}" data-module="govuk-button">{{
+    text }}</a>
+{% else %}
+<button type="{{ type }}" class="govuk-button {{ classes }}" data-module="govuk-button">{{ text }}</button>
+{% endif %}
+{% endmacro %}
+
+{% macro govuk_back_link(href) %}
+<a href="{{ href }}" class="govuk-back-link">Back</a>
+{% endmacro %}
+
+{% macro govuk_tag(text, colour="") %}
+<strong class="govuk-tag {% if colour %}govuk-tag--{{ colour }}{% endif %}">{{ text }}</strong>
+{% endmacro %}
+
+{% macro govuk_error_message(text) %}
+{% if text %}
+<div class="govuk-error-summary" data-module="govuk-error-summary">
+    <div role="alert">
+        <h2 class="govuk-error-summary__title">There is a problem</h2>
+        <div class="govuk-error-summary__body">
+            <ul class="govuk-list govuk-error-summary__list">
+                <li><a href="#answer">{{ text }}</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endmacro %}
+
+
+
+{% macro hmrcTimeline(params) %}
+<ol class="hmrc-timeline">
+    {% for event in params.events %}
+    <li class="hmrc-timeline__event">
+        <h{{ params.headingLevel | default(2) }} class="hmrc-timeline__event-title">
+            {{ event.title }}
+        </h{{ params.headingLevel | default(2) }}>
+        {% if event.time %}
+        <time class="hmrc-timeline__event-meta" datetime="{{ event.datetime }}">
+            {{ event.time }}
+        </time>
+        {% endif %}
+        {% if event.content %}
+        <div class="hmrc-timeline__event-content">
+            {{ event.content | safe }}
+        </div>
+        {% endif %}
+    </li>
+    {% endfor %}
+</ol>
+{% endmacro %}

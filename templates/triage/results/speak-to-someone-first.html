@@ -1,0 +1,40 @@
+{% extends "layouts/base_layout.html" %}
+
+{% block content %}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class="govuk-heading-l">Speak to someone first</h1>
+
+        <p class="govuk-body">Because your business case is part of an existing project or programme, you may still need
+            to do a
+            business case,
+            even if the spend is under £12,000.</p>
+
+        <p class="govuk-body">It's important to understand how projects and programmes are connected, so we can apply a
+            proportionate
+            approvals process.</p>
+
+        <h2 class="govuk-heading-m">What to do next</h2>
+        <ul class="govuk-list govuk-list--bullet">
+            <li>Find and speak with the Finance Business Partner who is leading on the programme.</li>
+            <li>If you have already been advised on what template you need, download it from the
+                <a class="govuk-link"
+                    href="https://mhclg.sharepoint.com.mcas.ms/sites/ProjectDeliveryNetwork/SitePages/Template-l.aspx"
+                    target="_blank" rel="noopener noreferrer">template library</a>
+            </li>
+        </ul>
+
+        <p class="govuk-body">Find everything about business cases at MHCLG on the
+            <a class="govuk-link" href="{{ external_linksproject_delivery_hub }}" target="_blank"
+                rel="noopener noreferrer">
+                Project Delivery Hub</a>
+        </p>
+
+        <p class="govuk-body">
+            <a class="govuk-link" href="{{ external_linksfeedback_survey }}">What did you think of this service?</a>
+            (takes 30 seconds)
+        </p>
+    </div>
+</div>
+
+{% endblock %}
