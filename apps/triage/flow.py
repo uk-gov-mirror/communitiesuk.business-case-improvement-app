@@ -9,6 +9,7 @@ Each question is a dict with:
   hint        — optional hint text shown below the title
   type        — e.g. "radio"
   choices     — list of (value, label) tuples
+  help_text   - help text for pages 
 
 Routing is defined by ROUTING — a dict of:
   (question_slug, answer_value) -> next_question_slug OR result_slug
