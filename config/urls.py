@@ -16,11 +16,11 @@ Including another URLconf
 """
 
 from django.contrib import admin
+from django.conf import settings
 from django.urls import include, path
 from apps.triage import views as triage_views
 
 urlpatterns = [
-    path("__reload__/", include("django_browser_reload.urls")),
     path("triage/", include("apps.triage.urls", namespace="triage")),
     path("", triage_views.index, name="index"),  # home route
 ]

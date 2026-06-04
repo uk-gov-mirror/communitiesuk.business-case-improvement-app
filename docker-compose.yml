@@ -1,0 +1,15 @@
+services:
+  web:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      DJANGO_SETTINGS_MODULE: config.settings
+      SECRET_KEY: docker-local-dev-secret
+      DEBUG: "false"
+      ALLOWED_HOSTS: "localhost,127.0.0.1,0.0.0.0"
+    volumes:
+      - db_data:/app/db.sqlite3
+
+volumes:
+  db_data:

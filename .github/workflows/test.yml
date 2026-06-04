@@ -22,7 +22,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install django whitenoise gunicorn python-dotenv jinja2 markupsafe \
-            govuk-frontend-jinja pytest pytest-django django-browser-reload
+            govuk-frontend-jinja pytest pytest-django
 
       - name: Setup govuk-frontend
         run: python scripts/setup_govuk_frontend.py

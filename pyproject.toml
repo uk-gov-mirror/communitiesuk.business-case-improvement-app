@@ -1,25 +1,30 @@
-[project]
-name = "business-case-improvement"
+[tool.poetry]
+name = "business-case-improvements"
 version = "0.1.0"
-requires-python = ">=3.12"
-dependencies = [
-    "django>=5.0",
-    "jinja2>=3.1",
-    "markupsafe>=2.1",
-    "whitenoise>=6.7",
-    "gunicorn>=22.0",
-    "python-dotenv>=1.0",
-    "govuk-frontend-jinja>=4.0.0",
-]
+description = "MHCLG Business Case Improvement Tool"
+authors = []
+package-mode = false
 
-[project.optional-dependencies]
-dev = [
-    "ruff>=0.4",
-    "pytest>=8.0",
-    "pytest-django>=4.8",
-    "django-debug-toolbar>=4.4",
-     "django-browser-reload>=1.12",
-]
+[tool.poetry.dependencies]
+python = "^3.12"
+django = "^6.0"
+jinja2 = "^3.1"
+markupsafe = "^3.0"
+whitenoise = "^6.7"
+gunicorn = "^26.0"
+python-dotenv = "^1.0"
+govuk-frontend-jinja = "^4.0.0"
+django-browser-reload = "^1.12"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.15"
+pytest = "^9.0"
+pytest-django = "^4.8"
+django-debug-toolbar = "^6.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
 
 [tool.ruff]
 target-version = "py312"
