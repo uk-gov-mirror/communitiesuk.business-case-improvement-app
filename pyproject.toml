@@ -14,7 +14,6 @@ whitenoise = "^6.7"
 gunicorn = "^26.0"
 python-dotenv = "^1.0"
 govuk-frontend-jinja = "^4.0.0"
-django-browser-reload = "^1.12"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.15"
