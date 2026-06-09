@@ -63,6 +63,10 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@183a1442edf41672e66566b7fc560e297a290896  # v2.1.1
 
+      - name: Get timestamp
+        id: timestamp
+        run: echo "formatted-timestamp=$(date +'%Y-%m-%d-%H-%M-%S')" >> $GITHUB_OUTPUT
+
       - name: Build, tag, and push image to Amazon ECR
         id: build-image
         env:
