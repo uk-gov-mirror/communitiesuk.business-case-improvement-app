@@ -1,0 +1,98 @@
+name: Deploy to Amazon ECS
+
+on:
+  push:
+    branches:
+      - 'main'
+  workflow_dispatch:
+    inputs:
+      refToDeploy:
+        description: "Branch, tag or commit SHA1 to deploy"
+        required: true
+        type: string
+        default: 'main'
+      environment:
+        description: 'Deployment Environment'
+        required: true
+        default: 'aws-dev'
+        type: choice
+        options:
+          - aws-dev
+          - aws-test
+
+defaults:
+  run:
+    shell: bash
+
+permissions:
+  id-token: write
+  contents: read
+
+concurrency:
+  group: deploy-${{ inputs.environment || 'aws-dev' }}
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy to ${{ inputs.environment || 'aws-dev' }}
+    runs-on: ubuntu-latest
+    if: ${{ github.actor != 'dependabot[bot]' }}
+    environment: ${{ inputs.environment || 'aws-dev' }}
+    outputs:
+      deploy_env: ${{ steps.output-deploy-env-name.outputs.deploy_env }}
+    steps:
+      - name: Output deploy environment name
+        id: output-deploy-env-name
+        run: |
+          echo "deploy_env=${{ inputs.environment || 'aws-dev' }}" >> $GITHUB_OUTPUT
+
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+        with:
+          ref: ${{ inputs.refToDeploy || 'main' }}
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@8df5847569e6427dd6c4fb1cf565c83acfa8afa7 # v6.0.0
+        with:
+          aws-region: ${{ vars.AWS_REGION }}
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          role-session-name: BuildAndTest-${{ github.run_id }}
+    
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@183a1442edf41672e66566b7fc560e297a290896  # v2.1.1
+
+      - name: Build, tag, and push image to Amazon ECR
+        id: build-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          TIMESTAMP_IMAGE_TAG: ${{ steps.timestamp.outputs.formatted-timestamp }}
+          LATEST_IMAGE_TAG: latest
+        run: |
+          # Build a docker container and
+          # push it to ECR so that it can
+          # be deployed to ECS.
+          docker build \
+          -t $ECR_REGISTRY/${{ secrets.ECR_REPOSITORY }}:$TIMESTAMP_IMAGE_TAG \
+          -f Dockerfile .
+          docker push $ECR_REGISTRY/${{ secrets.ECR_REPOSITORY }}:$TIMESTAMP_IMAGE_TAG
+          echo "image=$ECR_REGISTRY/${{ secrets.ECR_REPOSITORY }}:$TIMESTAMP_IMAGE_TAG" >> $GITHUB_OUTPUT
+          # # Re-build and push to ECR with the 'latest' tag
+          docker build \
+          -t $ECR_REGISTRY/${{ secrets.ECR_REPOSITORY }}:$LATEST_IMAGE_TAG \
+          -f Dockerfile .
+          docker push $ECR_REGISTRY/${{ secrets.ECR_REPOSITORY }}:$LATEST_IMAGE_TAG
+          echo "image=$ECR_REGISTRY/${{ secrets.ECR_REPOSITORY }}:$LATEST_IMAGE_TAG" >> $GITHUB_OUTPUT
+
+      - name: Force deployment
+        id: force-deploy
+        run: |
+          aws ecs update-service --cluster ${{ secrets.ECS_CLUSTER }} \
+          --service ${{ secrets.ECS_SERVICE }} \
+          --force-new-deployment
+
+      - name: Wait until ECS service stable
+        id: wait-for-stable-ecs-service
+        run: |
+          aws ecs wait services-stable --cluster ${{ secrets.ECS_CLUSTER }} \
+          --services ${{ secrets.ECS_SERVICE }}

@@ -77,10 +77,6 @@ def main():
     images_dir = DEST.parent / "images"
     images_dir.mkdir(exist_ok=True)
 
-    if all((DEST / f).exists() for f in ASSETS):
-        print(f"GOV.UK Frontend v{VERSION} already present — skipping.")
-        return
-
     print(f"Downloading GOV.UK Frontend v{VERSION}…")
 
     if requests:
