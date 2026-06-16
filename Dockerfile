@@ -9,7 +9,6 @@ ARG DEBUG=false
 ENV DEBUG=$DEBUG
 RUN pip install "poetry==${POETRY_VERSION}" --no-cache-dir
 
-
 # Copy Poetry files
 COPY pyproject.toml poetry.lock* ./
 
@@ -24,19 +23,19 @@ COPY . .
 RUN chmod +x scripts/setup_govuk_frontend.py
 RUN python scripts/setup_govuk_frontend.py
 
-
 # Collect static files
 RUN python manage.py collectstatic --noinput \
     --settings=config.settings
 
-
 # Create Non-root user - allow to access Temp DB (TODO: we won't need temp DB in future)
 RUN mkdir -p /usr/src/app/data && addgroup --system appuser && adduser --system --ingroup appuser appuser && chown -R appuser:appuser /usr/src/app
-
 
 USER appuser
 
 EXPOSE 8080
+
+RUN chmod +x entrypoint.sh
+ENTRYPOINT ["./entrypoint.sh"]
 
 CMD ["gunicorn", "config.wsgi:application", \
     "--bind", "0.0.0.0:8080", \

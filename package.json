@@ -2,6 +2,6 @@
     "name": "business-case-improvement-tool",
     "private": true,
     "dependencies": {
-        "hmrc-frontend": "6.95.0"
+        "hmrc-frontend": "^6.95.0"
     }
 }
