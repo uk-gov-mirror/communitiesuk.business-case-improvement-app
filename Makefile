@@ -22,3 +22,6 @@ run-extras:
 
 test:
 	poetry run pytest tests/ -v
+
+stop:
+	docker compose --profile dev-extras down
