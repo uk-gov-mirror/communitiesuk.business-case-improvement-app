@@ -4,6 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+psycopg = {extras = ["binary"], version = "3.3.4"}
 
 [dev-packages]
 
