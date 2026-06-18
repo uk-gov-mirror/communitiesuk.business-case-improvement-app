@@ -1,3 +1,5 @@
+-include .env
+
 setup:
 	echo "Setting up static assets..." && \
 	echo "WARNING: THIS IS A DESTRUCTIVE ACTION. It will delete any changes you have made in ./static." && \
@@ -25,3 +27,9 @@ test:
 
 stop:
 	docker compose --profile dev-extras down
+
+ecr-push:
+	aws ecr get-login-password --region eu-west-2 --profile bpi-dev | \
+		docker login --username AWS --password-stdin $(DEV_ACCOUNT_ID).dkr.ecr.eu-west-2.amazonaws.com
+	docker tag business-case-improvement-app-web:latest $(DEV_ACCOUNT_ID).dkr.ecr.eu-west-2.amazonaws.com/dpi-bci-dev-webapp:latest
+	docker push $(DEV_ACCOUNT_ID).dkr.ecr.eu-west-2.amazonaws.com/dpi-bci-dev-webapp:latest
