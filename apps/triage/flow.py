@@ -33,6 +33,18 @@ QUESTIONS = [
             ("above-12k", "£12,000 or above"),
         ],
     },
+    # {
+    #     "slug": "is-this-a-digital-service",
+    #     "title": "Is this a Digital Service? ",
+    #     "type": "radio",
+    #     "hint": '<div class="govuk-inset-text">It is digital if it runs on the internet</div>',
+    #     "help_text": "We ask this because it affects which directorates you engage with",
+    #     "choices": [
+    #         ("yes", "Yes"),
+    #         ("no", "No"),
+            
+    #     ],
+    # },
     {
         "slug": "new-project-or-programme",
         "title": "Is this spend part of an existing project or programme?",
@@ -181,7 +193,7 @@ ROUTING = {
     (
         "total-value-of-business-case",
         "above-12k",
-    ): "have-you-spoken-to-finance-business-partner",
+    ):"have-you-spoken-to-finance-business-partner" , # "is-this-a-digital-service" 
     ("new-project-or-programme", "*"): "where-is-the-budget-held",
     (
         "have-you-spoken-to-finance-business-partner",
@@ -211,6 +223,9 @@ ROUTING = {
         "where-is-the-budget-held",
         "*",
     ): "calculate-result",
+    # (
+    #     "is-this-a-digital-service", "*"
+    # ): "have-you-spoken-to-finance-business-partner"
 }
 
 # ---------------------------------------------------------------------------
