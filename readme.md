@@ -151,8 +151,6 @@ We use `ruff` for fast python linting and formatting.
 
 ---
 
-## Makefile Target Reference
-
 Here is a quick summary of the available `Makefile` targets:
 
 | Command | Description |
@@ -164,3 +162,66 @@ Here is a quick summary of the available `Makefile` targets:
 | `make test` | Runs the full `pytest` suite. |
 | `make stop` | Tears down all running Docker containers including extras. |
 | `make ecr-push` | Tags and pushes the local web image to AWS ECR (requires AWS CLI/credentials). |
+
+---
+
+
+
+## Managing the Triage Flow
+
+The triage application flow is defined entirely in `apps/triage/flow.py`. This declarative approach allows you to update questions, routing, and results without changing HTML templates or views.
+
+### 1. Updating Questions
+
+Edit the `QUESTIONS` list in `apps/triage/flow.py`. Each dictionary represents a page.
+
+```python
+{
+    "slug": "new-question-slug",
+    "title": "What is your question?",
+    "type": "radio", # or "checkbox", "select"
+    "choices": [
+        ("value-1", "Display Label 1"),
+        ("value-2", "Display Label 2"),
+    ],
+},
+```
+
+### 2. Updating Routing
+
+Update the `ROUTING` dictionary in `apps/triage/flow.py`. The key is a `(question_slug, answer_value)` tuple.
+
+```python
+ROUTING = {
+    # ...
+    ("current-question", "selected-answer"): "next-question-slug",
+    ("current-question", "*"): "next-question-slug", # Wildcard fallback
+}
+```
+
+### 3. Updating Results
+
+1.  **Create Template**: Add a new template in `templates/triage/results/`.
+2.  **Update Logic**: Modify `get_result_from_answers` in `apps/triage/flow.py` to return the new result slug based on the gathered answers.
+
+```python
+# In get_result_from_answers():
+if total_value == "above-12k" and novel == "yes":
+    return "my-new-result-slug"
+```
+
+### 4. Editing Macros
+
+Common UI components are defined as Jinja2 macros in `templates/components/macros.html` - this is where you define the Gov UK (or other styling) components for use across the templates.
+
+To modify a component (e.g., button styling) or add a new one, edit `macros.html`.
+
+**Usage in templates:**
+Import and call the macro at the top of your template:
+
+```html
+{% from "components/macros.html" import govuk_button %}
+
+{{ govuk_button("Continue", classes="govuk-button--secondary") }}
+```
+
