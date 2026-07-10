@@ -28,8 +28,14 @@ test:
 stop:
 	docker compose --profile dev-extras down
 
-ecr-push:
+ecr-push-dev:
 	aws ecr get-login-password --region eu-west-2 --profile bpi-dev | \
 		docker login --username AWS --password-stdin $(DEV_ACCOUNT_ID).dkr.ecr.eu-west-2.amazonaws.com
 	docker tag business-case-improvement-app-web:latest $(DEV_ACCOUNT_ID).dkr.ecr.eu-west-2.amazonaws.com/dpi-bci-dev-webapp:latest
 	docker push $(DEV_ACCOUNT_ID).dkr.ecr.eu-west-2.amazonaws.com/dpi-bci-dev-webapp:latest
+
+ecr-push-test:
+	aws ecr get-login-password --region eu-west-2 --profile bpi-test | \
+		docker login --username AWS --password-stdin $(TEST_ACCOUNT_ID).dkr.ecr.eu-west-2.amazonaws.com
+	docker tag business-case-improvement-app-web:latest $(TEST_ACCOUNT_ID).dkr.ecr.eu-west-2.amazonaws.com/dpi-bci-test-webapp:latest
+	docker push $(TEST_ACCOUNT_ID).dkr.ecr.eu-west-2.amazonaws.com/dpi-bci-test-webapp:latest
