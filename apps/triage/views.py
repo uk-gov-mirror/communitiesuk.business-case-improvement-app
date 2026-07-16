@@ -9,14 +9,14 @@ from .flow import (
     get_question,
     get_result_from_answers,
 )
-from .models import TriageSession
+from .models import BusinessCase, BusinessCaseTriageResponse
 
 
-def _get_or_create_session(request) -> TriageSession:
+def _get_or_create_session(request) -> BusinessCaseTriageResponse:
     if not request.session.session_key:
         request.session.create()
 
-    session, _ = TriageSession.objects.get_or_create(
+    session, _ = BusinessCaseTriageResponse.objects.get_or_create(
         session_key=request.session.session_key,
         completed_at=None,
         defaults={"result": "in-progress"},
@@ -32,12 +32,12 @@ def start(request):
     if not request.session.session_key:
         request.session.create()
 
-    TriageSession.objects.filter(
+    BusinessCaseTriageResponse.objects.filter(
         session_key=request.session.session_key,
         completed_at=None,
     ).delete()
 
-    TriageSession.objects.create(
+    BusinessCaseTriageResponse.objects.create(
         session_key=request.session.session_key,
         result="in-progress",
     )
@@ -79,6 +79,9 @@ def question(request, slug: str):
             triage_session.result = result_slug
             triage_session.completed_at = timezone.now()
             triage_session.save()
+            BusinessCase.objects.get_or_create(
+                business_case_triage_response=triage_session,
+            )
             return redirect("triage:result", slug=result_slug)
 
         return redirect("triage:question", slug=next_step)

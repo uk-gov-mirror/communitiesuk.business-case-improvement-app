@@ -117,7 +117,15 @@ You can run the entire application, including a PostgreSQL database and pgAdmin,
   # Or: docker compose --profile dev-extras down
   ```
 
+  **Stop all services, including deleting volumes and cleaning up images**:
+  ```bash
+  make full-reset
+  # Or: docker compose --profile dev-extras down --volumes --remove-orphans
+  ```
+
 When running with Docker, the Postgres database is accessible on port `5432` and pgAdmin (when using extras) is accessible at [http://localhost:5050/](http://localhost:5050/) (Credentials: `admin@local.dev` / `admin`).
+
+If you want to see the database in pgAdmin, sign in and click Add New Server. Give it a name, and set the following details in the Connection tab: `Host: db`, `User: local_user`, `Password: local_password`
 
 ---
 

@@ -1,7 +1,7 @@
 import pytest
 from django.test import Client
 from django.urls import reverse
-from apps.triage.models import TriageSession
+from apps.triage.models import BusinessCase, BusinessCaseTriageResponse
 from apps.triage.flow import get_first_question_slug, QUESTION_SLUGS
 
 
@@ -75,7 +75,7 @@ def test_answers_are_saved_to_database(started_session, db):
         reverse("triage:question", kwargs={"slug": slug}),
         data={"answer": "above-12k"},
     )
-    session = TriageSession.objects.filter(completed_at=None).last()
+    session = BusinessCaseTriageResponse.objects.filter(completed_at=None).last()
     assert session is not None
     assert session.answers.get(slug) == "above-12k"
 
@@ -83,11 +83,11 @@ def test_answers_are_saved_to_database(started_session, db):
 def test_start_clears_previous_session(client, db):
     # Start once
     client.get(reverse("triage:start"))
-    assert TriageSession.objects.count() == 1
+    assert BusinessCaseTriageResponse.objects.count() == 1
 
     # Start again
     client.get(reverse("triage:start"))
-    assert TriageSession.objects.count() == 1
+    assert BusinessCaseTriageResponse.objects.count() == 1
 
 
 def test_session_result_set_after_completion(client, db):
@@ -111,10 +111,41 @@ def test_session_result_set_after_completion(client, db):
                 data={"answer": answer},
             )
 
-    session = TriageSession.objects.filter(completed_at__isnull=False).last()
+    session = BusinessCaseTriageResponse.objects.filter(completed_at__isnull=False).last()
     assert session is not None
     assert session.result != "in-progress"
     assert session.result != ""
+
+
+def test_business_case_created_after_completion(client, db):
+    client.get(reverse("triage:start"))
+
+    answers = {
+        "total-value-of-business-case": "above-12k",
+        "new-project-or-programme": "no",
+        "have-you-spoken-to-finance-business-partner": "yes",
+        "is-business-case-less-than-two-million": "no",
+        "novel-contentious-or-repercussive": "no",
+        "where-is-the-budget-held": "Digital",
+    }
+
+    for slug in QUESTION_SLUGS:
+        answer = answers.get(slug)
+        if answer:
+            client.post(
+                reverse("triage:question", kwargs={"slug": slug}),
+                data={"answer": answer},
+            )
+
+    session = BusinessCaseTriageResponse.objects.filter(completed_at__isnull=False).last()
+    assert session is not None
+
+    business_case = BusinessCase.objects.last()
+    assert business_case is not None
+    assert business_case.business_case_triage_response_id == session.id
+    assert business_case.created_at is not None
+    assert business_case.modified_at is not None
+    assert business_case.deleted_at is None
 
 
 #  Result pages

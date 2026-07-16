@@ -2,7 +2,7 @@ from django.db import models
 from django.utils import timezone
 
 
-class TriageSession(models.Model):
+class BusinessCaseTriageResponse(models.Model):
     """
     Stores a user's answers for one Business Case triage journey.
 
@@ -36,4 +36,21 @@ class TriageSession(models.Model):
         self.save()
 
     def __str__(self):
-        return f"TriageSession {self.session_key[:8]}… ({len(self.answers)} answers)"
+        return f"BusinessCaseTriageResponse {self.session_key[:8]}… ({len(self.answers)} answers)"
+
+
+class BusinessCase(models.Model):
+    business_case_triage_response = models.ForeignKey(
+        BusinessCaseTriageResponse,
+        on_delete=models.PROTECT,
+        related_name="business_cases",
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    modified_at = models.DateTimeField(auto_now=True)
+    deleted_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"BusinessCase {self.pk} (triage={self.business_case_triage_response_id})"

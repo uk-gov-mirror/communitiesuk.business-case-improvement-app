@@ -1,6 +1,7 @@
 -include .env
 
 setup:
+	poetry install && \
 	echo "Setting up static assets..." && \
 	echo "WARNING: THIS IS A DESTRUCTIVE ACTION. It will delete any changes you have made in ./static." && \
 	echo "Press enter to continue or ctrl+c to cancel." && \
@@ -27,6 +28,9 @@ test:
 
 stop:
 	docker compose --profile dev-extras down
+
+full-reset:
+	docker compose --profile dev-extras down --volumes --remove-orphans
 
 ecr-push-dev:
 	aws ecr get-login-password --region eu-west-2 --profile bpi-dev | \
