@@ -1,0 +1,24 @@
+.timeline-compact {
+    font-size: 16px;
+}
+
+.timeline-compact .hmrc-timeline__event-title {
+    font-size: 18px;
+    margin-bottom: 2px;
+}
+
+.timeline-compact .hmrc-timeline__event-meta {
+    font-size: 10px;
+}
+
+.timeline-compact .hmrc-timeline__event-content {
+    font-size: 10px;
+}
+
+.timeline-compact .hmrc-timeline__event {
+    margin-bottom: 1px;
+}
+
+.timeline-compact .hmrc-timeline::before {
+    width: 3px;
+}
