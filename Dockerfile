@@ -4,7 +4,7 @@ RUN apk add --update --no-cache curl=8.21.0-r0
 WORKDIR /usr/src/app
 
 #  Install Poetry
-ARG POETRY_VERSION=2.1.3
+ARG POETRY_VERSION=2.3.3
 ARG DEBUG=false
 ENV DEBUG=$DEBUG
 RUN pip install "poetry==${POETRY_VERSION}" --no-cache-dir
