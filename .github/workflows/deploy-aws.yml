@@ -36,7 +36,7 @@ jobs:
   deploy:
     name: Deploy to ${{ inputs.environment || 'aws-dev' }}
     runs-on: ubuntu-latest
-    if: ${{ github.actor != 'dependabot[bot]' }}
+    if: ${{ github.triggering_actor != 'dependabot[bot]' }}
     environment: ${{ inputs.environment || 'aws-dev' }}
     outputs:
       deploy_env: ${{ steps.output-deploy-env-name.outputs.deploy_env }}

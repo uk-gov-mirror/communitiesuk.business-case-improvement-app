@@ -4,7 +4,7 @@ from django.contrib.messages import get_messages
 from django.middleware.csrf import get_token
 from django.templatetags.static import static
 from django.urls import reverse
-from jinja2 import ChoiceLoader, Environment, FileSystemLoader
+from jinja2 import ChoiceLoader, Environment, FileSystemLoader, select_autoescape
 from markupsafe import Markup
 from apps.core.shared_context import external_links
 
@@ -15,15 +15,16 @@ GOVUK_SITE_PACKAGES = GOVUK_PACKAGE.parent
 
 
 def csrf_field(request):
-    return Markup(
-        f'<input type="hidden" name="csrfmiddlewaretoken" value="{get_token(request)}">'
+    token = get_token(request)
+    return Markup('<input type="hidden" name="csrfmiddlewaretoken" value="{}">').format(
+        token
     )
 
 
 def environment(**options):
     options.pop("loader", None)
     options.pop("undefined", None)
-    options["autoescape"] = True
+    options.pop("autoescape", None)
 
     env = Environment(
         loader=ChoiceLoader(
@@ -36,6 +37,10 @@ def environment(**options):
                 # this maps to the templates/macros/... folder inside the package
                 FileSystemLoader(str(GOVUK_PACKAGE / "templates")),
             ]
+        ),
+        autoescape=select_autoescape(
+            enabled_extensions=("html", "htm", "xml", "jinja", "jinja2"),
+            default_for_string=True,
         ),
         **options,
     )
