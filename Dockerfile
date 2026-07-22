@@ -1,5 +1,5 @@
-FROM python:3.13.13-alpine3.22
-RUN apk add --update --no-cache curl=8.14.1-r2
+FROM python:3.14.6-alpine3.24
+RUN apk add --update --no-cache curl=8.21.0-r0
 
 WORKDIR /usr/src/app
 
