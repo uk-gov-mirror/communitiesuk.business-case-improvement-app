@@ -10,7 +10,7 @@ setup:
 	rm -rf static/hmrc-frontend static/govuk static/govuk-frontend static/images && \
 	mkdir -p static/hmrc-frontend && \
 	npm i && \
-	mv ./node_modules/hmrc-frontend/hmrc/govuk ./static/govuk && \
+	mv ./node_modules/hmrc-frontend/hmrc/govuk ./static/hmrc-frontend/govuk && \
 	mv ./node_modules/hmrc-frontend/hmrc/hmrc-frontend-*.min.css ./static/hmrc-frontend/hmrc-frontend.min.css && \
 	poetry run python scripts/setup_govuk_frontend.py
 
@@ -18,6 +18,10 @@ run:
 	docker compose up -d
 
 run-build:
+	docker compose up -d --build
+
+run-build-nocache:
+	docker compose build --no-cache
 	docker compose up -d --build
 
 run-extras:
