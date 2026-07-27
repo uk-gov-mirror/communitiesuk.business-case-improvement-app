@@ -5,6 +5,7 @@
 {% from "govuk_frontend_jinja/templates/components/select/macro.html" import govukSelect %}
 {% from "govuk_frontend_jinja/templates/components/details/macro.html" import govukDetails %}
 {% from "govuk_frontend_jinja/templates/components/button/macro.html" import govukButton %}
+{% from "govuk_frontend_jinja/templates/components/input/macro.html" import govukInput %}
 
 {% block content %}
 <div class="govuk-grid-row">
@@ -85,7 +86,22 @@
       "items": select_items
       }) }}
 
+      {# Input #}
+      {% elif question.type == "input" %}
+      {{ govukInput({
+      "id": "answer",
+      "name": "answer",
+      "label": {
+      "text": question.title,
+      "isPageHeading": true,
+      "classes": "govuk-label--l"
+      },
+      "errorMessage": {"text": error} if error else {},
+      "hint": {"text": question.hint} if question.hint else {}
+      }) }}
+
       {% endif %}
+
 
       {% if question.help_text %}
       {{ govukDetails({
