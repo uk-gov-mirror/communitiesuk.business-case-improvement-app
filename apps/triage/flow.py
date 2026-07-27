@@ -1,4 +1,6 @@
 from markupsafe import Markup
+from typing import Final
+from .slugs import *
 
 """
 Triage question flow for Phase 1.
@@ -20,28 +22,135 @@ If there's no specific match for an answer, the fallback key (slug, "*") is used
 Result pages are defined in RESULTS.
 """
 
-# Types: Radio, Checkbox, Select
+# because routing requires very specific check, I'm setting here to reduce likelihood of unknowing changes
+DIGITAL_STRING: Final[str] = "Digital"
+
+# Types: Radio, Checkbox, Select, Input
 QUESTIONS = [
     {
-        "slug": "total-value-of-business-case",
-        "title": "What is the total value of the business case?",
+        "slug": total_value_of_business_case,
+        "title": "What is the estimated total value of your request?",
         "type": "radio",
         "hint": '<div class="govuk-inset-text">The total value means the whole life cost of the business case including VAT.</div>',
         "help_text": "We ask this first because the value influences whether you need a business case at all. The total value is the whole life cost of the business case, including staffing costs, capital and revenue.",
         "choices": [
             ("below-12k", "Below £12,000"),
-            ("above-12k", "£12,000 or above"),
+            ("between-12k-and-2m", "Between £12,000 and 2m (inclusive)"),
+            ("above-2m", "Above 2m")
         ],
     },
     {
-        "slug": "new-project-or-programme",
-        "title": "Is this spend part of an existing project or programme?",
+        "slug": part_of_wider_programme_with_existing_fbc,
+        "title": "Is this request part of a wider programme with an existing FBC?",
+        "type": "radio",
+        "hint": '<div class="govuk-inset-text"></div>',
+        "help_text": "",
+        "choices": [
+            ("yes", "Yes"),
+            ("no", "No")
+        ]
+    },
+    {
+        "slug": request_part_of_wider_programme,
+        "title": "Is this request part of a wider programme with an existing FBC?",
         "type": "radio",
         "help_text": "We ask this to make sure spend is routed through the correct approvals process. If this work is part of a wider piece of activity, or if multiple related pieces of spend together exceed approval thresholds, you should answer Yes, even if this individual business case is for a smaller amount.",
         "choices": [
             ("yes", "Yes"),
             ("no", "No"),
         ],
+    },
+    {
+        "slug": does_request_involve_anything_digital,
+        "title": "Does you request involve anything digital?",
+        "type": "radio",
+        "choices":[
+            ("yes", "Yes"),
+            ("no", "No")
+        ]
+    },
+    {
+        "slug": is_this_request_a_pilot_with_potential_to_be_a_larger_proposal,
+        "title": "Is this request a 'pilot' with the potential to turn into a larger proposal in the future?",
+        "type": "radio",
+        "choices":[
+            ("yes", "Yes"),
+            ("no", "No")
+        ]
+    },
+    {
+        "slug": is_this_request_part_of_a_wider_programme_with_existing_business_case,
+        "title": "Is this request part of a wider programme with an existing full business case in place?",
+        "type": "radio",
+        "choices":[
+            ("yes", "Yes"),
+            ("no", "No")
+        ]
+    },
+    {
+        "slug": any_other_business_cases_that_are_connected_to_this_work,
+        "title": "Are there any other business cases that are in draft or review connected to this work or initiative?",
+        "type": "radio",
+        "choices":[
+            ("yes", "Yes"),
+            ("no", "No")
+        ]
+    },
+    {
+        "slug": is_this_a_retrospective_case,
+        "title": "Is this a retrospective case?",
+        "type": "radio",
+        "choices": [
+            ("yes","Yes"),
+            ("no", "No")
+        ]
+    },
+    {
+        "slug": which_option_describes_what_you_are_trying_to_do,
+        "title": "Which option best describes what you're trying to do?",
+        "type": "radio",
+        "choices":[
+            (commission_research, "Commision Research"),
+            (procure_goods_and_services_from_third_party, "Procure goods and services from a 3rd party"),
+            (hire_contracted_workers_to_fill_temporary_capacity_gap, "Hire contracted workers to fill a temporary capacity gap (i.e money for contingent labour)")
+        ]
+    },
+    {
+        "slug": which_best_describes_your_situation,
+        "title": "Which best describes your situation?",
+        "type": "radio",
+        "choices": [
+            (spend_on_corporate_activities,"Spend money on corporate activities - Purchase additional licences, equipment, training or similar operational items that do not require a new procurement approach"),
+            (procuring_something_else, "I'm procuring something else")
+        ]
+    },
+    {
+        "slug": are_you_procuring_consulting_and_professional_services,
+        "title": "Are you procuring Consulting & Professional services?",
+        "type": "radio",
+        "choices": [
+            ("yes", "Yes"),
+            ("no", "No")
+        ]
+    },
+    {
+        "slug": we_want_to_continue_improving_our_service,
+        "title": "We want to continue improving our service.",
+        "hint": "To help us improve, for reporting, and if you're able to, what does your procurement relate to? select all the apply. Don't worry - this won't impact what template we give you.",
+        "type": "checkbox",
+        "choices":[
+            ("procurement-of-brand-new-service-contract-or-delivery", "Procurement of a brand new service, contract or delivery activity"),
+            ("re-procurement-of-an-existing-good-or-service", "Re-procurement of an existing good or service"),
+            ("variation-to-or-extension-of-existing-contract", "Variation to, or extension of, an existing contract"),
+            ("direct-award-without-competition", "Direct award without competition"),
+            ("other", "Other"),
+            ("dont-know", "I don't know")
+        ]
+    },
+    {
+        "slug": provide_a_high_level_summary,
+        "title": "Provide a high level summary",
+        "type": "input"
     },
     {
         "slug": "have-you-spoken-to-finance-business-partner",
@@ -80,8 +189,8 @@ QUESTIONS = [
         ],
     },
     {
-        "slug": "novel-contentious-or-repercussive",
-        "title": "Is it novel, contentious, sets precedent, repercussive or requires HM Treasury consent because of legislation?",
+        "slug": novel_repercussive_contentious_hmt_consent,
+        "title": "Is it novel, repercussive, contentious, or needs HMT consent?",
         "type": "radio",
         "hint": '<div class="govuk-inset-text">This includes something that could be deemed unusual, risky or is likely to be challenged.</div>',
         "help_text": """<p>We ask this because anything that may be deemed novel, contentious or repercussive will need to go through particular approvals (including HM Treasury for consent due to legislation). </p>
@@ -109,7 +218,7 @@ QUESTIONS = [
         ],
     },
     {
-        "slug": "where-is-the-budget-held",
+        "slug": where_is_the_budget_held,
         "title": "Where is the budget held?",
         "type": "select",
         "hint": Markup(
@@ -130,7 +239,7 @@ QUESTIONS = [
                 "Departmental Strategy & Governance",
             ),
             ("Deputy Prime Minister's Data Unit", "Deputy Prime Minister's Data Unit"),
-            ("Digital", "Digital"),
+            (DIGITAL_STRING, DIGITAL_STRING),
             ("Digital Process Improvement", "Digital Process Improvement"),
             ("Elections Directorate", "Elections Directorate"),
             ("Executive Team", "Executive Team"),
@@ -172,45 +281,37 @@ QUESTIONS = [
             ("Social Housing", "Social Housing"),
         ],
     },
+    {
+        "slug": give_your_bjc_a_name,
+        "title": "Give your BJC a name",
+        "type": "input",
+    }
 ]
 
 
 ROUTING = {
     # work-type branches first
-    ("total-value-of-business-case", "below-12k"): "new-project-or-programme",
-    (
-        "total-value-of-business-case",
-        "above-12k",
-    ): "have-you-spoken-to-finance-business-partner",
-    ("new-project-or-programme", "*"): "where-is-the-budget-held",
-    (
-        "have-you-spoken-to-finance-business-partner",
-        "yes",
-    ): "is-business-case-less-than-two-million",
-    (
-        "have-you-spoken-to-finance-business-partner",
-        "no",
-    ): "is-business-case-less-than-two-million",
-    (
-        "is-business-case-less-than-two-million",
-        "yes",
-    ): "novel-contentious-or-repercussive",
-    (
-        "is-business-case-less-than-two-million",
-        "no",
-    ): "novel-contentious-or-repercussive",
-    (
-        "novel-contentious-or-repercussive",
-        "no",
-    ): "where-is-the-budget-held",
-    (
-        "novel-contentious-or-repercussive",
-        "yes",
-    ): "where-is-the-budget-held",
-    (
-        "where-is-the-budget-held",
-        "*",
-    ): "calculate-result",
+    (total_value_of_business_case, "below-12k"): part_of_wider_programme_with_existing_fbc,
+    (total_value_of_business_case, "between-12k-and-2m"): novel_repercussive_contentious_hmt_consent,
+    (total_value_of_business_case, "above-2m"): "calculate-result",
+    (part_of_wider_programme_with_existing_fbc, "yes"): "calculate-result",
+    (part_of_wider_programme_with_existing_fbc, "no"): does_request_involve_anything_digital,
+    (does_request_involve_anything_digital, "yes"): "calculate-result",
+    (does_request_involve_anything_digital, "no"): "calculate-result",
+    (novel_repercussive_contentious_hmt_consent, "no"): is_this_request_a_pilot_with_potential_to_be_a_larger_proposal,
+    (is_this_request_a_pilot_with_potential_to_be_a_larger_proposal, "no"): is_this_request_part_of_a_wider_programme_with_existing_business_case,
+    (is_this_request_part_of_a_wider_programme_with_existing_business_case, "no"): any_other_business_cases_that_are_connected_to_this_work,
+    (any_other_business_cases_that_are_connected_to_this_work, "*"): where_is_the_budget_held,
+    (where_is_the_budget_held, "*"): is_this_a_retrospective_case,
+    (is_this_a_retrospective_case, "*"): which_option_describes_what_you_are_trying_to_do,
+    (which_option_describes_what_you_are_trying_to_do, commission_research): "calculate-result",
+    (which_option_describes_what_you_are_trying_to_do, procure_goods_and_services_from_third_party): which_best_describes_your_situation,
+    (which_best_describes_your_situation, spend_on_corporate_activities): give_your_bjc_a_name,
+    (which_best_describes_your_situation, procuring_something_else): are_you_procuring_consulting_and_professional_services,
+    (are_you_procuring_consulting_and_professional_services, "*"): we_want_to_continue_improving_our_service,
+    (we_want_to_continue_improving_our_service, "*"): give_your_bjc_a_name,
+    (give_your_bjc_a_name, "*"): provide_a_high_level_summary,
+    (provide_a_high_level_summary, "*"): "calculate-result"
 }
 
 # ---------------------------------------------------------------------------
@@ -252,42 +353,62 @@ def get_first_question_slug() -> str:
     return QUESTIONS[0]["slug"]
 
 
+# this is only called when calculate-result is the next step, not in general flow
 def get_result_from_answers(answers: dict) -> str:
     """
     Works out which result to show based on the combination of answers.
 
     Returns a result slug.
     """
-    total_value = answers.get("total-value-of-business-case")
-    new_project = answers.get("new-project-or-programme")
-    spoken_to_fbp = answers.get("have-you-spoken-to-finance-business-partner")
-    less_than_2m = answers.get("is-business-case-less-than-two-million")
-    novel = answers.get("novel-contentious-or-repercussive")
-    where_is_budget_held = answers.get("where-is-the-budget-held")
+    total_value = answers.get(total_value_of_business_case)
+    new_project = answers.get(part_of_wider_programme_with_existing_fbc)
+    request_involve_anything_digital = answers.get(does_request_involve_anything_digital, None)
+    novel = answers.get(novel_repercussive_contentious_hmt_consent)
+    
+    if total_value == "above-2m":
+        return "you-need-to-do-3-stage-process"
 
-    # Exit 1
-    if total_value == "below-12k" and new_project == "no":
+    if total_value == "between-12k-and-2m":
+            if is_procurement_case(answers):
+                return you_need_to_start_a_business_justification_case
+            else:
+                return "we-could-not-find-the-right-process-for-you"
+
+    # Exit early for you do not need a BC
+    if (total_value == "below-12k" and new_project == "no") or request_involve_anything_digital is not None:
         return "you-do-not-need-a-business-case"
 
-    # Exit 2
+    # Exit 
     elif total_value == "below-12k" and new_project == "yes":
         return "speak-to-someone-first"
 
-    # Exit 3
-    elif total_value == "above-12k" and less_than_2m == "no" and novel == "no":
-        return "you-need-to-start-a-full-business-case"
-
-    # Exit 4
-    elif total_value == "above-12k" and less_than_2m == "yes" and novel == "no":
+    # Exit 
+    elif total_value == "between-12k-and-2m" and novel == "no":
         return "you-need-to-start-a-business-justification-case"
 
-    # Exit 5
-    elif total_value == "above-12k" and less_than_2m == "yes" and novel == "yes":
+    # Exit 
+    elif total_value == "between-12k-and-2m" and novel == "yes":
         return "you-need-to-start-a-full-business-case-novel-or-complex"
-
-    # Exit 5b
-    elif total_value == "above-12k" and less_than_2m == "no" and novel == "yes":
-        return "you-need-to-start-a-full-business-case-novel-or-complex"
-
+    
     else:
         return "we-could-not-find-the-right-process-for-you"
+
+
+def is_procurement_case(answers: dict) -> bool:
+    is_not_novel = answers.get(novel_repercussive_contentious_hmt_consent, None) == "no"
+    is_not_pilot = answers.get(is_this_request_a_pilot_with_potential_to_be_a_larger_proposal, None) == "no"
+    is_not_existing_programme = answers.get(is_this_request_part_of_a_wider_programme_with_existing_business_case, None) == "no"
+    is_not_digital_budget = answers.get(where_is_the_budget_held, None) != DIGITAL_STRING
+
+    is_trying_to_procure_from_third_party = answers.get(which_option_describes_what_you_are_trying_to_do, None) == procure_goods_and_services_from_third_party
+    
+    is_corporate_spend_or_procurement: bool = (answers.get(which_best_describes_your_situation, None) == spend_on_corporate_activities or
+                             answers.get(which_best_describes_your_situation, None) == procuring_something_else)
+
+    return (is_not_novel and
+            is_not_pilot and
+            is_not_existing_programme and
+            is_not_digital_budget and
+            is_trying_to_procure_from_third_party and
+            is_corporate_spend_or_procurement)
+

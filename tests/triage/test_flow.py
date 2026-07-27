@@ -6,10 +6,12 @@ from apps.triage.flow import (
     get_first_question_slug,
     QUESTION_SLUGS,
     QUESTIONS,
+    DIGITAL_STRING
 )
 
-#  Question definitions
+from apps.triage.slugs import *
 
+#  Question definitions
 
 def test_first_question_exists():
     slug = get_first_question_slug()
@@ -17,13 +19,16 @@ def test_first_question_exists():
     assert get_question(slug) is not None
 
 
+#handle types
 def test_all_questions_have_required_fields():
     for q in QUESTIONS:
         assert "slug" in q, f"Question missing slug: {q}"
         assert "title" in q, f"Question missing title: {q}"
         assert "type" in q, f"Question missing type: {q}"
-        assert "choices" in q, f"Question missing choices: {q}"
-        assert len(q["choices"]) > 0, f"Question has no choices: {q['slug']}"
+
+        if q["type"] == "checkbox" or q["type"] == "radio" or q["type"] == "select":
+            assert "choices" in q, f"Question missing choices: {q}"
+            assert len(q["choices"]) > 0, f"Question has no choices: {q['slug']}"
 
 
 def test_get_question_returns_correct_question():
@@ -42,30 +47,9 @@ def test_all_question_slugs_are_unique():
 
 
 #  Routing
-
-
-def test_routing_below_12k_continues_to_next_question():
-    next_step = get_next("total-value-of-business-case", "below-12k")
-    assert next_step is not None
-    assert not next_step.startswith("result:")
-
-
-def test_routing_above_12k_continues_to_next_question():
-    next_step = get_next("total-value-of-business-case", "above-12k")
-    assert next_step is not None
-
-
 def test_routing_raises_for_unknown_question():
     with pytest.raises(KeyError):
         get_next("not-a-real-question", "any-answer")
-
-
-def test_last_question_routes_to_calculate_result():
-    last_slug = QUESTION_SLUGS[-1]
-    last_question = get_question(last_slug)
-    first_choice_value = last_question["choices"][0][0]
-    next_step = get_next(last_slug, first_choice_value)
-    assert next_step == "calculate-result"
 
 
 def test_all_routing_rules_point_to_valid_questions_or_results():
@@ -84,69 +68,14 @@ def test_all_routing_rules_point_to_valid_questions_or_results():
 
 #  Result/Exit screen Routing
 
+def test_over_2m_exit_screen_routing():
+    # act
+    result = get_next(total_value_of_business_case, "above-2m")
+    exit = get_result_from_answers({total_value_of_business_case: "above-2m"})
 
-def test_result_below_12k_not_part_of_programme():
-    result = get_result_from_answers(
-        {
-            "total-value-of-business-case": "below-12k",
-            "new-project-or-programme": "no",
-        }
-    )
-    assert result == "you-do-not-need-a-business-case"
-
-
-def test_result_below_12k_part_of_programme():
-    result = get_result_from_answers(
-        {
-            "total-value-of-business-case": "below-12k",
-            "new-project-or-programme": "yes",
-        }
-    )
-    assert result == "speak-to-someone-first"
-
-
-def test_result_above_12k_over_2m_not_novel():
-    result = get_result_from_answers(
-        {
-            "total-value-of-business-case": "above-12k",
-            "is-business-case-less-than-two-million": "no",
-            "novel-contentious-or-repercussive": "no",
-        }
-    )
-    assert result == "you-need-to-start-a-full-business-case"
-
-
-def test_result_above_12k_under_2m_not_novel():
-    result = get_result_from_answers(
-        {
-            "total-value-of-business-case": "above-12k",
-            "is-business-case-less-than-two-million": "yes",
-            "novel-contentious-or-repercussive": "no",
-        }
-    )
-    assert result == "you-need-to-start-a-business-justification-case"
-
-
-def test_result_above_12k_under_2m_novel():
-    result = get_result_from_answers(
-        {
-            "total-value-of-business-case": "above-12k",
-            "is-business-case-less-than-two-million": "yes",
-            "novel-contentious-or-repercussive": "yes",
-        }
-    )
-    assert result == "you-need-to-start-a-full-business-case-novel-or-complex"
-
-
-def test_result_above_12k_over_2m_novel():
-    result = get_result_from_answers(
-        {
-            "total-value-of-business-case": "above-12k",
-            "is-business-case-less-than-two-million": "no",
-            "novel-contentious-or-repercussive": "yes",
-        }
-    )
-    assert result == "you-need-to-start-a-full-business-case-novel-or-complex"
+    # assert
+    assert result == "calculate-result"
+    assert exit == "you-need-to-do-3-stage-process"
 
 
 def test_result_always_returns_a_slug():
@@ -155,3 +84,106 @@ def test_result_always_returns_a_slug():
     assert result is not None
     assert isinstance(result, str)
     assert len(result) > 0
+
+
+def test_procurement_routes_to_calculate_result_1():
+    # arrange
+    procurement_answers = [
+        "between-12k-and-2m",
+        "no",
+        "no",
+        "no",
+        "Any Answer",
+        "Any Answer",
+        "Any Answer",
+        procure_goods_and_services_from_third_party,
+        spend_on_corporate_activities,
+        "title",
+        "details"
+    ]
+
+    counter: int = 0
+    step: str = total_value_of_business_case
+    answers: dict = {}
+
+    # act 
+    while step != "calculate-result":
+        answers[step] = procurement_answers[counter]
+        step = get_next(step, procurement_answers[counter])
+        counter += 1
+
+    result = get_result_from_answers(answers)
+
+    # assert
+    assert step == "calculate-result"
+    assert result == you_need_to_start_a_business_justification_case
+
+
+def test_procurement_routes_to_calculate_result_2():
+    # arrange
+    procurement_answers = [
+        "between-12k-and-2m",
+        "no",
+        "no",
+        "no",
+        "Any Answer",
+        "Any Answer",
+        "Any Answer",
+        procure_goods_and_services_from_third_party,
+        procuring_something_else,
+        "no",
+        "Any Answer",
+        "title",
+        "details"
+    ]
+
+    counter: int = 0
+    step: str = total_value_of_business_case
+    answers: dict = {}
+
+    # act 
+    while step != "calculate-result":
+        answers[step] = procurement_answers[counter]
+        step = get_next(step, procurement_answers[counter])
+        counter += 1
+
+    result = get_result_from_answers(answers)
+
+    # assert
+    assert step == "calculate-result"
+    assert result == you_need_to_start_a_business_justification_case
+
+
+def test_procurement_routes_including_digital_routes_away_from_procurement():
+    # arrange
+    procurement_answers = [
+        "between-12k-and-2m",
+        "no",
+        "no",
+        "no",
+        "Any Answer",
+        DIGITAL_STRING,
+        "Any Answer",
+        procure_goods_and_services_from_third_party,
+        spend_on_corporate_activities,
+        "title",
+        "details"
+    ]
+
+    counter: int = 0
+    step: str = total_value_of_business_case
+    answers: dict = {}
+
+    # act 
+    while step != "calculate-result":
+        answers[step] = procurement_answers[counter]
+        step = get_next(step, procurement_answers[counter])
+        counter += 1
+
+    result = get_result_from_answers(answers)
+
+    # assert
+    assert step == "calculate-result"
+    assert result == "we-could-not-find-the-right-process-for-you"
+
+    

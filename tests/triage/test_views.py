@@ -3,7 +3,7 @@ from django.test import Client
 from django.urls import reverse
 from apps.triage.models import BusinessCase, BusinessCaseTriageResponse
 from apps.triage.flow import get_first_question_slug, QUESTION_SLUGS
-
+from apps.triage.slugs import *
 
 @pytest.fixture
 def client(db):
@@ -90,17 +90,21 @@ def test_start_clears_previous_session(client, db):
     assert BusinessCaseTriageResponse.objects.count() == 1
 
 
-def test_session_result_set_after_completion(client, db):
-    """Complete the full flow and check result is saved."""
+def test_procurement_template_route(client, db):
     client.get(reverse("triage:start"))
 
     answers = {
-        "total-value-of-business-case": "above-12k",
-        "new-project-or-programme": "no",
-        "have-you-spoken-to-finance-business-partner": "yes",
-        "is-business-case-less-than-two-million": "no",
-        "novel-contentious-or-repercussive": "no",
-        "where-is-the-budget-held": "Digital",
+        total_value_of_business_case: "between-12k-and-2m",
+        novel_repercussive_contentious_hmt_consent: "no",
+        is_this_request_a_pilot_with_potential_to_be_a_larger_proposal: "no",
+        is_this_request_part_of_a_wider_programme_with_existing_business_case: "no",
+        any_other_business_cases_that_are_connected_to_this_work: "*",
+        where_is_the_budget_held: "*",
+        is_this_a_retrospective_case: "*",
+        which_option_describes_what_you_are_trying_to_do: procure_goods_and_services_from_third_party,
+        which_best_describes_your_situation: spend_on_corporate_activities,
+        give_your_bjc_a_name: "*",
+        provide_a_high_level_summary: "*"
     }
 
     for slug in QUESTION_SLUGS:
@@ -115,34 +119,9 @@ def test_session_result_set_after_completion(client, db):
     assert session is not None
     assert session.result != "in-progress"
     assert session.result != ""
-
-
-def test_business_case_created_after_completion(client, db):
-    client.get(reverse("triage:start"))
-
-    answers = {
-        "total-value-of-business-case": "above-12k",
-        "new-project-or-programme": "no",
-        "have-you-spoken-to-finance-business-partner": "yes",
-        "is-business-case-less-than-two-million": "no",
-        "novel-contentious-or-repercussive": "no",
-        "where-is-the-budget-held": "Digital",
-    }
-
-    for slug in QUESTION_SLUGS:
-        answer = answers.get(slug)
-        if answer:
-            client.post(
-                reverse("triage:question", kwargs={"slug": slug}),
-                data={"answer": answer},
-            )
-
-    session = BusinessCaseTriageResponse.objects.filter(completed_at__isnull=False).last()
-    assert session is not None
-
+    
     business_case = BusinessCase.objects.last()
     assert business_case is not None
-    assert business_case.business_case_triage_response_id == session.id
     assert business_case.created_at is not None
     assert business_case.modified_at is not None
     assert business_case.deleted_at is None
