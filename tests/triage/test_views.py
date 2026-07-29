@@ -18,7 +18,9 @@ def started_session(client):
 
 
 # Pages load
-
+def test_3_stage_process_page_loads(client):
+    resp = client.get(reverse("triage:result", kwargs={"slug": "you-need-to-follow-a-three-stage-process"}))
+    assert resp.status_code == 200
 
 def test_index_page_loads(client):
     resp = client.get(reverse("triage:index"))

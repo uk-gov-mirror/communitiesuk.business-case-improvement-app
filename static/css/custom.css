@@ -22,3 +22,7 @@
 .timeline-compact .hmrc-timeline::before {
     width: 3px;
 }
+
+.accordion-no-show-all-toggle .govuk-accordion__controls {
+  display: none !important;
+}

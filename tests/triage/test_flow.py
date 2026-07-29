@@ -75,7 +75,7 @@ def test_over_2m_exit_screen_routing():
 
     # assert
     assert result == "calculate-result"
-    assert exit == "you-need-to-do-3-stage-process"
+    assert exit == "you-need-to-follow-a-three-stage-process"
 
 
 def test_result_always_returns_a_slug():
