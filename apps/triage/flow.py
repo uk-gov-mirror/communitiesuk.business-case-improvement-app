@@ -374,6 +374,9 @@ def get_result_from_answers(answers: dict) -> str:
             else:
                 return "we-could-not-find-the-right-process-for-you"
 
+    if total_value == "below-12k":
+        return determine_is_less_than_12k_exit_route(answers)
+
     # Exit early for you do not need a BC
     if (total_value == "below-12k" and new_project == "no") or request_involve_anything_digital is not None:
         return "you-do-not-need-a-business-case"
@@ -392,6 +395,28 @@ def get_result_from_answers(answers: dict) -> str:
     
     else:
         return "we-could-not-find-the-right-process-for-you"
+
+
+def determine_is_less_than_12k_exit_route(answers: dict) -> str:
+    if answers.get(part_of_wider_programme_with_existing_fbc, None) == "yes":
+        return "speak-to-someone-first"
+
+    if answers.get(part_of_wider_programme_with_existing_fbc, None) == "no":
+        involves_digital: bool = answers.get(does_request_involve_anything_digital, None) == "yes"
+
+        if involves_digital != None:
+            return "do-not-need-a-business-case-no-programme-digital" if involves_digital else "do-not-need-a-business-case-no-programme-not-digital"
+
+    return "we-could-not-find-the-right-process-for-you"
+
+def is_less_than_12k_do_not_need_a_bc(answers: dict):
+    return (answers.get(part_of_wider_programme_with_existing_fbc, None) == "no" and 
+            answers.get(does_request_involve_anything_digital, None) == "no")
+
+def is_less_than_12k_do_not_need_a_bc_send_email(answers: dict):
+    return (answers.get(part_of_wider_programme_with_existing_fbc, None) == "no" and 
+            answers.get(does_request_involve_anything_digital, None) == "yes")
+
 
 
 def is_procurement_case(answers: dict) -> bool:
