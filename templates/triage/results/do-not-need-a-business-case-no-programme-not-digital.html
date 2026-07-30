@@ -1,0 +1,142 @@
+{% extends "layouts/timeline_layout.html" %}
+{% from "govuk_frontend_jinja/templates/components/accordion/macro.html" import govukAccordion %}
+
+{% block main_content %}
+    <h1 class='govuk-heading-l'>You don't need a business case.</h1>
+
+    <p class='govuk-body'>Based on your answers, a business case is not required because:</p>
+    <ul class='govuk-list govuk-list--bullet govuk-list--spaced'>
+        <li>the whole life cost is less than £12,000 (including VAT), and</li>
+        <li>the request is not part of an existing project or programme with an approved business case.</li>
+    </ul>
+
+    <p class='govuk-body'>
+        If your costs increase above £12,000 (including VAT), you'll need to return to this service as your result may differ.</p>
+
+    <h2 class='govuk-heading-m'>
+        What to do next:</h2>
+
+    <h3 class="govuk-heading-s">Expand the option below that applies to your proposal for further guidance</h3>
+
+    <div class="accordion-no-show-all-toggle">
+        {{ govukAccordion({
+            "id": "low-value-accordion",
+            "items": [
+                {
+                    "heading":{
+                        "text": "If you want to buy something of low value (between £1,000 and £12,000 incl VAT)"
+                    },
+                    "content": {
+                        "html": "<div class='govuk-details__text'>
+                            <ul class='govuk-list govuk-list--bullet'>
+                                <li>
+                                    <h3 class='govuk-heading-s'>
+                                        You need to follow the Low Value Purchase process.</h3>
+                                </li>
+                                <li>
+                                    <p class='govuk-body'>
+                                        For guidance on the steps to do this, visit the Procurement Sharepoint page.</a></p>
+                                </li>
+                            </ul>
+                        </div>"
+                    }
+                }
+            ]
+        }) }}
+    </div>
+
+    <div class="accordion-no-show-all-toggle">
+        {{ govukAccordion({
+            "id": "c-and-ps-accordion",
+            "items": [
+                {
+                    "heading": {
+                        "text": "If you want to procure consultancy and professional services (C&PS):"
+                    },
+                    "content": {
+                        "html": "<div class='govuk-details__text'>
+                            <ul class='govuk-list govuk-list--bullet'>
+                                <li>if your spend is over £10,000 for C&PS, you may need to speak to the team.
+                                    Further guidance and next steps can be found on the intranet *here*
+                                </li>
+                            </ul>
+                        </div>"
+                    }
+                }
+            ]
+        }) }}
+    </div>
+
+    <div class="accordion-no-show-all-toggle">
+        {{ govukAccordion({
+            "id": "labour-accordion",
+            "items": [
+                {
+                    "heading": {
+                        "text": "If you need contingent labour:"
+                    },
+                    "content": {
+                        "html": "<div class='govuk-details__text'>
+                            <ul class='govuk-list govuk-list--bullet'>
+                                <li>People, Capabilities & Change can help you. Contact them *here*</li>
+                            </ul>
+                        </div>"
+                    }
+                }
+            ]
+        }) }}
+    </div>
+
+    <div class="accordion-no-show-all-toggle">
+        {{ govukAccordion({
+            "id": "external-legal-accordion",
+            "items": [
+                {
+                    "heading": {
+                        "text": "If you need external legal advice:"
+                    },
+                    "content": {
+                        "html": "<div class='govuk-details__text'>
+                            <ul class='govuk-list govuk-list--bullet'>
+                                <li>
+                                    you need to get agreement from 
+                                    <a class='govuk-link' href='{{external_links.governmentLegalDepartment}}'
+                                        target='_blank' rel='noopener noreferrer'>Government Legal Department (GLD)</a> 
+                                    This is due to HM Treasury rules around legal spend that we have to follow as a department</li>
+                                <li>
+                                    you should also contact your Finance Business Partner</li>
+                            </ul>
+                        </div>"
+                    }
+                }
+            ]
+        }) }}
+    </div>
+
+    <div class="accordion-no-show-all-toggle">
+        {{ govukAccordion({
+            "id": "research-accordion",
+            "items": [
+                {
+                    "heading": {
+                        "text": "If you need to commission research:"
+                    },
+                    "content": {
+                        "html": "<div class='govuk-details__text'>
+                            <ul class='govuk-list govuk-list--bullet'>
+                                <li>
+                                    contact <a class='govuk-link' href='{{external_links.researchGateway}}' target='_blank'
+                                        rel='noopener noreferrer'>Research Gateway</a></li>
+                                <li>
+                                    you will need to fill in a proposal if the commission research and evaluation work is over £9,999 (excl. VAT)</li>
+                                <li>
+                                    you can find the template on the Research Gateway Intranet in the section “Projects over £9,999”</li>
+                            </ul>
+                        </div>"
+                    }
+                }
+            ]
+        }) }}
+    </div>
+
+{% endblock %}

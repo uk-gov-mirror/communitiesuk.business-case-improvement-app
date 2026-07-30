@@ -22,6 +22,17 @@ def test_3_stage_process_page_loads(client):
     resp = client.get(reverse("triage:result", kwargs={"slug": "you-need-to-follow-a-three-stage-process"}))
     assert resp.status_code == 200
 
+
+def test_below_12k_no_programme_not_digital_loads(client):
+    resp = client.get(reverse("triage:result", kwargs={"slug": "do-not-need-a-business-case-no-programme-not-digital"}))
+    assert resp.status_code == 200
+
+
+def test_below_12k_no_programme_digital_loads(client):
+    resp = client.get(reverse("triage:result", kwargs={"slug": "do-not-need-a-business-case-no-programme-digital"}))
+    assert resp.status_code == 200
+
+
 def test_index_page_loads(client):
     resp = client.get(reverse("triage:index"))
     assert resp.status_code == 200

@@ -68,6 +68,14 @@ def test_all_routing_rules_point_to_valid_questions_or_results():
 
 #  Result/Exit screen Routing
 
+def test_result_always_returns_a_slug():
+    """No combination of answers should return None."""
+    result = get_result_from_answers({})
+    assert result is not None
+    assert isinstance(result, str)
+    assert len(result) > 0
+
+
 def test_over_2m_exit_screen_routing():
     # act
     result = get_next(total_value_of_business_case, "above-2m")
@@ -78,12 +86,34 @@ def test_over_2m_exit_screen_routing():
     assert exit == "you-need-to-follow-a-three-stage-process"
 
 
-def test_result_always_returns_a_slug():
-    """No combination of answers should return None."""
-    result = get_result_from_answers({})
-    assert result is not None
-    assert isinstance(result, str)
-    assert len(result) > 0
+def test_less_than_12k_no_programme_not_digital_routing():
+    # arrange
+    responses = [
+        "below-12k",
+        "no",
+        "no"
+    ]
+
+    # act
+    result = get_routing_exit_page(responses)
+
+    # assert
+    assert result == "do-not-need-a-business-case-no-programme-not-digital"
+
+
+def test_less_than_12k_no_programme_digital_routing():
+    # arrange
+    responses = [
+        "below-12k",
+        "no",
+        "yes"
+    ]
+
+    #act
+    result = get_routing_exit_page(responses)
+
+    #assert
+    assert result == "do-not-need-a-business-case-no-programme-digital"
 
 
 def test_procurement_routes_to_calculate_result_1():
@@ -102,20 +132,10 @@ def test_procurement_routes_to_calculate_result_1():
         "details"
     ]
 
-    counter: int = 0
-    step: str = total_value_of_business_case
-    answers: dict = {}
-
-    # act 
-    while step != "calculate-result":
-        answers[step] = procurement_answers[counter]
-        step = get_next(step, procurement_answers[counter])
-        counter += 1
-
-    result = get_result_from_answers(answers)
+    # act
+    result = get_routing_exit_page(procurement_answers)
 
     # assert
-    assert step == "calculate-result"
     assert result == you_need_to_start_a_business_justification_case
 
 
@@ -137,20 +157,10 @@ def test_procurement_routes_to_calculate_result_2():
         "details"
     ]
 
-    counter: int = 0
-    step: str = total_value_of_business_case
-    answers: dict = {}
-
-    # act 
-    while step != "calculate-result":
-        answers[step] = procurement_answers[counter]
-        step = get_next(step, procurement_answers[counter])
-        counter += 1
-
-    result = get_result_from_answers(answers)
+    # act
+    result = get_routing_exit_page(procurement_answers)
 
     # assert
-    assert step == "calculate-result"
     assert result == you_need_to_start_a_business_justification_case
 
 
@@ -170,20 +180,31 @@ def test_procurement_routes_including_digital_routes_away_from_procurement():
         "details"
     ]
 
+    # act
+    result = get_routing_exit_page(procurement_answers)
+
+    # assert
+    assert result == "we-could-not-find-the-right-process-for-you"
+
+
+'''
+Provide a list of triage responses, starting from the cost.
+This will then go through each response to reach the end of the journey and provide
+the exit screen that was determined
+'''
+def get_routing_exit_page(responses: list) -> str:
     counter: int = 0
     step: str = total_value_of_business_case
     answers: dict = {}
 
-    # act 
-    while step != "calculate-result":
-        answers[step] = procurement_answers[counter]
-        step = get_next(step, procurement_answers[counter])
-        counter += 1
+    try:
+        while step != "calculate-result":
+                answers[step] = responses[counter]
+                step = get_next(step, responses[counter])
+                counter += 1
 
-    result = get_result_from_answers(answers)
+        result = get_result_from_answers(answers)
+    except:
+        result = ""
 
-    # assert
-    assert step == "calculate-result"
-    assert result == "we-could-not-find-the-right-process-for-you"
-
-    
+    return result
