@@ -187,6 +187,26 @@ def test_procurement_routes_including_digital_routes_away_from_procurement():
     assert result == "we-could-not-find-the-right-process-for-you"
 
 
+def test_commission_research_routing():
+    # arrange
+    responses = [
+        "between-12k-and-2m",
+        "no",
+        "no",
+        "no",
+        "Any Answer",
+        DIGITAL_STRING,
+        "Any Answer",
+        commission_research
+    ]
+
+    # act
+    result = get_routing_exit_page(responses)
+
+    # assert
+    assert result == 'you-need-to-speak-to-the-research-team'
+
+
 '''
 Provide a list of triage responses, starting from the cost.
 This will then go through each response to reach the end of the journey and provide

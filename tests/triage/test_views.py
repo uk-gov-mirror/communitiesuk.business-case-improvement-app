@@ -28,6 +28,11 @@ def test_below_12k_no_programme_not_digital_loads(client):
     assert resp.status_code == 200
 
 
+def test_speak_to_research_team_loads(client):
+    resp = client.get(reverse("triage:result", kwargs={"slug": "you-need-to-speak-to-the-research-team"}))
+    assert resp.status_code == 200
+
+
 def test_below_12k_no_programme_digital_loads(client):
     resp = client.get(reverse("triage:result", kwargs={"slug": "do-not-need-a-business-case-no-programme-digital"}))
     assert resp.status_code == 200
