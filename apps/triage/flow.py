@@ -369,6 +369,9 @@ def get_result_from_answers(answers: dict) -> str:
         return "you-need-to-follow-a-three-stage-process"
 
     if total_value == "between-12k-and-2m":
+            if is_commission_research(answers):
+                return 'you-need-to-speak-to-the-research-team'
+            
             if is_procurement_case(answers):
                 return you_need_to_start_a_business_justification_case
             else:
@@ -418,6 +421,20 @@ def is_less_than_12k_do_not_need_a_bc_send_email(answers: dict):
             answers.get(does_request_involve_anything_digital, None) == "yes")
 
 
+def is_commission_research(answers: dict) -> bool:
+    is_not_novel = answers.get(novel_repercussive_contentious_hmt_consent, None) == "no"
+    is_not_pilot = answers.get(is_this_request_a_pilot_with_potential_to_be_a_larger_proposal, None) == "no"
+    is_not_existing_programme = answers.get(is_this_request_part_of_a_wider_programme_with_existing_business_case, None) == "no"
+    is_not_digital_budget = answers.get(where_is_the_budget_held, None) != ''
+
+    is_trying_to_commission_research = answers.get(which_option_describes_what_you_are_trying_to_do, None) == commission_research
+
+    return (is_not_novel and
+            is_not_pilot and
+            is_not_existing_programme and
+            is_not_digital_budget and
+            is_trying_to_commission_research)
+    
 
 def is_procurement_case(answers: dict) -> bool:
     is_not_novel = answers.get(novel_repercussive_contentious_hmt_consent, None) == "no"
