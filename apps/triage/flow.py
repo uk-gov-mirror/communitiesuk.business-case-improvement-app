@@ -44,7 +44,6 @@ QUESTIONS = [
         "slug": part_of_wider_programme_with_existing_fbc,
         "title": "Is this request part of a wider programme with an existing FBC?",
         "type": "radio",
-        "hint": '<div class="govuk-inset-text"></div>',
         "help_text": "",
         "choices": [
             ("yes", "Yes"),
@@ -71,7 +70,7 @@ QUESTIONS = [
         ]
     },
     {
-        "slug": is_this_request_a_pilot_with_potential_to_be_a_larger_proposal,
+        "slug": is_this_request_a_pilot,
         "title": "Is this request a 'pilot' with the potential to turn into a larger proposal in the future?",
         "type": "radio",
         "choices":[
@@ -299,8 +298,10 @@ ROUTING = {
     (part_of_wider_programme_with_existing_fbc, "no"): does_request_involve_anything_digital,
     (does_request_involve_anything_digital, "yes"): "calculate-result",
     (does_request_involve_anything_digital, "no"): "calculate-result",
-    (novel_repercussive_contentious_hmt_consent, "no"): is_this_request_a_pilot_with_potential_to_be_a_larger_proposal,
-    (is_this_request_a_pilot_with_potential_to_be_a_larger_proposal, "no"): is_this_request_part_of_a_wider_programme_with_existing_business_case,
+    (novel_repercussive_contentious_hmt_consent, "no"): is_this_request_a_pilot,
+    (novel_repercussive_contentious_hmt_consent, "yes"): "calculate-result",
+    (is_this_request_a_pilot, "yes"): "calculate-result",
+    (is_this_request_a_pilot, "no"): is_this_request_part_of_a_wider_programme_with_existing_business_case,
     (is_this_request_part_of_a_wider_programme_with_existing_business_case, "no"): any_other_business_cases_that_are_connected_to_this_work,
     (any_other_business_cases_that_are_connected_to_this_work, "*"): where_is_the_budget_held,
     (where_is_the_budget_held, "*"): is_this_a_retrospective_case,
@@ -374,6 +375,8 @@ def get_result_from_answers(answers: dict) -> str:
             if full_12k_to_2m_flow_completed(answers):
                 return get_procurement_exit(answers)
             else:
+                if is_three_stage_process_novel_or_pilot(answers):
+                    return "you-need-to-follow-a-three-stage-process-novel-or-pilot"
                 return "we-could-not-find-the-right-process-for-you"
 
     if total_value == "below-12k":
@@ -394,10 +397,16 @@ def determine_is_less_than_12k_exit_route(answers: dict) -> str:
 
     return "we-could-not-find-the-right-process-for-you"
 
+def is_three_stage_process_novel_or_pilot(answers: dict) -> bool:
+    # could be 'I don't know' so check it's not No here, as Yes and Don't Know are the same route
+    is_novel = answers.get(novel_repercussive_contentious_hmt_consent, None) != "no"
+    is_pilot = answers.get(is_this_request_a_pilot, None) == "yes"
+
+    return (is_novel or is_pilot)
 
 def is_commission_research(answers: dict) -> bool:
     is_not_novel = answers.get(novel_repercussive_contentious_hmt_consent, None) == "no"
-    is_not_pilot = answers.get(is_this_request_a_pilot_with_potential_to_be_a_larger_proposal, None) == "no"
+    is_not_pilot = answers.get(is_this_request_a_pilot, None) == "no"
     is_not_existing_programme = answers.get(is_this_request_part_of_a_wider_programme_with_existing_business_case, None) == "no"
     is_not_digital_budget = answers.get(where_is_the_budget_held, None) != ''
 
@@ -408,7 +417,7 @@ def is_commission_research(answers: dict) -> bool:
             is_not_existing_programme and
             is_not_digital_budget and
             is_trying_to_commission_research)
-    
+
 
 '''
 Check all the answers that will lead from 12k-2m cost to the end, to determine
@@ -416,7 +425,7 @@ if we reached the end of the journey
 '''
 def full_12k_to_2m_flow_completed(answers: dict) -> bool:
     is_not_novel = answers.get(novel_repercussive_contentious_hmt_consent, None) == "no"
-    is_not_pilot = answers.get(is_this_request_a_pilot_with_potential_to_be_a_larger_proposal, None) == "no"
+    is_not_pilot = answers.get(is_this_request_a_pilot, None) == "no"
     is_not_existing_programme = answers.get(is_this_request_part_of_a_wider_programme_with_existing_business_case, None) == "no"
     budget_answered = answers.get(where_is_the_budget_held, None) != ""
 

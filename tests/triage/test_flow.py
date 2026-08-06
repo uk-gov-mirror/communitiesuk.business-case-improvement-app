@@ -101,6 +101,20 @@ def test_less_than_12k_no_programme_not_digital_routing():
     assert result == "do-not-need-a-business-case-no-programme-not-digital"
 
 
+def test_less_than_12k_existing_programme_routing():
+    # arrange
+    responses = [
+        "below-12k",
+        "yes",
+    ]
+
+    # act
+    result = get_routing_exit_page(responses)
+
+    # assert
+    assert result == "speak-to-someone-first"
+
+
 def test_less_than_12k_no_programme_digital_routing():
     # arrange
     responses = [
@@ -236,6 +250,35 @@ def test_procurement_routes_including_digital_routes_away_from_procurement():
     assert result == "we-could-not-find-the-right-process-for-you"
 
 
+def test_3_stage_process_for_novel():
+    # arrange
+    responses = [
+        "between-12k-and-2m",
+        "yes"
+    ]
+
+    # act
+    result = get_routing_exit_page(responses)
+
+    # assert
+    assert result == "you-need-to-follow-a-three-stage-process-novel-or-pilot", f"result was {result}"
+
+
+def test_3_stage_process_for_pilot():
+    # arrange
+    responses = [
+        "between-12k-and-2m",
+        "no",
+        "yes"
+    ]
+
+    # act
+    result = get_routing_exit_page(responses)
+
+    # assert
+    assert result == "you-need-to-follow-a-three-stage-process-novel-or-pilot", f"result was {result}"
+
+
 def test_commission_research_routing():
     # arrange
     responses = [
@@ -273,7 +316,8 @@ def get_routing_exit_page(responses: list) -> str:
                 counter += 1
 
         result = get_result_from_answers(answers)
-    except:
+    except Exception as e:
+        print(e.__str__)
         result = ""
 
     return result

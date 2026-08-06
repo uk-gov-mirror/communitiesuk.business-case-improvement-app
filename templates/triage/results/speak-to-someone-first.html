@@ -1,40 +1,136 @@
-{% extends "layouts/base_layout.html" %}
+{% extends "layouts/timeline_layout.html" %}
+{% from "govuk_frontend_jinja/templates/components/accordion/macro.html" import govukAccordion %}
 
-{% block content %}
-<div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
-        <h1 class="govuk-heading-l">Speak to someone first</h1>
+{% block main_content %}
+    <h1 class="govuk-heading-l">This request may be covered by an existing business case</h1>
 
-        <p class="govuk-body">Because your business case is part of an existing project or programme, you may still need
-            to do a
-            business case,
-            even if the spend is under £12,000.</p>
+    <p class='govuk-body'>Based on your answers, a business case is not required because:</p>
+    <ul class='govuk-list govuk-list--bullet govuk-list--spaced'>
+        <li>this request is part of a wider project or programme with an existing approved business case</li>
+        <li>the value of this individual request is less than £12,000, additional approvals or controls may apply</li>
+    </ul>
 
-        <p class="govuk-body">It's important to understand how projects and programmes are connected, so we can apply a
-            proportionate
-            approvals process.</p>
+    <h2 class='govuk-heading-m'>What to do next:</h2>
 
-        <h2 class="govuk-heading-m">What to do next</h2>
-        <ul class="govuk-list govuk-list--bullet">
-            <li>Find and speak with the Finance Business Partner who is leading on the programme.</li>
-            <li>If you have already been advised on what template you need, download it from the
-                <a class="govuk-link"
-                    href="https://mhclg.sharepoint.com.mcas.ms/sites/ProjectDeliveryNetwork/SitePages/Template-l.aspx"
-                    target="_blank" rel="noopener noreferrer">template library</a>
-            </li>
-        </ul>
+    <ul class='govuk-list govuk-list--bullet govuk-list--spaced'>
+        <li>review the existing full business case to check if this spend is already covered</li>
+        <li>if it's not covered, work with your Finance Business Partner or Commercial colleague to understand the next appropriate step - in some cases, this will typically involve updating the existing business case with an addendum</li>
+    </ul>
 
-        <p class="govuk-body">Find everything about business cases at MHCLG on the
-            <a class="govuk-link" href="{{ external_linksproject_delivery_hub }}" target="_blank"
-                rel="noopener noreferrer">
-                Project Delivery Hub</a>
-        </p>
+    <h2 class='govuk-heading-m'>Other options</h2>
+    <p class='govuk-body'>Expand the option below that applies to your proposal for further guidance</p>
 
-        <p class="govuk-body">
-            <a class="govuk-link" href="{{ external_linksfeedback_survey }}">What did you think of this service?</a>
-            (takes 30 seconds)
-        </p>
+    <div class='accordion-no-show-all-toggle'>
+        {{ govukAccordion({
+            "id": "low-value-accordion",
+            "items": [
+                {
+                    "heading":{
+                        "text": "If you want to buy something of low value (between £1,000 and £12,000 incl VAT)"
+                    },
+                    "content": {
+                        "html": "<div class='govuk-details__text'>
+                            <h3 class='govuk-heading-s'>You need to follow the Low Value Purchase process.</h3>
+                            <p class='govuk-body'>For guidance on the steps to do this, visit the Procurement Sharepoint page.</p>
+                        </div>"
+                    }
+                }
+            ]
+        }) }}
     </div>
-</div>
+
+    <div class='accordion-no-show-all-toggle'>
+        {{ govukAccordion({
+            "id": "c-and-ps-accordion",
+            "items": [
+                {
+                    "heading": {
+                        "text": "If you want to procure consultancy and professional services (C&PS):"
+                    },
+                    "content": {
+                        "html": "<div class='govuk-details__text'>
+                            <ul class='govuk-list govuk-list--bullet'>
+                                <li>if your spend is over £10,000 for C&PS, you may need to speak to the team.
+                                    Further guidance and next steps can be found on the intranet *here*
+                                </li>
+                            </ul>
+                        </div>"
+                    }
+                }
+            ]
+        }) }}
+    </div>
+
+    <div class='accordion-no-show-all-toggle'>
+        {{ govukAccordion({
+            "id": "labour-accordion",
+            "items": [
+                {
+                    "heading": {
+                        "text": "If you need contingent labour:"
+                    },
+                    "content": {
+                        "html": "<div class='govuk-details__text'>
+                            <ul class='govuk-list govuk-list--bullet'>
+                                <li>People, Capabilities & Change can help you. Contact them *here*</li>
+                            </ul>
+                        </div>"
+                    }
+                }
+            ]
+        }) }}
+    </div>
+
+    <div class='accordion-no-show-all-toggle'>
+        {{ govukAccordion({
+            "id": "external-legal-accordion",
+            "items": [
+                {
+                    "heading": {
+                        "text": "If you need external legal advice:"
+                    },
+                    "content": {
+                        "html": "<div class='govuk-details__text'>
+                            <ul class='govuk-list govuk-list--bullet'>
+                                <li>
+                                    you need to get agreement from 
+                                    <a class='govuk-link' href='{{external_links.governmentLegalDepartment}}'
+                                        target='_blank' rel='noopener noreferrer'>Government Legal Department (GLD)</a>.
+                                    This is due to HM Treasury rules around legal spend that we have to follow as a department</li>
+                                <li>
+                                    you should also contact your Finance Business Partner</li>
+                            </ul>
+                        </div>"
+                    }
+                }
+            ]
+        }) }}
+    </div>
+
+    <div class='accordion-no-show-all-toggle'>
+        {{ govukAccordion({
+            "id": "research-accordion",
+            "items": [
+                {
+                    "heading": {
+                        "text": "If you need to commission research:"
+                    },
+                    "content": {
+                        "html": "<div class='govuk-details__text'>
+                            <ul class='govuk-list govuk-list--bullet'>
+                                <li>
+                                    contact <a class='govuk-link' href='{{external_links.researchGateway}}' target='_blank'
+                                        rel='noopener noreferrer'>Research Gateway</a></li>
+                                <li>
+                                    you will need to fill in a proposal if the commission research and evaluation work is over £9,999 (excl. VAT)</li>
+                                <li>
+                                    you can find the template on the Research Gateway Intranet in the section “Projects over £9,999”</li>
+                            </ul>
+                        </div>"
+                    }
+                }
+            ]
+        }) }}
+    </div>
 
 {% endblock %}
