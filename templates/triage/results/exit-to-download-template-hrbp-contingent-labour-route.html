@@ -1,0 +1,119 @@
+{% extends "layouts/timeline_layout.html" %}
+
+{% block main_content %}
+
+    {% if request.session.business_case_title %}
+        <h1 class="govuk-heading-l">{{ request.session.business_case_title }}</h1>
+    {% else %}
+        <h1 class="govuk-heading-l">--- Business Case Title Placeholder ---</h1>
+    {% endif %}
+
+    <h2 class="govuk-heading-m">Download your business case template</h2>
+
+    <p class="govuk-body">This is the Word document you'll use to draft your business case.</p>
+    <p class="govuk-body">Note: once you download your template, keep a copy somewhere safe.
+        If it is lost or deleted, you'll need to return to this service and complete the questions again to generate a new one.
+    </p>
+    <p class=govuk-body>*Download template*</p>
+
+    <h2 class="govuk-body">Before you start drafting</h2>
+
+    <h3 class="govuk-heading-s">1. Engage the right people early</h3>
+    <p class="govuk-body">Business cases are developed collaboratively.
+        Engage the people who will advise on, assure and approve your proposal as early as possible. You should contact:
+    </p>
+
+    <ul class="govuk-list govuk-list--bullet">
+        <li>
+            <p class="govuk-body">
+                <b>HR Business Partners (HRBP) </b>Explain your proposal and the total value of the request.
+                They will assign a Corporate Partner to support the development of your business case and provide a recommendation on whether it should proceed.
+            </p>
+        </li>
+        <li>
+            <p class="govuk-body">
+                <b>Your finance business partner (FBP)</b>
+                Explain your proposal and the total value of the request.
+                They will confirm funding is available, assess the proposal against Accounting Officer standards and provide a recommendation on whether it should proceed.
+                <b>Digital Directorate only:</b>
+                If you are seeking funding from the Digital budget, you do not contact your Finance Business Partner.
+                Instead, contact the Digital Corporate Office at
+                <a class="govuk-link" href="{{external_links.digital_business_case_email}}" target="_blank" rel="noopener noreferrer">digitalbusinesscase@communities.gov.uk</a>
+                .
+            </p>
+        </li>
+        <li>
+            <p class="govuk-body">
+                <b>Your SRO/SCS</b>
+                in your area with the delegated authority to sign off this spend - advise them of what you're doing early and that you will be seeking their approval soon.
+            </p>
+        </li>
+        <li>
+            <p class="govuk-body">
+                <b>Digital Front Door (DFD) </b>
+                If your proposal involves digital services, software, platforms, systems, technology or data, contact the Digital Front Door team.
+                They oversee the department's digital spend and will advise on any assurance requirements.
+                Depending on the value and nature of your proposal, you may also need to attend the Digital Pipeline Assurance Board.
+                If this applies, the DFD team will arrange this for you.
+            </p>
+        </li>
+    </ul>
+
+    <h3 class="govuk-heading-s">2. Allow enough time</h3>
+    <p class="govuk-body">
+        Depending on the nature of your proposal, additional approvals and assurance may be required.
+        The end-to-end process can take <b>16+ weeks</b>, so engage the right people early - they will help guide you through additional requirements. 
+    </p>
+
+    <h3 class="govuk-heading-s">3. Use the supporting guidance</h3>
+    <p class="govuk-body">Review the available guidance before drafting your business case.
+        This will help you understand the information reviewers and approvers expect to see. Access the
+        <a class="govuk-link" href="https://mhclg.sharepoint.com/:p:/s/ProjectDeliveryNetwork/IQD5gPFS1WxDQ4dHGm2Elm0eAUng-J0JZ7p-_CbIDQPjHJ0?e=oI41LQ"
+        target="_blank" rel="noopener noreferrer">Contingent Labour Step-by-Step guide.pptx</a>
+    </p>
+
+    <details class="govuk-details">
+        <summary class="govuk-details__summary">
+            <span class="govuk-details__summary-text">
+                Who approves my business case?
+            </span>
+        </summary>
+        <div class="govuk-details__text">
+            <p class="govuk-body">After securing assurance sign off from your Procurement Lead SME and Finance Business Partner, you will need to ask your area SRO or SCS to approve this.</p>
+            <p class="govuk-body">Additional approvals may also be required depending on the nature and value of your proposal:</p>
+
+            <ul class="govuk-list govuk-list--bullet">
+                <li>
+                    <p class="govuk-body">
+                        <b>Resource DEL Administration (RDEL Admin)</b>
+                        <br/>
+                        If your proposal includes <b>£1 million or more of RDEL Admin spend</b>, approval from the Investment Sub-Committee (ISC) may be required.
+                        Speak to your Finance Business Partner if you're unsure whether this applies. 
+                    </p>
+                </li>
+                <li>
+                    <p class="govuk-body">
+                        <b>Consultancy and Professional Services (C&PS)</b>
+                        <br/>
+                        If your proposal includes <b>more than £10,000 of Consultancy and Professional Services spend</b>, additional approvals may be required.
+                        Refer to the relevant intranet guidance for further information. 
+                    </p>
+                </li>
+                <li>
+                    <p class="govuk-body">
+                        <b>External legal advice</b>
+                        </br>
+                        If your proposal requires external legal advice, approval may be required from the Government Legal Department (GLD) in line with HM Treasury requirements.
+                    </p>
+                </li>
+            </ul>
+        </div>
+ 
+        <p class="govuk-body">
+            No longer need this?
+            <a class="govuk-link" href="" target="_blank" rel="noopener noreferrer">Withdraw business case.</a> 
+        </p>
+        
+    </details>
+
+{% endblock %}
