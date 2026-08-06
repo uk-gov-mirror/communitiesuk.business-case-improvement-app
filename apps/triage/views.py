@@ -7,10 +7,10 @@ from .flow import (
     get_first_question_slug,
     get_next,
     get_question,
-    get_result_from_answers
 )
 from .models import BusinessCase, BusinessCaseTriageResponse
 from .slugs import give_your_bjc_a_name
+from .calculate_result_helpers import get_result_from_answers
 
 def _get_or_create_session(request) -> BusinessCaseTriageResponse:
     if not request.session.session_key:
