@@ -116,8 +116,8 @@ QUESTIONS = [
         ]
     },
     {
-        "slug": which_best_describes_your_situation,
-        "title": "Which best describes your situation?",
+        "slug": which_best_describes_your_spend,
+        "title": "Which best describes your spend?",
         "type": "radio",
         "choices": [
             (spend_on_corporate_activities,"Spend money on corporate activities - Purchase additional licences, equipment, training or similar operational items that do not require a new procurement approach"),
@@ -305,9 +305,10 @@ ROUTING = {
     (where_is_the_budget_held, "*"): is_this_a_retrospective_case,
     (is_this_a_retrospective_case, "*"): which_option_describes_what_you_are_trying_to_do,
     (which_option_describes_what_you_are_trying_to_do, commission_research): "calculate-result",
-    (which_option_describes_what_you_are_trying_to_do, procure_goods_and_services_from_third_party): which_best_describes_your_situation,
-    (which_best_describes_your_situation, spend_on_corporate_activities): give_your_bjc_a_name,
-    (which_best_describes_your_situation, procuring_something_else): are_you_procuring_consulting_and_professional_services,
+    (which_option_describes_what_you_are_trying_to_do, procure_goods_and_services_from_third_party): which_best_describes_your_spend,
+    (which_option_describes_what_you_are_trying_to_do, hire_contracted_workers_to_fill_temporary_capacity_gap): give_your_bjc_a_name,
+    (which_best_describes_your_spend, spend_on_corporate_activities): give_your_bjc_a_name,
+    (which_best_describes_your_spend, procuring_something_else): are_you_procuring_consulting_and_professional_services,
     (are_you_procuring_consulting_and_professional_services, "*"): we_want_to_continue_improving_our_service,
     (we_want_to_continue_improving_our_service, "*"): give_your_bjc_a_name,
     (give_your_bjc_a_name, "*"): provide_a_high_level_summary,
@@ -373,7 +374,7 @@ def get_result_from_answers(answers: dict) -> str:
                 return 'you-need-to-speak-to-the-research-team'
             
             if is_procurement_case(answers):
-                return you_need_to_start_a_business_justification_case
+                return get_procurement_exit(answers)
             else:
                 return "we-could-not-find-the-right-process-for-you"
 
@@ -412,14 +413,6 @@ def determine_is_less_than_12k_exit_route(answers: dict) -> str:
 
     return "we-could-not-find-the-right-process-for-you"
 
-def is_less_than_12k_do_not_need_a_bc(answers: dict):
-    return (answers.get(part_of_wider_programme_with_existing_fbc, None) == "no" and 
-            answers.get(does_request_involve_anything_digital, None) == "no")
-
-def is_less_than_12k_do_not_need_a_bc_send_email(answers: dict):
-    return (answers.get(part_of_wider_programme_with_existing_fbc, None) == "no" and 
-            answers.get(does_request_involve_anything_digital, None) == "yes")
-
 
 def is_commission_research(answers: dict) -> bool:
     is_not_novel = answers.get(novel_repercussive_contentious_hmt_consent, None) == "no"
@@ -440,17 +433,35 @@ def is_procurement_case(answers: dict) -> bool:
     is_not_novel = answers.get(novel_repercussive_contentious_hmt_consent, None) == "no"
     is_not_pilot = answers.get(is_this_request_a_pilot_with_potential_to_be_a_larger_proposal, None) == "no"
     is_not_existing_programme = answers.get(is_this_request_part_of_a_wider_programme_with_existing_business_case, None) == "no"
-    is_not_digital_budget = answers.get(where_is_the_budget_held, None) != DIGITAL_STRING
+    budget_answered = answers.get(where_is_the_budget_held, None) != ""
 
-    is_trying_to_procure_from_third_party = answers.get(which_option_describes_what_you_are_trying_to_do, None) == procure_goods_and_services_from_third_party
+    is_trying_to_procure_from_third_party = answers.get(which_option_describes_what_you_are_trying_to_do, None) in {
+        procure_goods_and_services_from_third_party,
+        hire_contracted_workers_to_fill_temporary_capacity_gap
+        }
     
-    is_corporate_spend_or_procurement: bool = (answers.get(which_best_describes_your_situation, None) == spend_on_corporate_activities or
-                             answers.get(which_best_describes_your_situation, None) == procuring_something_else)
-
+    is_corporate_spend_or_procurement: bool = answers.get(which_best_describes_your_spend, None) != ""
     return (is_not_novel and
             is_not_pilot and
             is_not_existing_programme and
-            is_not_digital_budget and
+            budget_answered and
             is_trying_to_procure_from_third_party and
             is_corporate_spend_or_procurement)
 
+def get_procurement_exit(answers: dict) -> str:
+    best_describes_your_situation: str | None = answers.get(which_option_describes_what_you_are_trying_to_do, None)
+    best_describes_your_spend: str | None = answers.get(which_best_describes_your_spend, None)
+
+    if answers.get(where_is_the_budget_held, None) == DIGITAL_STRING:
+        return "we-could-not-find-the-right-process-for-you"
+    
+    if best_describes_your_situation == procure_goods_and_services_from_third_party:
+        if best_describes_your_spend == spend_on_corporate_activities:
+            return "exit-to-download-template-corporate-spend-fbp-route"
+        if best_describes_your_spend == procuring_something_else:
+            return "exit-to-download-template-procurement-route" 
+
+    if best_describes_your_situation == hire_contracted_workers_to_fill_temporary_capacity_gap:
+        return "exit-to-download-template-hrbp-contingent-labour-route"
+ 
+    return "we-could-not-find-the-right-process-for-you"

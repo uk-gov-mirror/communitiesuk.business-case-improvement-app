@@ -116,30 +116,7 @@ def test_less_than_12k_no_programme_digital_routing():
     assert result == "do-not-need-a-business-case-no-programme-digital"
 
 
-def test_procurement_routes_to_calculate_result_1():
-    # arrange
-    procurement_answers = [
-        "between-12k-and-2m",
-        "no",
-        "no",
-        "no",
-        "Any Answer",
-        "Any Answer",
-        "Any Answer",
-        procure_goods_and_services_from_third_party,
-        spend_on_corporate_activities,
-        "title",
-        "details"
-    ]
-
-    # act
-    result = get_routing_exit_page(procurement_answers)
-
-    # assert
-    assert result == you_need_to_start_a_business_justification_case
-
-
-def test_procurement_routes_to_calculate_result_2():
+def test_procurement_routes_to_procurement():
     # arrange
     procurement_answers = [
         "between-12k-and-2m",
@@ -161,7 +138,79 @@ def test_procurement_routes_to_calculate_result_2():
     result = get_routing_exit_page(procurement_answers)
 
     # assert
-    assert result == you_need_to_start_a_business_justification_case
+    assert result == "exit-to-download-template-procurement-route"
+
+
+def test_procurement_routes_to_fbp():
+    # arrange
+    procurement_answers = [
+        "between-12k-and-2m",
+        "no",
+        "no",
+        "no",
+        "Any Answer",
+        "Any Answer",
+        "Any Answer",
+        procure_goods_and_services_from_third_party,
+        spend_on_corporate_activities,
+        "no",
+        "Any Answer",
+        "title",
+        "details"
+    ]
+
+    # act
+    result = get_routing_exit_page(procurement_answers)
+
+    # assert
+    assert result == "exit-to-download-template-corporate-spend-fbp-route"
+
+
+def test_procurement_routes():
+    # arrange
+    procurement_answers = [
+        "between-12k-and-2m",
+        "no",
+        "no",
+        "no",
+        "no",
+        "Any Answer",
+        "Any Answer", 
+        procure_goods_and_services_from_third_party,
+        procuring_something_else,
+        "no",
+        "Any Answer",
+        "title",
+        "details"
+    ]
+
+    # act
+    result = get_routing_exit_page(procurement_answers)
+
+    # assert
+    assert result == "exit-to-download-template-procurement-route"
+
+
+def test_procurement_routes_to_hrbp_labour():
+    # arrange
+    procurement_answers = [
+        "between-12k-and-2m",
+        "no",
+        "no",
+        "no",
+        "Any Answer",
+        "Any Answer",
+        "Any Answer",
+        hire_contracted_workers_to_fill_temporary_capacity_gap,
+        "title",
+        "details"
+    ]
+
+    # act
+    result = get_routing_exit_page(procurement_answers)
+
+    # assert
+    assert result == "exit-to-download-template-hrbp-contingent-labour-route"
 
 
 def test_procurement_routes_including_digital_routes_away_from_procurement():

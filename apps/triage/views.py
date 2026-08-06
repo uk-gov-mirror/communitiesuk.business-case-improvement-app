@@ -11,6 +11,7 @@ from .flow import (
 )
 from .models import BusinessCase, BusinessCaseTriageResponse
 
+from .slugs import give_your_bjc_a_name
 
 def _get_or_create_session(request) -> BusinessCaseTriageResponse:
     if not request.session.session_key:
@@ -82,6 +83,9 @@ def question(request, slug: str):
             BusinessCase.objects.get_or_create(
                 business_case_triage_response=triage_session,
             )
+
+            request.session["business_case_title"] = triage_session.answers.get(give_your_bjc_a_name, "")
+
             return redirect("triage:result", slug=result_slug)
 
         return redirect("triage:question", slug=next_step)
