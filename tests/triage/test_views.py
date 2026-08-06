@@ -43,6 +43,11 @@ def test_procurement_template_exit_loads(client):
     assert resp.status_code == 200
 
 
+def test_procurement_route_digital_spend_page_loads(client):
+    resp = client.get(reverse("triage:result", kwargs={"slug": "procurement_route_digital_spend"}))
+    assert resp.status_code == 200
+
+
 def test_speak_to_research_team_loads(client):
     resp = client.get(reverse("triage:result", kwargs={"slug": "you-need-to-speak-to-the-research-team"}))
     assert resp.status_code == 200
