@@ -22,8 +22,9 @@ If there's no specific match for an answer, the fallback key (slug, "*") is used
 Result pages are defined in RESULTS.
 """
 
-# because routing requires very specific check, I'm setting here to reduce likelihood of unknowing changes
+# because routing requires very specific checks, I'm setting here to reduce likelihood of unknowing changes
 DIGITAL_STRING: Final[str] = "Digital"
+BETWEEN_12K_AND_2M_STRING: Final[str] = "between-12k-and-2m"
 
 # Types: Radio, Checkbox, Select, Input
 QUESTIONS = [
@@ -362,18 +363,15 @@ def get_result_from_answers(answers: dict) -> str:
     Returns a result slug.
     """
     total_value = answers.get(total_value_of_business_case)
-    new_project = answers.get(part_of_wider_programme_with_existing_fbc)
-    request_involve_anything_digital = answers.get(does_request_involve_anything_digital, None)
-    novel = answers.get(novel_repercussive_contentious_hmt_consent)
-    
+
     if total_value == "above-2m":
         return "you-need-to-follow-a-three-stage-process"
 
-    if total_value == "between-12k-and-2m":
+    if total_value == BETWEEN_12K_AND_2M_STRING:
             if is_commission_research(answers):
                 return 'you-need-to-speak-to-the-research-team'
             
-            if is_procurement_case(answers):
+            if full_12k_to_2m_flow_completed(answers):
                 return get_procurement_exit(answers)
             else:
                 return "we-could-not-find-the-right-process-for-you"
@@ -381,24 +379,7 @@ def get_result_from_answers(answers: dict) -> str:
     if total_value == "below-12k":
         return determine_is_less_than_12k_exit_route(answers)
 
-    # Exit early for you do not need a BC
-    if (total_value == "below-12k" and new_project == "no") or request_involve_anything_digital is not None:
-        return "you-do-not-need-a-business-case"
-
-    # Exit 
-    elif total_value == "below-12k" and new_project == "yes":
-        return "speak-to-someone-first"
-
-    # Exit 
-    elif total_value == "between-12k-and-2m" and novel == "no":
-        return "you-need-to-start-a-business-justification-case"
-
-    # Exit 
-    elif total_value == "between-12k-and-2m" and novel == "yes":
-        return "you-need-to-start-a-full-business-case-novel-or-complex"
-    
-    else:
-        return "we-could-not-find-the-right-process-for-you"
+    return "we-could-not-find-the-right-process-for-you"
 
 
 def determine_is_less_than_12k_exit_route(answers: dict) -> str:
@@ -429,7 +410,11 @@ def is_commission_research(answers: dict) -> bool:
             is_trying_to_commission_research)
     
 
-def is_procurement_case(answers: dict) -> bool:
+'''
+Check all the answers that will lead from 12k-2m cost to the end, to determine
+if we reached the end of the journey
+'''
+def full_12k_to_2m_flow_completed(answers: dict) -> bool:
     is_not_novel = answers.get(novel_repercussive_contentious_hmt_consent, None) == "no"
     is_not_pilot = answers.get(is_this_request_a_pilot_with_potential_to_be_a_larger_proposal, None) == "no"
     is_not_existing_programme = answers.get(is_this_request_part_of_a_wider_programme_with_existing_business_case, None) == "no"

@@ -7,10 +7,9 @@ from .flow import (
     get_first_question_slug,
     get_next,
     get_question,
-    get_result_from_answers,
+    get_result_from_answers
 )
 from .models import BusinessCase, BusinessCaseTriageResponse
-
 from .slugs import give_your_bjc_a_name
 
 def _get_or_create_session(request) -> BusinessCaseTriageResponse:
@@ -77,6 +76,7 @@ def question(request, slug: str):
 
         if next_step == "calculate-result":
             result_slug = get_result_from_answers(triage_session.answers)
+            
             triage_session.result = result_slug
             triage_session.completed_at = timezone.now()
             triage_session.save()
@@ -102,6 +102,7 @@ def question(request, slug: str):
 
 
 def result(request, slug):
+
     try:
         return render(request, f"triage/results/{slug}.html")
     except Exception as e:
