@@ -8,6 +8,26 @@ class AnswerConstants(str, Enum):
     DIGITAL_STRING = "Digital"
 
 
+class TriageData():
+    def __init__(self, triage_dict: dict):
+        self.triage_data = triage_dict
+
+    def get_answer_string(self, slug: str) -> str:
+        return self.triage_data.get(slug, "")
+
+    def get_is_answer_equal_to(self, slug: str, desired_value: str) -> bool:
+        return self.triage_data.get(slug, "") == desired_value
+
+    @property
+    def is_three_stage_process_novel_or_pilot(self) -> bool:
+        return self.is_novel() or self.is_pilot()
+
+    def is_novel(self):
+        return self.triage_data.get(novel_repercussive_contentious_hmt_consent, "") == "yes"
+
+    def is_pilot(self) -> bool:
+        return self.triage_data.get(is_this_request_a_pilot, "") == "yes"
+
 """
 Works out which result to show based on the combination of answers.
 
@@ -15,6 +35,8 @@ Returns a result slug.
 Called when calculate-result is the next step, not in general flow
 """
 def get_result_from_answers(answers: dict) -> str:
+    triage_data: TriageData = TriageData(answers)
+
     total_value = answers.get(total_value_of_business_case)
 
     if total_value == AnswerConstants.ABOVE_2M:
@@ -27,7 +49,7 @@ def get_result_from_answers(answers: dict) -> str:
             if full_12k_to_2m_flow_completed(answers):
                 return get_procurement_exit(answers)
             else:
-                if is_three_stage_process_novel_or_pilot(answers):
+                if triage_data.is_three_stage_process_novel_or_pilot:
                     return "you-need-to-follow-a-three-stage-process-novel-or-pilot"
                 return "we-could-not-find-the-right-process-for-you"
 
@@ -50,12 +72,6 @@ def determine_is_less_than_12k_exit_route(answers: dict) -> str:
         
     return "we-could-not-find-the-right-process-for-you"
 
-def is_three_stage_process_novel_or_pilot(answers: dict) -> bool:
-    # could be 'I don't know' so check it's not No here, as Yes and Don't Know are the same route
-    is_novel = answers.get(novel_repercussive_contentious_hmt_consent, None) != "no"
-    is_pilot = answers.get(is_this_request_a_pilot, None) == "yes"
-
-    return (is_novel or is_pilot)
 
 def is_commission_research(answers: dict) -> bool:
     is_not_novel = answers.get(novel_repercussive_contentious_hmt_consent, None) == "no"
