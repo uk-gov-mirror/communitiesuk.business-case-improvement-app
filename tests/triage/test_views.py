@@ -23,6 +23,16 @@ def test_3_stage_process_page_loads(client):
     assert resp.status_code == 200
 
 
+def test_3_stage_process_novel_or_pilot_page_loads(client):
+    resp = client.get(reverse("triage:result", kwargs={"slug": "you-need-to-follow-a-three-stage-process-novel-or-pilot"}))
+    assert resp.status_code == 200
+
+
+def test_spewak_to_someone_first_page_loads(client):
+    resp = client.get(reverse("triage:result", kwargs={"slug": "speak-to-someone-first"}))
+    assert resp.status_code == 200
+
+
 def test_below_12k_no_programme_not_digital_loads(client):
     resp = client.get(reverse("triage:result", kwargs={"slug": "do-not-need-a-business-case-no-programme-not-digital"}))
     assert resp.status_code == 200
@@ -134,7 +144,7 @@ def test_procurement_template_route(client, db):
     answers = {
         total_value_of_business_case: "between-12k-and-2m",
         novel_repercussive_contentious_hmt_consent: "no",
-        is_this_request_a_pilot_with_potential_to_be_a_larger_proposal: "no",
+        is_this_request_a_pilot: "no",
         is_this_request_part_of_a_wider_programme_with_existing_business_case: "no",
         any_other_business_cases_that_are_connected_to_this_work: "*",
         where_is_the_budget_held: "*",
