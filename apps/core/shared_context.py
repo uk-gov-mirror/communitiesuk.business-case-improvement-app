@@ -12,5 +12,7 @@ def external_links(request):
             "feedback_survey": "https://forms.office.com.mcas.ms/Pages/ResponsePage.aspx?id=EGg0v32c3kOociSi7zmVqGAkEPlcQ5NPoeljmLYYJyNURUZXSldLN1dENU1VWjFGWEU0VEJRUVI4Ni4u",
             "full_business_case_template": "https://mhclg.sharepoint.com.mcas.ms/:w:/r/sites/ProjectDeliveryNetwork/_layouts/15/Doc.aspx?sourcedoc=%7BED164C68-A84D-491E-A7BE-5408B486FC40%7D&file=Full%20Business%20Case%20%5Btemplate%20ver.%202.8%5D.docx&action=default&mobileredirect=true",
             "isc_secretariat_email": "ISCSecretariat@communities.gov.uk",
+            "digital_business_case_email": "mailto:digitalbusinesscase@communities.gov.uk",
+            "procurement_guidance": "https://mhclg.sharepoint.com.mcas.ms/sites/ProjectDeliveryNetwork/SitePages/BJC-Contingent-Labour-Route.aspx?or=WORD-WEB.BODY.NT&ct=1785751227706"
         }
     }

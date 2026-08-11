@@ -22,8 +22,9 @@ If there's no specific match for an answer, the fallback key (slug, "*") is used
 Result pages are defined in RESULTS.
 """
 
-# because routing requires very specific check, I'm setting here to reduce likelihood of unknowing changes
+# because routing requires very specific checks, I'm setting here to reduce likelihood of unknowing changes
 DIGITAL_STRING: Final[str] = "Digital"
+BETWEEN_12K_AND_2M_STRING: Final[str] = "between-12k-and-2m"
 
 # Types: Radio, Checkbox, Select, Input
 QUESTIONS = [
@@ -43,7 +44,6 @@ QUESTIONS = [
         "slug": part_of_wider_programme_with_existing_fbc,
         "title": "Is this request part of a wider programme with an existing FBC?",
         "type": "radio",
-        "hint": '<div class="govuk-inset-text"></div>',
         "help_text": "",
         "choices": [
             ("yes", "Yes"),
@@ -70,7 +70,7 @@ QUESTIONS = [
         ]
     },
     {
-        "slug": is_this_request_a_pilot_with_potential_to_be_a_larger_proposal,
+        "slug": is_this_request_a_pilot,
         "title": "Is this request a 'pilot' with the potential to turn into a larger proposal in the future?",
         "type": "radio",
         "choices":[
@@ -116,8 +116,8 @@ QUESTIONS = [
         ]
     },
     {
-        "slug": which_best_describes_your_situation,
-        "title": "Which best describes your situation?",
+        "slug": which_best_describes_your_spend,
+        "title": "Which best describes your spend?",
         "type": "radio",
         "choices": [
             (spend_on_corporate_activities,"Spend money on corporate activities - Purchase additional licences, equipment, training or similar operational items that do not require a new procurement approach"),
@@ -298,16 +298,19 @@ ROUTING = {
     (part_of_wider_programme_with_existing_fbc, "no"): does_request_involve_anything_digital,
     (does_request_involve_anything_digital, "yes"): "calculate-result",
     (does_request_involve_anything_digital, "no"): "calculate-result",
-    (novel_repercussive_contentious_hmt_consent, "no"): is_this_request_a_pilot_with_potential_to_be_a_larger_proposal,
-    (is_this_request_a_pilot_with_potential_to_be_a_larger_proposal, "no"): is_this_request_part_of_a_wider_programme_with_existing_business_case,
+    (novel_repercussive_contentious_hmt_consent, "no"): is_this_request_a_pilot,
+    (novel_repercussive_contentious_hmt_consent, "yes"): "calculate-result",
+    (is_this_request_a_pilot, "yes"): "calculate-result",
+    (is_this_request_a_pilot, "no"): is_this_request_part_of_a_wider_programme_with_existing_business_case,
     (is_this_request_part_of_a_wider_programme_with_existing_business_case, "no"): any_other_business_cases_that_are_connected_to_this_work,
     (any_other_business_cases_that_are_connected_to_this_work, "*"): where_is_the_budget_held,
     (where_is_the_budget_held, "*"): is_this_a_retrospective_case,
     (is_this_a_retrospective_case, "*"): which_option_describes_what_you_are_trying_to_do,
     (which_option_describes_what_you_are_trying_to_do, commission_research): "calculate-result",
-    (which_option_describes_what_you_are_trying_to_do, procure_goods_and_services_from_third_party): which_best_describes_your_situation,
-    (which_best_describes_your_situation, spend_on_corporate_activities): give_your_bjc_a_name,
-    (which_best_describes_your_situation, procuring_something_else): are_you_procuring_consulting_and_professional_services,
+    (which_option_describes_what_you_are_trying_to_do, procure_goods_and_services_from_third_party): which_best_describes_your_spend,
+    (which_option_describes_what_you_are_trying_to_do, hire_contracted_workers_to_fill_temporary_capacity_gap): give_your_bjc_a_name,
+    (which_best_describes_your_spend, spend_on_corporate_activities): give_your_bjc_a_name,
+    (which_best_describes_your_spend, procuring_something_else): are_you_procuring_consulting_and_professional_services,
     (are_you_procuring_consulting_and_professional_services, "*"): we_want_to_continue_improving_our_service,
     (we_want_to_continue_improving_our_service, "*"): give_your_bjc_a_name,
     (give_your_bjc_a_name, "*"): provide_a_high_level_summary,
@@ -361,43 +364,25 @@ def get_result_from_answers(answers: dict) -> str:
     Returns a result slug.
     """
     total_value = answers.get(total_value_of_business_case)
-    new_project = answers.get(part_of_wider_programme_with_existing_fbc)
-    request_involve_anything_digital = answers.get(does_request_involve_anything_digital, None)
-    novel = answers.get(novel_repercussive_contentious_hmt_consent)
-    
+
     if total_value == "above-2m":
         return "you-need-to-follow-a-three-stage-process"
 
-    if total_value == "between-12k-and-2m":
+    if total_value == BETWEEN_12K_AND_2M_STRING:
             if is_commission_research(answers):
                 return 'you-need-to-speak-to-the-research-team'
             
-            if is_procurement_case(answers):
-                return you_need_to_start_a_business_justification_case
+            if full_12k_to_2m_flow_completed(answers):
+                return get_procurement_exit(answers)
             else:
+                if is_three_stage_process_novel_or_pilot(answers):
+                    return "you-need-to-follow-a-three-stage-process-novel-or-pilot"
                 return "we-could-not-find-the-right-process-for-you"
 
     if total_value == "below-12k":
         return determine_is_less_than_12k_exit_route(answers)
 
-    # Exit early for you do not need a BC
-    if (total_value == "below-12k" and new_project == "no") or request_involve_anything_digital is not None:
-        return "you-do-not-need-a-business-case"
-
-    # Exit 
-    elif total_value == "below-12k" and new_project == "yes":
-        return "speak-to-someone-first"
-
-    # Exit 
-    elif total_value == "between-12k-and-2m" and novel == "no":
-        return "you-need-to-start-a-business-justification-case"
-
-    # Exit 
-    elif total_value == "between-12k-and-2m" and novel == "yes":
-        return "you-need-to-start-a-full-business-case-novel-or-complex"
-    
-    else:
-        return "we-could-not-find-the-right-process-for-you"
+    return "we-could-not-find-the-right-process-for-you"
 
 
 def determine_is_less_than_12k_exit_route(answers: dict) -> str:
@@ -412,18 +397,16 @@ def determine_is_less_than_12k_exit_route(answers: dict) -> str:
 
     return "we-could-not-find-the-right-process-for-you"
 
-def is_less_than_12k_do_not_need_a_bc(answers: dict):
-    return (answers.get(part_of_wider_programme_with_existing_fbc, None) == "no" and 
-            answers.get(does_request_involve_anything_digital, None) == "no")
+def is_three_stage_process_novel_or_pilot(answers: dict) -> bool:
+    # could be 'I don't know' so check it's not No here, as Yes and Don't Know are the same route
+    is_novel = answers.get(novel_repercussive_contentious_hmt_consent, None) != "no"
+    is_pilot = answers.get(is_this_request_a_pilot, None) == "yes"
 
-def is_less_than_12k_do_not_need_a_bc_send_email(answers: dict):
-    return (answers.get(part_of_wider_programme_with_existing_fbc, None) == "no" and 
-            answers.get(does_request_involve_anything_digital, None) == "yes")
-
+    return (is_novel or is_pilot)
 
 def is_commission_research(answers: dict) -> bool:
     is_not_novel = answers.get(novel_repercussive_contentious_hmt_consent, None) == "no"
-    is_not_pilot = answers.get(is_this_request_a_pilot_with_potential_to_be_a_larger_proposal, None) == "no"
+    is_not_pilot = answers.get(is_this_request_a_pilot, None) == "no"
     is_not_existing_programme = answers.get(is_this_request_part_of_a_wider_programme_with_existing_business_case, None) == "no"
     is_not_digital_budget = answers.get(where_is_the_budget_held, None) != ''
 
@@ -434,23 +417,45 @@ def is_commission_research(answers: dict) -> bool:
             is_not_existing_programme and
             is_not_digital_budget and
             is_trying_to_commission_research)
-    
 
-def is_procurement_case(answers: dict) -> bool:
+
+'''
+Check all the answers that will lead from 12k-2m cost to the end, to determine
+if we reached the end of the journey
+'''
+def full_12k_to_2m_flow_completed(answers: dict) -> bool:
     is_not_novel = answers.get(novel_repercussive_contentious_hmt_consent, None) == "no"
-    is_not_pilot = answers.get(is_this_request_a_pilot_with_potential_to_be_a_larger_proposal, None) == "no"
+    is_not_pilot = answers.get(is_this_request_a_pilot, None) == "no"
     is_not_existing_programme = answers.get(is_this_request_part_of_a_wider_programme_with_existing_business_case, None) == "no"
-    is_not_digital_budget = answers.get(where_is_the_budget_held, None) != DIGITAL_STRING
+    budget_answered = answers.get(where_is_the_budget_held, None) != ""
 
-    is_trying_to_procure_from_third_party = answers.get(which_option_describes_what_you_are_trying_to_do, None) == procure_goods_and_services_from_third_party
+    is_trying_to_procure_from_third_party = answers.get(which_option_describes_what_you_are_trying_to_do, None) in {
+        procure_goods_and_services_from_third_party,
+        hire_contracted_workers_to_fill_temporary_capacity_gap
+        }
     
-    is_corporate_spend_or_procurement: bool = (answers.get(which_best_describes_your_situation, None) == spend_on_corporate_activities or
-                             answers.get(which_best_describes_your_situation, None) == procuring_something_else)
-
+    is_corporate_spend_or_procurement: bool = answers.get(which_best_describes_your_spend, None) != ""
     return (is_not_novel and
             is_not_pilot and
             is_not_existing_programme and
-            is_not_digital_budget and
+            budget_answered and
             is_trying_to_procure_from_third_party and
             is_corporate_spend_or_procurement)
 
+def get_procurement_exit(answers: dict) -> str:
+    best_describes_your_situation: str | None = answers.get(which_option_describes_what_you_are_trying_to_do, None)
+    best_describes_your_spend: str | None = answers.get(which_best_describes_your_spend, None)
+
+    if answers.get(where_is_the_budget_held, None) == DIGITAL_STRING:
+        return "we-could-not-find-the-right-process-for-you"
+    
+    if best_describes_your_situation == procure_goods_and_services_from_third_party:
+        if best_describes_your_spend == spend_on_corporate_activities:
+            return "exit-to-download-template-corporate-spend-fbp-route"
+        if best_describes_your_spend == procuring_something_else:
+            return "exit-to-download-template-procurement-route" 
+
+    if best_describes_your_situation == hire_contracted_workers_to_fill_temporary_capacity_gap:
+        return "exit-to-download-template-hrbp-contingent-labour-route"
+ 
+    return "we-could-not-find-the-right-process-for-you"
