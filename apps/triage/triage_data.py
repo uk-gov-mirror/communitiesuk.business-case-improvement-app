@@ -5,6 +5,10 @@ class TriageData():
         self.triage_data = triage_dict
 
     @property
+    def total_value_of_business_case(self) -> str:
+        return self.triage_data.get(total_value_of_business_case, "")
+
+    @property
     def is_novel(self) -> bool:
         return self.triage_data.get(novel_repercussive_contentious_hmt_consent, "") == "yes"
 

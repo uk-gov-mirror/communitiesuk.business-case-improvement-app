@@ -19,8 +19,8 @@ Called when calculate-result is the next step, not in general flow
 def get_result_from_answers(answers: dict) -> str:
     triage_data = TriageData(answers)
 
-    total_value = answers.get(total_value_of_business_case)
-
+    total_value = triage_data.total_value_of_business_case
+    
     if total_value == AnswerConstants.ABOVE_2M:
         return "you-need-to-follow-a-three-stage-process"
 
