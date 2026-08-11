@@ -1,32 +1,14 @@
 from enum import Enum
 from .slugs import *
+from .triage_data import TriageData
 
 # because routing requires very specific checks, setting here to reduce likelihood of unknowing changes
 class AnswerConstants(str, Enum):
     ABOVE_2M = "above-2m"
     BETWEEN_12K_AND_2M_STRING = "between-12k-and-2m"
+    BELOW_12K = "below-12k"
     DIGITAL_STRING = "Digital"
 
-
-class TriageData():
-    def __init__(self, triage_dict: dict):
-        self.triage_data = triage_dict
-
-    def get_answer_string(self, slug: str) -> str:
-        return self.triage_data.get(slug, "")
-
-    def get_is_answer_equal_to(self, slug: str, desired_value: str) -> bool:
-        return self.triage_data.get(slug, "") == desired_value
-
-    @property
-    def is_three_stage_process_novel_or_pilot(self) -> bool:
-        return self.is_novel() or self.is_pilot()
-
-    def is_novel(self):
-        return self.triage_data.get(novel_repercussive_contentious_hmt_consent, "") == "yes"
-
-    def is_pilot(self) -> bool:
-        return self.triage_data.get(is_this_request_a_pilot, "") == "yes"
 
 """
 Works out which result to show based on the combination of answers.
@@ -35,7 +17,7 @@ Returns a result slug.
 Called when calculate-result is the next step, not in general flow
 """
 def get_result_from_answers(answers: dict) -> str:
-    triage_data: TriageData = TriageData(answers)
+    triage_data = TriageData(answers)
 
     total_value = answers.get(total_value_of_business_case)
 
@@ -43,77 +25,49 @@ def get_result_from_answers(answers: dict) -> str:
         return "you-need-to-follow-a-three-stage-process"
 
     if total_value == AnswerConstants.BETWEEN_12K_AND_2M_STRING:
-            if is_commission_research(answers):
-                return 'you-need-to-speak-to-the-research-team'
-            
-            if full_12k_to_2m_flow_completed(answers):
-                return get_procurement_exit(answers)
-            else:
-                if triage_data.is_three_stage_process_novel_or_pilot:
-                    return "you-need-to-follow-a-three-stage-process-novel-or-pilot"
-                return "we-could-not-find-the-right-process-for-you"
+        if triage_data.is_commission_research:
+            return 'you-need-to-speak-to-the-research-team'
+        
+        if full_12k_to_2m_flow_completed(triage_data):
+            return get_procurement_exit(answers)
+        else:
+            if triage_data.is_three_stage_process_novel_or_pilot:
+                return "you-need-to-follow-a-three-stage-process-novel-or-pilot"
+            return "we-could-not-find-the-right-process-for-you"
 
-    if total_value == "below-12k":
-        return determine_is_less_than_12k_exit_route(answers)
+    if total_value == AnswerConstants.BELOW_12K:
+        return determine_is_less_than_12k_exit_route(triage_data)
 
     return "we-could-not-find-the-right-process-for-you"
 
 
-def determine_is_less_than_12k_exit_route(answers: dict) -> str:
-    if answers.get(part_of_wider_programme_with_existing_fbc, None) == "yes":
+def determine_is_less_than_12k_exit_route(triage_data: TriageData) -> str:
+    if triage_data.is_part_of_wider_programme_with_existing_fbc:
         return "speak-to-someone-first"
 
-    if answers.get(part_of_wider_programme_with_existing_fbc, None) == "no":
-        involves_digital: bool = answers.get(does_request_involve_anything_digital, None) == "yes"
-
-        if involves_digital != None:
-            return ("do-not-need-a-business-case-no-programme-digital" if involves_digital 
-                        else "do-not-need-a-business-case-no-programme-not-digital")
+    return (
+        "do-not-need-a-business-case-no-programme-digital" if triage_data.does_involve_digital 
+        else "do-not-need-a-business-case-no-programme-not-digital")
         
-    return "we-could-not-find-the-right-process-for-you"
-
-
-def is_commission_research(answers: dict) -> bool:
-    is_not_novel = answers.get(novel_repercussive_contentious_hmt_consent, None) == "no"
-    is_not_pilot = answers.get(is_this_request_a_pilot, None) == "no"
-    is_not_existing_programme = answers.get(is_this_request_part_of_a_wider_programme_with_existing_business_case, None) == "no"
-    is_not_digital_budget = answers.get(where_is_the_budget_held, None) != ""
-
-    is_trying_to_commission_research = answers.get(which_option_describes_what_you_are_trying_to_do, None) == commission_research
-
-    return (is_not_novel and
-            is_not_pilot and
-            is_not_existing_programme and
-            is_not_digital_budget and
-            is_trying_to_commission_research)
-
 
 '''
 Check all the answers that will lead from 12k-2m cost to the end, to determine
 if we reached the end of the journey
 '''
-def full_12k_to_2m_flow_completed(answers: dict) -> bool:
-    is_not_novel = answers.get(novel_repercussive_contentious_hmt_consent, None) == "no"
-    is_not_pilot = answers.get(is_this_request_a_pilot, None) == "no"
-    is_not_existing_programme = answers.get(is_this_request_part_of_a_wider_programme_with_existing_business_case, None) == "no"
-    budget_answered = answers.get(where_is_the_budget_held, None) != ""
-    is_corporate_spend_or_procurement: bool = answers.get(which_best_describes_your_spend, None) != ""
-    is_business_case_title_answered: bool = answers.get(give_your_bjc_a_name, None) != ""
-    is_summary_answered: bool = answers.get(provide_a_high_level_summary, None) != ""
-
-    is_trying_to_procure_from_third_party = answers.get(which_option_describes_what_you_are_trying_to_do, None) in {
+def full_12k_to_2m_flow_completed(triage_data: TriageData) -> bool:
+    correct_options_chosen = triage_data.which_option_best_describes_what_is_trying_to_be_done in {
         procure_goods_and_services_from_third_party,
         hire_contracted_workers_to_fill_temporary_capacity_gap
-        }
-
-    return (is_not_novel and
-            is_not_pilot and
-            is_not_existing_programme and
-            budget_answered and
-            is_trying_to_procure_from_third_party and
-            is_corporate_spend_or_procurement and
-            is_business_case_title_answered and
-            is_summary_answered)
+    }
+    
+    return (not triage_data.is_novel and
+            not triage_data.is_pilot and
+            not triage_data.is_existing_programme and
+            triage_data.where_is_the_budget_held != "" and
+            correct_options_chosen and
+            triage_data.is_corporate_spend_or_procurement and
+            triage_data.business_case_title != "" and
+            triage_data.summary != "")
 
 
 def get_procurement_exit(answers: dict) -> str:
