@@ -21,6 +21,8 @@ from django.urls import include, path
 from apps.triage import views as triage_views
 
 urlpatterns = [
+    path("admin/", admin.site.urls),
+    path("accounts/", include("apps.accounts.urls", namespace="accounts")),
     path("triage/", include("apps.triage.urls", namespace="triage")),
     path("", triage_views.index, name="index"),  # home route
 ]

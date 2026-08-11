@@ -18,6 +18,7 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / ".env")
 
+ENTRA_ID_ENABLED = os.environ.get("ENTRA_ID_ENABLED", "False") == "True"
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
@@ -26,7 +27,7 @@ load_dotenv(BASE_DIR / ".env")
 SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production
-DEBUG = os.environ.get("DEBUG")
+DEBUG = os.environ.get("DEBUG", "False").lower() == "true"
 
 ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
 CSRF_TRUSTED_ORIGINS = os.environ.get(
@@ -42,6 +43,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "apps.accounts",
     # "apps.core",
     "apps.triage",
     # "apps.bjc",
@@ -55,6 +57,15 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
+]
+
+# Add Entra Middleware if required
+if ENTRA_ID_ENABLED:
+    MIDDLEWARE += ["apps.accounts.middleware.EntraMiddleware"]
+else:
+    MIDDLEWARE += ["django.contrib.auth.middleware.LoginRequiredMiddleware"]
+
+MIDDLEWARE += [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
@@ -102,13 +113,21 @@ DATABASES = {
     }
 }
 
+#  Authentication
+AUTH_USER_MODEL = "accounts.User"
+
+AUTHENTICATION_BACKENDS = []
+if ENTRA_ID_ENABLED:
+    AUTHENTICATION_BACKENDS += ["apps.accounts.backend.EntraBackend"]
+AUTHENTICATION_BACKENDS += ["django.contrib.auth.backends.ModelBackend"]
 
 # Sessions — stored in DB so answers survive browser close / are auditable TODO change this to work in AWS
 
 SESSION_ENGINE = "django.contrib.sessions.backends.db"
-SESSION_COOKIE_AGE = 60 * 60 * 24 * 7  # 1 week
+SESSION_COOKIE_AGE = 60 * 60 * 24  # 1 day
 SESSION_COOKIE_HTTPONLY = True
 SESSION_COOKIE_SAMESITE = "Lax"
+SESSION_SAVE_EVERY_REQUEST = False
 
 if not DEBUG:
     SESSION_COOKIE_SECURE = True
@@ -137,9 +156,25 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-LOGIN_URL = "/accounts/login/"
+LOGIN_URL = "accounts:login"
 LOGIN_REDIRECT_URL = "/"
 
+if ENTRA_ID_ENABLED:
+    ENTRA_AUTH = {
+        "CLIENT_ID": os.environ.get("ENTRA_CLIENT_ID"),
+        "CLIENT_SECRET": os.environ.get("ENTRA_CLIENT_SECRET"),
+        # Need to use the full authority URL, not just the tenant, e.g. https://login.microsoftonline.com/<tenant-id>
+        "AUTHORITY": os.environ.get("ENTRA_AUTHORITY"),
+        "REDIRECT_URI": os.environ.get(
+            "ENTRA_REDIRECT_URI", "/accounts/auth_callback/"
+        ),
+        "LOGOUT_REDIRECT": os.environ.get("ENTRA_LOGOUT_REDIRECT"),
+        "SCOPES": ["User.Read"],
+        "ALLOWED_TENANTS": os.environ.get("ENTRA_ALLOWED_TENANTS", "").split(),
+    }
+
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+USE_X_FORWARDED_HOST = True
 
 # Internationalization
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
