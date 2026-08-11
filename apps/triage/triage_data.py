@@ -25,27 +25,31 @@ class TriageData():
 
     @property
     def is_existing_programme(self) -> bool:
-         return self.triage_data.get(is_this_request_part_of_a_wider_programme_with_existing_business_case, None) == "yes"
+        return self.triage_data.get(is_this_request_part_of_a_wider_programme_with_existing_business_case, None) == "yes"
 
     @property
     def where_is_the_budget_held(self) -> str:
-         return self.triage_data.get(where_is_the_budget_held, "")
+        return self.triage_data.get(where_is_the_budget_held, "")
 
     @property
     def business_case_title(self) -> str:
-         return self.triage_data.get(give_your_bjc_a_name, "")
+        return self.triage_data.get(give_your_bjc_a_name, "")
+
+    @property
+    def which_option_best_describes_the_spend(self) -> str:
+        return self.triage_data.get(which_best_describes_your_spend, "")
 
     @property
     def is_corporate_spend_or_procurement(self) -> bool:
-         return self.triage_data.get(which_best_describes_your_spend, None) != ""
+        return self.triage_data.get(which_best_describes_your_spend, None) != ""
 
     @property
     def summary(self) -> str:
-         return self.triage_data.get(provide_a_high_level_summary, "")
+        return self.triage_data.get(provide_a_high_level_summary, "")
 
     @property
     def which_option_best_describes_what_is_trying_to_be_done(self) -> str:
-         return self.triage_data.get(which_option_describes_what_you_are_trying_to_do, "")
+        return self.triage_data.get(which_option_describes_what_you_are_trying_to_do, "")
 
     @property
     def is_commission_research(self) -> bool:

@@ -29,7 +29,7 @@ def get_result_from_answers(answers: dict) -> str:
             return 'you-need-to-speak-to-the-research-team'
         
         if full_12k_to_2m_flow_completed(triage_data):
-            return get_procurement_exit(answers)
+            return get_procurement_exit(triage_data)
         else:
             if triage_data.is_three_stage_process_novel_or_pilot:
                 return "you-need-to-follow-a-three-stage-process-novel-or-pilot"
@@ -70,11 +70,11 @@ def full_12k_to_2m_flow_completed(triage_data: TriageData) -> bool:
             triage_data.summary != "")
 
 
-def get_procurement_exit(answers: dict) -> str:
-    best_describes_your_situation: str | None = answers.get(which_option_describes_what_you_are_trying_to_do, None)
-    best_describes_your_spend: str | None = answers.get(which_best_describes_your_spend, None)
+def get_procurement_exit(triage_data: TriageData) -> str:
+    best_describes_your_situation: str  = triage_data.which_option_best_describes_what_is_trying_to_be_done
+    best_describes_your_spend: str = triage_data.which_option_best_describes_the_spend
 
-    if answers.get(where_is_the_budget_held, None) == AnswerConstants.DIGITAL_STRING:
+    if triage_data.where_is_the_budget_held == AnswerConstants.DIGITAL_STRING:
         return "we-could-not-find-the-right-process-for-you"
     
     if best_describes_your_situation == procure_goods_and_services_from_third_party:
