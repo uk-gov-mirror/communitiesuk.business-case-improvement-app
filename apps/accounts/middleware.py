@@ -7,6 +7,8 @@ from django.urls import reverse
 
 from .authentication import Authentication
 
+ADMIN_PATH_PREFIX = "/admin/"  # block access to /admin for non admins
+
 
 class EntraMiddleware:
     """
@@ -29,9 +31,15 @@ class EntraMiddleware:
             if request.path_info.startswith(path):
                 return self.get_response(request)
 
-        if Authentication(request).user_is_authenticated:
-            return self.get_response(request)
+        # Check if authenticated
+        if not Authentication(request).user_is_authenticated:
+            return redirect(
+                f"{reverse('accounts:login')}?next={urlparse(request.path).path}"
+            )
 
-        return redirect(
-            f"{reverse('accounts:login')}?next={urlparse(request.path).path}"
-        )
+        # Block users accessing the /admin page if they are not active or staff
+        if request.path_info.startswith(ADMIN_PATH_PREFIX):
+            if not (request.user.is_active and request.user.is_staff):
+                return redirect("/")
+
+        return self.get_response(request)

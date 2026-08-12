@@ -18,7 +18,7 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(BASE_DIR / ".env")
 
-ENTRA_ID_ENABLED = os.environ.get("ENTRA_ID_ENABLED", "False") == "True"
+ENTRA_ID_ENABLED = os.environ.get("ENTRA_ID_ENABLED", "False").lower() == "true"
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/

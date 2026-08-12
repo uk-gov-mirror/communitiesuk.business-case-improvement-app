@@ -321,7 +321,7 @@ ssh = ["bcrypt (>=3.1.5)"]
 
 [[package]]
 name = "django"
-version = "6.0.6"
+version = "6.0.7"
 description = "A high-level Python web framework that encourages rapid development and clean, pragmatic design."
 optional = false
 python-versions = ">=3.12"
