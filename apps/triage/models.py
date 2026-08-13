@@ -1,7 +1,17 @@
 from django.db import models
 from django.utils import timezone
 
+class BlockType(models.Model):
+    id = models.SmallAutoField(null=False, unique=True, primary_key=True)
+    name = models.CharField(max_length=25, unique=True)
 
+    class Meta:
+        ordering = ['id']
+
+    def __str__(self):
+        return self.name
+
+    
 class BusinessCaseTriageResponse(models.Model):
     """
     Stores a user's answers for one Business Case triage journey.
@@ -45,6 +55,7 @@ class BusinessCase(models.Model):
         on_delete=models.PROTECT,
         related_name="business_cases",
     )
+
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(null=True, blank=True)
@@ -54,3 +65,72 @@ class BusinessCase(models.Model):
 
     def __str__(self):
         return f"BusinessCase {self.pk} (triage={self.business_case_triage_response_id})"
+
+
+
+class BusinessCaseResponse(models.Model):
+    version = models.IntegerField(default=1)
+    created_at = models.DateTimeField(default=timezone.now)
+    uploaded_by = models.CharField(max_length=150, blank=False, null=False, default="-")
+    
+    business_case_id = models.ForeignKey(
+        BusinessCase,
+        on_delete=models.PROTECT,
+        related_name="business_cases",
+    )
+
+    class Meta:
+        ordering = ["-started_at"]
+
+    def __str__(self):
+        return f"BusinessCase: {self.business_case_id} - response version: {self.version}"
+
+
+class BusinessCaseResponseSummary(models.Model):
+    business_case_response_id = models.ForeignKey(
+        BusinessCaseResponse,
+        on_delete=models.PROTECT,
+        related_name="business_case_responses"
+    )
+    summary_text = models.TextField(blank=False, null=False, )
+    whole_of_life_cost = models.CharField(blank=False, null=False, default="0")
+    directorate = models.CharField(blank=False, null=False, default="-")
+    sro_scs = models.CharField(blank=False, null=False, default="-")
+    approved_by_sro_scs = models.DateField(default=timezone.now)
+    author = models.CharField(blank=False, null=False, default="-")
+
+
+    def __str__(self):
+        return f"BusinessCaseResponse: {self.business_case_response_id}"
+
+class BusinessCaseResponseSection(models.Model):
+    business_case_response_id = models.ForeignKey(
+        BusinessCaseResponse,
+        on_delete=models.PROTECT,
+        related_name="business_case_responses"
+    )
+
+    header_text = models.CharField(max_length=100, blank=False, null=False, default="")
+    
+    def __str__(self):
+        return ""
+
+
+class BusinessCaseResponseBlock(models.Model):
+    business_case_response_section_id = models.ForeignKey(
+        BusinessCaseResponseSection,
+        on_delete=models.PROTECT,
+        related_name="business_case_repsonse_section"
+    )
+    block_type = models.ForeignKey(
+            BlockType,
+            on_delete=models.PROTECT,
+            related_name="block_types",
+            help_text="The type of Block this data represents, e.g Paragraph, Table, etc."
+        )
+
+    block_number = models.IntegerField(default=0, help_text="The order in which this block appeared under the header")
+    block_data = models.BinaryField(blank=False, null=False)
+
+    def __str__(self):
+        return ""
