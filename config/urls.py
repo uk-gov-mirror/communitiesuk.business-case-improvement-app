@@ -19,6 +19,7 @@ from django.contrib import admin
 from django.conf import settings
 from django.urls import include, path
 from apps.triage import views as triage_views
+from apps.accounts import views as accounts_views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -26,3 +27,14 @@ urlpatterns = [
     path("triage/", include("apps.triage.urls", namespace="triage")),
     path("", triage_views.index, name="index"),  # home route
 ]
+
+if settings.ENTRA_ID_ENABLED:
+    # Use configured Entra Callback Env var
+    # allows different values for e.g Localhost and AWS
+    from urllib.parse import urlparse
+
+    _callback_path = urlparse(settings.ENTRA_AUTH["REDIRECT_URI"]).path.lstrip("/")
+    urlpatterns.insert(
+        0,
+        path(_callback_path, accounts_views.entra_callback, name="auth_callback"),
+    )

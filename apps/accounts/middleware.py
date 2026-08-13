@@ -18,7 +18,7 @@ class EntraMiddleware:
 
     def __init__(self, get_response):
         self.get_response = get_response
-        public_views = ["accounts:login", "accounts:logout", "accounts:callback"]
+        public_views = ["accounts:login", "accounts:logout", "auth_callback"]
         public_views.extend(settings.ENTRA_AUTH.get("PUBLIC_URLS", []))
         # Strip trailing / if registered with this in Entra (which we do not directly manage)
         # this resolves e.g /auth_callback/ and /auth_callback
