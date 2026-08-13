@@ -20,11 +20,15 @@ class EntraMiddleware:
         self.get_response = get_response
         public_views = ["accounts:login", "accounts:logout", "accounts:callback"]
         public_views.extend(settings.ENTRA_AUTH.get("PUBLIC_URLS", []))
-        self.public_urls = [reverse(view_name) for view_name in public_views]
+        # Strip trailing / if registered with this in Entra (which we do not directly manage)
+        # this resolves e.g /auth_callback/ and /auth_callback
+        self.public_urls = {
+            reverse(view_name).rstrip("/") for view_name in public_views
+        }
         self.public_paths = ["/health"] + settings.ENTRA_AUTH.get("PUBLIC_PATHS", [])
 
     def __call__(self, request: HttpRequest):
-        if request.path_info in self.public_urls:
+        if request.path_info.rstrip("/") in self.public_urls:
             return self.get_response(request)
 
         for path in self.public_paths:
