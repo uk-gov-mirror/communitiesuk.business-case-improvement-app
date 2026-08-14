@@ -1,0 +1,22 @@
+{% extends "layouts/base_layout.html" %}
+{% from "govuk_frontend_jinja/templates/components/button/macro.html" import govukButton %}
+
+{% block content %}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class='govuk-heading-l'>Placeholder page for uploading a word doc</h1>
+        
+        <form action="{{ url('trigger-work') }}" method="post">
+            {{ csrf_input }}
+
+            <button type="submit"
+                class="govuk-button"
+                data-module="govuk-button"
+            >
+                upload
+            </button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}

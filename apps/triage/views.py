@@ -10,6 +10,15 @@ from .flow import (
 from .models import BusinessCase, BusinessCaseTriageResponse
 from .slugs import give_your_bjc_a_name
 from .calculate_result_helpers import get_result_from_answers
+from ..word_doc_services.parsing_document import parse_word_document
+
+
+from django.shortcuts import redirect
+from django.views.decorators.http import require_POST
+from django.http import HttpRequest, HttpResponse, HttpResponseNotAllowed
+from pathlib import Path
+
+from docx import Document
 
 def _get_or_create_session(request) -> BusinessCaseTriageResponse:
     if not request.session.session_key:
@@ -25,6 +34,22 @@ def _get_or_create_session(request) -> BusinessCaseTriageResponse:
 
 def index(request):
     return render(request, "triage/index.html")
+
+def upload(request):
+    return render(request, "triage/upload_document_placeholder_template.html")
+
+
+def DoWork():
+    current_folder = Path(__file__).resolve().parent
+    doc = Document(f"{current_folder}/FullDoc.docx")
+    doc_content, summary_section = parse_word_document(doc)
+    print("")
+
+def trigger_work_view(request: HttpRequest) -> HttpResponse:
+    if request.method != 'POST':
+        return HttpResponseNotAllowed(['POST'])
+    DoWork()
+    return redirect('/')
 
 
 def start(request):

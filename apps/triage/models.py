@@ -68,6 +68,9 @@ class BusinessCase(models.Model):
 
 
 
+
+
+
 class BusinessCaseResponse(models.Model):
     version = models.IntegerField(default=1)
     created_at = models.DateTimeField(default=timezone.now)
@@ -76,11 +79,7 @@ class BusinessCaseResponse(models.Model):
     business_case_id = models.ForeignKey(
         BusinessCase,
         on_delete=models.PROTECT,
-        related_name="business_cases",
     )
-
-    class Meta:
-        ordering = ["-started_at"]
 
     def __str__(self):
         return f"BusinessCase: {self.business_case_id} - response version: {self.version}"
@@ -90,7 +89,6 @@ class BusinessCaseResponseSummary(models.Model):
     business_case_response_id = models.ForeignKey(
         BusinessCaseResponse,
         on_delete=models.PROTECT,
-        related_name="business_case_responses"
     )
     summary_text = models.TextField(blank=False, null=False, )
     whole_of_life_cost = models.CharField(blank=False, null=False, default="0")
@@ -107,7 +105,6 @@ class BusinessCaseResponseSection(models.Model):
     business_case_response_id = models.ForeignKey(
         BusinessCaseResponse,
         on_delete=models.PROTECT,
-        related_name="business_case_responses"
     )
 
     header_text = models.CharField(max_length=100, blank=False, null=False, default="")
@@ -120,14 +117,13 @@ class BusinessCaseResponseBlock(models.Model):
     business_case_response_section_id = models.ForeignKey(
         BusinessCaseResponseSection,
         on_delete=models.PROTECT,
-        related_name="business_case_repsonse_section"
     )
     block_type = models.ForeignKey(
-            BlockType,
-            on_delete=models.PROTECT,
-            related_name="block_types",
-            help_text="The type of Block this data represents, e.g Paragraph, Table, etc."
-        )
+        BlockType,
+        on_delete=models.PROTECT,
+        related_name="block_types",
+        help_text="The type of Block this data represents, e.g Paragraph, Table, etc."
+    )
 
     block_number = models.IntegerField(default=0, help_text="The order in which this block appeared under the header")
     block_data = models.BinaryField(blank=False, null=False)

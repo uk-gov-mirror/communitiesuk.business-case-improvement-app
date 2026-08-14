@@ -23,4 +23,7 @@ from apps.triage import views as triage_views
 urlpatterns = [
     path("triage/", include("apps.triage.urls", namespace="triage")),
     path("", triage_views.index, name="index"),  # home route
+
+    path("upload/", triage_views.upload, name="upload"),
+    path("do-work/", triage_views.trigger_work_view, name="trigger-work"),
 ]
