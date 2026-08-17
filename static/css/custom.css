@@ -26,3 +26,114 @@
 .accordion-no-show-all-toggle .govuk-accordion__controls {
   display: none !important;
 }
+
+.sortable-table {
+    table-layout: fixed;
+}
+
+.sortable-table__sort,
+.sortable-table__expand {
+    color: inherit;
+    font: inherit;
+    text-align: left;
+}
+
+.sortable-table__sort {
+    background: none;
+    border: 0;
+    cursor: pointer;
+    padding: 0;
+    text-decoration: underline;
+}
+
+.sortable-table__sort:focus,
+.sortable-table__expand:focus {
+    outline: 3px solid #ffdd00;
+    outline-offset: 0;
+}
+
+.sortable-table__sort-icon {
+    border-bottom: 5px solid currentColor;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    display: inline-block;
+    margin-left: 8px;
+    vertical-align: middle;
+}
+
+.sortable-table th[aria-sort="descending"] .sortable-table__sort-icon {
+    border-bottom: 0;
+    border-top: 5px solid currentColor;
+}
+
+.sortable-table__expand {
+    background: none;
+    border: 0;
+    color: #1d70b8;
+    cursor: pointer;
+    padding: 0;
+    text-decoration: underline;
+}
+
+.sortable-table__expand-icon {
+    border-bottom: 6px solid transparent;
+    border-left: 8px solid currentColor;
+    border-top: 6px solid transparent;
+    display: inline-block;
+    margin-right: 8px;
+    transition: transform 0.15s ease-in-out;
+    vertical-align: middle;
+}
+
+.sortable-table__expand[aria-expanded="true"] .sortable-table__expand-icon {
+    transform: rotate(90deg);
+}
+
+.sortable-table__detail .govuk-table__cell {
+    padding-left: 32px;
+}
+
+.sortable-table__status {
+    display: inline-block;
+    padding: 2px 8px;
+}
+
+.sortable-table__status--uploaded {
+    background: #d8eee4;
+    color: #005a30;
+}
+
+.sortable-table__status--active {
+    background: #d9e8f5;
+    color: #003078;
+}
+
+.sortable-table__status--withdrawn {
+    background: #e5e5e5;
+    color: #0b0c0c;
+}
+
+.sortable-table__pagination {
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 32px;
+}
+
+.sortable-table__pagination .govuk-pagination__list {
+    margin-bottom: 0;
+}
+
+.sortable-table__pagination .govuk-pagination__link {
+    min-width: 44px;
+    text-align: center;
+}
+
+@media (max-width: 40.0625em) {
+    .sortable-table {
+        font-size: 16px;
+    }
+
+    .sortable-table__detail .govuk-table__cell {
+        padding-left: 16px;
+    }
+}

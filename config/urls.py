@@ -19,8 +19,9 @@ from django.contrib import admin
 from django.conf import settings
 from django.urls import include, path
 from apps.triage import views as triage_views
+from apps.core import views as core_views
 
 urlpatterns = [
     path("triage/", include("apps.triage.urls", namespace="triage")),
-    path("", triage_views.index, name="index"),  # home route
+    path("", core_views.index, name="index"),
 ]

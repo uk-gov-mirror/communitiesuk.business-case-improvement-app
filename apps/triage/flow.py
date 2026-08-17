@@ -317,6 +317,12 @@ ROUTING = {
     (provide_a_high_level_summary, "*"): "calculate-result"
 }
 
+BUSINESS_CASE_EXIT_SCREEN_TYPES = {
+    "exit-to-download-template-procurement-route": "Placeholder Type",
+    "exit-to-download-template-corporate-spend-fbp-route": "Placeholder Type",
+    "exit-to-download-template-hrbp-contingent-labour-route": "Placeholder Type",
+}
+
 # ---------------------------------------------------------------------------
 # Exit pages - TODO
 # ---------------------------------------------------------------------------
@@ -354,6 +360,10 @@ def get_next(current_question_slug: str, answer: str) -> str:
 
 def get_first_question_slug() -> str:
     return QUESTIONS[0]["slug"]
+
+
+def get_business_case_type_from_result_slug(result_slug: str, default: str) -> str:
+    return BUSINESS_CASE_EXIT_SCREEN_TYPES.get(result_slug, default)
 
 
 # this is only called when calculate-result is the next step, not in general flow

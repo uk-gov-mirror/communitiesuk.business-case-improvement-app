@@ -157,19 +157,35 @@ def test_procurement_template_route(client, db):
 
     for slug in QUESTION_SLUGS:
         answer = answers.get(slug)
-        if answer:
+        if answer and slug not in (give_your_bjc_a_name, provide_a_high_level_summary):
             client.post(
                 reverse("triage:question", kwargs={"slug": slug}),
                 data={"answer": answer},
             )
 
+    client.post(
+        reverse("triage:question", kwargs={"slug": give_your_bjc_a_name}),
+        data={"answer": answers[give_your_bjc_a_name]},
+    )
+    client.post(
+        reverse("triage:question", kwargs={"slug": provide_a_high_level_summary}),
+        data={"answer": answers[provide_a_high_level_summary]},
+    )
+
     session = BusinessCaseTriageResponse.objects.filter(completed_at__isnull=False).last()
     assert session is not None
     assert session.result != "in-progress"
     assert session.result != ""
+    assert session.answers.get(give_your_bjc_a_name) == "*"
     
     business_case = BusinessCase.objects.last()
     assert business_case is not None
+    assert business_case.name == "*"
+    assert business_case.directorate == "*"
+    assert business_case.type == "Placeholder Type"
+    assert business_case.lead_contact == "Placeholder Contact"
+    assert business_case.summary == "*"
+    assert business_case.status == BusinessCase.Status.ACTIVE
     assert business_case.created_at is not None
     assert business_case.modified_at is not None
     assert business_case.deleted_at is None

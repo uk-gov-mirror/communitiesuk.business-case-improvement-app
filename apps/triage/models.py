@@ -38,8 +38,22 @@ class BusinessCaseTriageResponse(models.Model):
     def __str__(self):
         return f"BusinessCaseTriageResponse {self.session_key[:8]}… ({len(self.answers)} answers)"
 
-
 class BusinessCase(models.Model):
+    class Status(models.TextChoices):
+        ACTIVE = "Active", "Active"
+        UPLOADED = "Uploaded", "Uploaded"
+        WITHDRAWN = "Withdrawn", "Withdrawn"
+
+    name = models.CharField(max_length=255, blank=True, default="")
+    directorate = models.CharField(max_length=255, blank=True, default="")
+    type = models.CharField(max_length=255, blank=True, default="")
+    lead_contact = models.CharField(max_length=255, blank=True, default="")
+    summary = models.TextField(blank=True, default="")
+    status = models.CharField(
+        max_length=9,
+        choices=Status.choices,
+        default=Status.ACTIVE,
+    )
     business_case_triage_response = models.ForeignKey(
         BusinessCaseTriageResponse,
         on_delete=models.PROTECT,

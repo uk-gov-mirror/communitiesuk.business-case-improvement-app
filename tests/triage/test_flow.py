@@ -4,6 +4,7 @@ from apps.triage.flow import (
     get_next,
     get_result_from_answers,
     get_first_question_slug,
+    get_business_case_type_from_result_slug,
     QUESTION_SLUGS,
     QUESTIONS,
     DIGITAL_STRING
@@ -40,6 +41,22 @@ def test_get_question_returns_correct_question():
 
 def test_get_question_returns_none_for_invalid_slug():
     assert get_question("not-a-real-question") is None
+
+
+@pytest.mark.parametrize(
+    ("result_slug", "business_case_type"),
+    [
+        ("exit-to-download-template-procurement-route", "Placeholder Type"),
+        ("exit-to-download-template-corporate-spend-fbp-route", "Placeholder Type"),
+        ("exit-to-download-template-hrbp-contingent-labour-route", "Placeholder Type"),
+    ],
+)
+def test_business_case_type_is_mapped_from_result_slug(result_slug, business_case_type):
+    assert get_business_case_type_from_result_slug(result_slug, "Unknown") == business_case_type
+
+
+def test_business_case_type_uses_default_for_unknown_result_slug():
+    assert get_business_case_type_from_result_slug("unknown-result", "Unknown") == "Unknown"
 
 
 def test_all_question_slugs_are_unique():
