@@ -37,3 +37,5 @@ jobs:
           DJANGO_SETTINGS_MODULE: config.settings
           SECRET_KEY: test-secret-key-not-for-production
           DEBUG: "false"
+          ENTRA_ID_ENABLED: "true"
+          ENTRA_ALLOWED_TENANTS: "00000000-0000-0000-0000-000000000000"
