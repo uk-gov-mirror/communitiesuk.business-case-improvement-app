@@ -1,13 +1,29 @@
 import pytest
+import time
 from django.test import Client
 from django.urls import reverse
 from apps.triage.models import BusinessCase, BusinessCaseTriageResponse
 from apps.triage.flow import get_first_question_slug, QUESTION_SLUGS
 from apps.triage.slugs import *
+from apps.accounts.models import User
+
+""" 
+Users need to be Logged in to access the App 
+Force login and create a session so that Entra has a valid token
+"""
+
 
 @pytest.fixture
 def client(db):
-    return Client()
+    user = User.objects.create_user(
+        username="test.user@example.gov.uk", email="test.user@example.gov.uk"
+    )
+    client = Client()
+    client.force_login(user)
+    session = client.session
+    session["id_token_claims"] = {"exp": time.time() + 3600}
+    session.save()
+    return client
 
 
 @pytest.fixture
@@ -16,55 +32,99 @@ def started_session(client):
     client.get(reverse("triage:start"))
     return client
 
+
 # Pages load
 
+
 def test_3_stage_process_page_loads(client):
-    resp = client.get(reverse("triage:result", kwargs={"slug": "you-need-to-follow-a-three-stage-process"}))
+    resp = client.get(
+        reverse(
+            "triage:result", kwargs={"slug": "you-need-to-follow-a-three-stage-process"}
+        )
+    )
     assert resp.status_code == 200
 
 
 def test_3_stage_process_novel_or_pilot_page_loads(client):
-    resp = client.get(reverse("triage:result", kwargs={"slug": "you-need-to-follow-a-three-stage-process-novel-or-pilot"}))
+    resp = client.get(
+        reverse(
+            "triage:result",
+            kwargs={"slug": "you-need-to-follow-a-three-stage-process-novel-or-pilot"},
+        )
+    )
     assert resp.status_code == 200
 
 
 def test_spewak_to_someone_first_page_loads(client):
-    resp = client.get(reverse("triage:result", kwargs={"slug": "speak-to-someone-first"}))
+    resp = client.get(
+        reverse("triage:result", kwargs={"slug": "speak-to-someone-first"})
+    )
     assert resp.status_code == 200
 
 
 def test_below_12k_no_programme_not_digital_loads(client):
-    resp = client.get(reverse("triage:result", kwargs={"slug": "do-not-need-a-business-case-no-programme-not-digital"}))
+    resp = client.get(
+        reverse(
+            "triage:result",
+            kwargs={"slug": "do-not-need-a-business-case-no-programme-not-digital"},
+        )
+    )
     assert resp.status_code == 200
 
 
 def test_corporate_spend_fbp_exit_loads(client):
-    resp = client.get(reverse("triage:result", kwargs={"slug": "exit-to-download-template-corporate-spend-fbp-route"}))
+    resp = client.get(
+        reverse(
+            "triage:result",
+            kwargs={"slug": "exit-to-download-template-corporate-spend-fbp-route"},
+        )
+    )
     assert resp.status_code == 200
 
 
 def test_hrbp_contingent_labour_exit_loads(client):
-    resp = client.get(reverse("triage:result", kwargs={"slug": "exit-to-download-template-hrbp-contingent-labour-route"}))
+    resp = client.get(
+        reverse(
+            "triage:result",
+            kwargs={"slug": "exit-to-download-template-hrbp-contingent-labour-route"},
+        )
+    )
     assert resp.status_code == 200
 
 
 def test_procurement_template_exit_loads(client):
-    resp = client.get(reverse("triage:result", kwargs={"slug": "exit-to-download-template-procurement-route"}))
+    resp = client.get(
+        reverse(
+            "triage:result",
+            kwargs={"slug": "exit-to-download-template-procurement-route"},
+        )
+    )
     assert resp.status_code == 200
 
 
 def test_procurement_route_digital_spend_page_loads(client):
-    resp = client.get(reverse("triage:result", kwargs={"slug": "procurement_route_digital_spend"}))
+    resp = client.get(
+        reverse("triage:result", kwargs={"slug": "procurement_route_digital_spend"})
+    )
     assert resp.status_code == 200
 
 
 def test_speak_to_research_team_loads(client):
-    resp = client.get(reverse("triage:result", kwargs={"slug": "you-need-to-speak-to-the-research-team"}))
+    resp = client.get(
+        reverse(
+            "triage:result", kwargs={"slug": "you-need-to-speak-to-the-research-team"}
+        )
+    )
     assert resp.status_code == 200
 
 
 def test_below_12k_no_programme_digital_loads(client):
-    resp = client.get(reverse("triage:result", kwargs={"slug": "do-not-need-a-business-case-no-programme-digital"}))
+    resp = client.get(
+        reverse(
+            "triage:result",
+            kwargs={"slug": "do-not-need-a-business-case-no-programme-digital"},
+        )
+    )
     assert resp.status_code == 200
 
 
@@ -152,7 +212,7 @@ def test_procurement_template_route(client, db):
         which_option_describes_what_you_are_trying_to_do: procure_goods_and_services_from_third_party,
         which_best_describes_your_spend: spend_on_corporate_activities,
         give_your_bjc_a_name: "*",
-        provide_a_high_level_summary: "*"
+        provide_a_high_level_summary: "*",
     }
 
     for slug in QUESTION_SLUGS:
@@ -163,11 +223,13 @@ def test_procurement_template_route(client, db):
                 data={"answer": answer},
             )
 
-    session = BusinessCaseTriageResponse.objects.filter(completed_at__isnull=False).last()
+    session = BusinessCaseTriageResponse.objects.filter(
+        completed_at__isnull=False
+    ).last()
     assert session is not None
     assert session.result != "in-progress"
     assert session.result != ""
-    
+
     business_case = BusinessCase.objects.last()
     assert business_case is not None
     assert business_case.created_at is not None

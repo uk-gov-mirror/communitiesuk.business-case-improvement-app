@@ -1,0 +1,47 @@
+{% extends "layouts/base_layout.html" %}
+{% from "govuk_frontend_jinja/templates/components/error-summary/macro.html" import govukErrorSummary %}
+{% from "govuk_frontend_jinja/templates/components/input/macro.html" import govukInput %}
+{% from "govuk_frontend_jinja/templates/components/button/macro.html" import govukButton %}
+
+{% block title %}Sign in{% endblock %}
+
+{% block content %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+
+    <form method="post" novalidate>
+      {{ csrf_field(request) }}
+      {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
+
+      {% if form.errors %}
+      {{ govukErrorSummary({
+      "titleText": "There is a problem",
+      "errorList": [{"text": "Enter a correct email and password.", "href": "#id_username"}]
+      }) }}
+      {% endif %}
+
+      <h1 class="govuk-heading-l">Sign in</h1>
+
+      {{ govukInput({
+      "id": "id_username",
+      "name": "username",
+      "type": "email",
+      "label": {"text": "Email address"},
+      "autocomplete": "email"
+      }) }}
+
+      {{ govukInput({
+      "id": "id_password",
+      "name": "password",
+      "type": "password",
+      "label": {"text": "Password"},
+      "autocomplete": "current-password"
+      }) }}
+
+      {{ govukButton({"text": "Sign in"}) }}
+
+    </form>
+
+  </div>
+</div>
+{% endblock %}
