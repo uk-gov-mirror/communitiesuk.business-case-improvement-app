@@ -24,6 +24,7 @@ urlpatterns = [
     path("triage/", include("apps.triage.urls", namespace="triage")),
     path("", triage_views.index, name="index"),  # home route
     
+    #temporary
     path("upload/", triage_views.upload, name="upload"),
-    path("api/do-work/", triage_views.trigger_work_view, name="upload-word-doc"),
+    path("api/word-doc-parsing/", triage_views.trigger_work_view, name="upload-word-doc"),
 ]

@@ -38,15 +38,6 @@ Summary:
 '''
 class _SectionContent():
     def __init__(self):
-        self.clear()
-    
-    def get_section_header(self) -> str:
-        return self.section_header
-
-    def get_content(self):
-        return self.content
-
-    def clear(self):
         self.section_header = ""
         self.content = []
 
@@ -73,7 +64,9 @@ Params:
     summary_section: dict. Contains key value pair of summary data.
     document_data: list[_SectionContent]. Needs splitting and itterating over.
 '''
-def submit_data_to_models(summary_section: dict, document_data: list[_SectionContent]):
+def submit_data_to_models(summary_section: dict, document_data: list[_SectionContent]) -> tuple[bool, bool]:
+    summary_data_successful: bool = True
+    document_data_successful: bool = True
     triage_response_object = BusinessCaseTriageResponse.objects.create()
     business_case_object, _ = BusinessCase.objects.get_or_create(business_case_triage_response=triage_response_object)
 
@@ -84,11 +77,14 @@ def submit_data_to_models(summary_section: dict, document_data: list[_SectionCon
 
     business_case_response_object = BusinessCaseResponse.objects.get(business_case_id=business_case_object)
 
+    # submit summary data to the model
     try:
         submit_summary_data(business_case_response_object, summary_section)
     except Exception as ex:
+        summary_data_successful = False
         logger.error(model_exception_string.format("BusinessCaseResponseSummary", ex.__str__))
 
+    # submit Document data to the models required.
     for data in document_data:
         business_Case_response_section=BusinessCaseResponseSection.objects.create(
             business_case_response_id=business_case_response_object,
@@ -109,6 +105,7 @@ def submit_data_to_models(summary_section: dict, document_data: list[_SectionCon
                     )
                 except Exception as ex:
                     logger.error(model_exception_string.format("BusinessCaseResponseBlock, type: str", ex.__str__))
+                    document_data_successful = False
 
             elif isinstance(c, dict):
                 try:
@@ -122,9 +119,12 @@ def submit_data_to_models(summary_section: dict, document_data: list[_SectionCon
                         block_data=dict_bytes
                     )
                 except Exception as ex:
-                    logger.error(model_exception_string.format("BusinessCaseResponseBlock, type: dict", ex.__str__))                    
+                    logger.error(model_exception_string.format("BusinessCaseResponseBlock, type: dict", ex.__str__))
+                    document_data_successful = False              
 
             order_of_block += 1
+
+    return summary_data_successful, document_data_successful
 
 
 '''
@@ -138,12 +138,12 @@ Params:
 '''
 def submit_summary_data(business_case_response_object: BusinessCaseResponse, summary_section: dict[str, str]):
     BusinessCaseResponseSummary.objects.create(
-            business_case_response_id=business_case_response_object,
-            summary_text=summary_section.get(summary_key_text, "-"),
-            whole_of_life_cost=summary_section.get(summary_key_whole_life_cost, "-"),
+            business_case_response_id = business_case_response_object,
+            summary_text = summary_section.get(summary_key_text, "-"),
+            whole_of_life_cost = summary_section.get(summary_key_whole_life_cost, "-"),
             directorate = summary_section.get(summary_key_directorate, "-"),
-            sro_scs=summary_section.get(summary_key_sro_scs, "-"),
-            author=summary_section.get(summary_key_author, "-")
+            sro_scs = summary_section.get(summary_key_sro_scs, "-"),
+            author = summary_section.get(summary_key_author, "-")
         )
 
 
@@ -157,8 +157,8 @@ Params:
     doc: Word Document.
 '''
 def parse_word_document(doc: Document):
-    sections: list[_SectionContent] = []
-    temp_section: _SectionContent = _SectionContent()
+    document_sections: list[_SectionContent] = []
+    temp_section: _SectionContent
     summary_section: dict[str, str] = {}
 
     for s in doc.sections:
@@ -178,18 +178,20 @@ def parse_word_document(doc: Document):
                 while content is not None:
                     if content.style and isinstance(content, Paragraph):
                         if content.style.name == "Heading 1":
-                            break
+                            break # new section, end current section
                         else:
                             if (content_text := escaped_string(content.text)) != "":
                                 temp_section.add_item_to_content(content_text) 
                     elif isinstance(content, Table):
-                        temp_section.add_item_to_content(_extract_data_from_doc_table(content))
+                        temp_section.add_item_to_content(
+                            _extract_data_from_doc_table(content)
+                        )
 
                     content = next(content_stream, None)
-                sections.append(temp_section)
+                document_sections.append(temp_section)
 
     summary_section = _get_summary_data(doc)
-    submit_data_to_models(summary_section, sections)
+    submit_data_to_models(summary_section, document_sections)
 
 
 '''
@@ -280,14 +282,14 @@ def _get_data_from_details_table(doc: Document) -> tuple[str, str, str]:
     sro_or_scs_result: str = "-"
     directorate_result: str = "-"
 
-    key_words = {author_name_header, sro_or_scs_header , directorate_header}
+    known_headers = {author_name_header, sro_or_scs_header , directorate_header}
 
     if doc and doc.tables[0]:
         tbl = doc.tables[0]
 
         for r in tbl.rows:
             cell_header: str = escaped_string(r.cells[0].text).lower()
-            if cell_header in key_words:
+            if cell_header in known_headers:
                 summary_content = escaped_string(r.cells[1].text)
                 match cell_header:
                     case header if header == author_name_header:
@@ -328,7 +330,7 @@ Summary:
 Returns:
     A formatted string. This exists beause when the template was pulled from the web into word, it
     came with nbs marks, and other markup as string that translated to hard text when saved.
-    I also want to control other elements like where the '£' sign goes in a string or remove double spaces, etc.
+    Also allows control over other elements like where the '£' sign goes in a string or remove double spaces, etc.
 Params:
     value: any str.
 '''
