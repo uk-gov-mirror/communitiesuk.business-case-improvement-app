@@ -39,17 +39,20 @@ def upload(request):
     return render(request, "triage/upload_document_placeholder_template.html")
 
 
-def DoWork():
+def parse_word_doc():
     current_folder = Path(__file__).resolve().parent
     doc = Document(f"{current_folder}/FullDoc.docx")
-    doc_content, summary_section = parse_word_document(doc)
-    print("")
+    parse_word_document(doc)
+    
 
 def trigger_work_view(request: HttpRequest) -> HttpResponse:
     if request.method != 'POST':
         return HttpResponseNotAllowed(['POST'])
-    DoWork()
-    return redirect('/')
+    parse_word_doc()
+    return JsonResponse({
+            'status': 'success',
+            'message': "Complete"
+        })
 
 
 def start(request):

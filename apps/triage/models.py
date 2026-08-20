@@ -1,16 +1,5 @@
 from django.db import models
 from django.utils import timezone
-
-class BlockType(models.Model):
-    id = models.SmallAutoField(null=False, unique=True, primary_key=True)
-    name = models.CharField(max_length=25, unique=True)
-
-    class Meta:
-        ordering = ['id']
-
-    def __str__(self):
-        return self.name
-
     
 class BusinessCaseTriageResponse(models.Model):
     """
@@ -50,12 +39,25 @@ class BusinessCaseTriageResponse(models.Model):
 
 
 class BusinessCase(models.Model):
+    # class Status(models.TextChoices):
+    #     ACTIVE = "Active", "Active"
+    #     UPLOADED = "Uploaded", "Uploaded"
+    #     WITHDRAWN = "Withdrawn", "Withdrawn"
+
+    # name = models.CharField(max_length=255, blank=True, default="")
+    # directorate = models.CharField(max_length=255, blank=True, default="")
+    # type = models.CharField(max_length=255, blank=True, default="")
+    # lead_contact = models.CharField(max_length=255, blank=True, default="")
+    # summary = models.TextField(blank=True, default="")
+    # status = models.CharField(
+    #     choices=Status.choices,
+    #     default=Status.ACTIVE,
+    # )
     business_case_triage_response = models.ForeignKey(
         BusinessCaseTriageResponse,
         on_delete=models.PROTECT,
         related_name="business_cases",
     )
-
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
     deleted_at = models.DateTimeField(null=True, blank=True)
@@ -64,7 +66,7 @@ class BusinessCase(models.Model):
         ordering = ["-created_at"]
 
     def __str__(self):
-        return f"BusinessCase {self.pk} (triage={self.business_case_triage_response_id})"
+        return f"BusinessCase {self.pk}"
 
 
 
@@ -72,6 +74,9 @@ class BusinessCase(models.Model):
 
 
 class BusinessCaseResponse(models.Model):
+    class BusinessCaseResponseStatus(models.TextChoices):
+        COMPLETED = "Completed", "Completed"
+
     version = models.IntegerField(default=1)
     created_at = models.DateTimeField(default=timezone.now)
     uploaded_by = models.CharField(max_length=150, blank=False, null=False, default="-")
@@ -81,8 +86,17 @@ class BusinessCaseResponse(models.Model):
         on_delete=models.PROTECT,
     )
 
+    status = models.TextField(
+        choices=BusinessCaseResponseStatus.choices,
+        default=BusinessCaseResponseStatus.COMPLETED
+    )
+
     def __str__(self):
         return f"BusinessCase: {self.business_case_id} - response version: {self.version}"
+
+
+
+
 
 
 class BusinessCaseResponseSummary(models.Model):
@@ -114,14 +128,17 @@ class BusinessCaseResponseSection(models.Model):
 
 
 class BusinessCaseResponseBlock(models.Model):
+    class BlockType(models.TextChoices):
+        PARGRAPH = "Paragraph", "Paragraph"
+        TABLE = "Table", "Table"
+
     business_case_response_section_id = models.ForeignKey(
         BusinessCaseResponseSection,
         on_delete=models.PROTECT,
     )
-    block_type = models.ForeignKey(
-        BlockType,
-        on_delete=models.PROTECT,
-        related_name="block_types",
+    block_type = models.TextField(
+        choices=BlockType.choices,
+        default=BlockType.PARGRAPH,
         help_text="The type of Block this data represents, e.g Paragraph, Table, etc."
     )
 
@@ -129,4 +146,4 @@ class BusinessCaseResponseBlock(models.Model):
     block_data = models.BinaryField(blank=False, null=False)
 
     def __str__(self):
-        return ""
+        return f"Content: {self.block_data} - Content Type: {self.block_type}" 
