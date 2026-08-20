@@ -44,7 +44,6 @@ def parse_word_doc():
     doc = Document(f"{current_folder}/FullDoc.docx")
     parse_word_document(doc)
     
-
 def trigger_work_view(request: HttpRequest) -> HttpResponse:
     if request.method != 'POST':
         return HttpResponseNotAllowed(['POST'])
