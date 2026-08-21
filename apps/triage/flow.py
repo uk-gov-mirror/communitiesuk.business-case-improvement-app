@@ -148,11 +148,6 @@ QUESTIONS = [
         ]
     },
     {
-        "slug": provide_a_high_level_summary,
-        "title": "Provide a high level summary",
-        "type": "input"
-    },
-    {
         "slug": "have-you-spoken-to-finance-business-partner",
         "title": "Have you discussed this business case with your Finance Business Partner (FBP) or a Commercial colleague?",
         "type": "radio",
@@ -285,7 +280,12 @@ QUESTIONS = [
         "slug": give_your_bjc_a_name,
         "title": "Give your BJC a name",
         "type": "input",
-    }
+    },
+    {
+        "slug": provide_a_high_level_summary,
+        "title": "Provide a high level summary",
+        "type": "input"
+    },
 ]
 
 
@@ -315,6 +315,12 @@ ROUTING = {
     (we_want_to_continue_improving_our_service, "*"): give_your_bjc_a_name,
     (give_your_bjc_a_name, "*"): provide_a_high_level_summary,
     (provide_a_high_level_summary, "*"): "calculate-result"
+}
+
+BUSINESS_CASE_EXIT_SCREEN_TYPES = {
+    "exit-to-download-template-procurement-route": "Procurement",
+    "exit-to-download-template-corporate-spend-fbp-route": "Corporate Spend FBP",
+    "exit-to-download-template-hrbp-contingent-labour-route": "HRBP Contingent Labour",
 }
 
 # ---------------------------------------------------------------------------
@@ -354,6 +360,10 @@ def get_next(current_question_slug: str, answer: str) -> str:
 
 def get_first_question_slug() -> str:
     return QUESTIONS[0]["slug"]
+
+
+def get_business_case_type_from_result_slug(result_slug: str, default: str) -> str:
+    return BUSINESS_CASE_EXIT_SCREEN_TYPES.get(result_slug, default)
 
 
 # this is only called when calculate-result is the next step, not in general flow

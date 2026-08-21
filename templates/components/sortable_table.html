@@ -1,0 +1,67 @@
+{% macro sortable_table(columns, rows, caption="Sortable table", expandable=false, table_id="sortable-table", paginated=false) %}
+<div class="govuk-!-margin-bottom-4" data-sortable-table="{{ table_id }}">
+  <table class="govuk-table sortable-table">
+    <caption class="govuk-visually-hidden">{{ caption }}</caption>
+    <thead class="govuk-table__head">
+      <tr class="govuk-table__row">
+        {% for column in columns %}
+          <th scope="col" class="govuk-table__header" aria-sort="none" style="width: {{ column.width|default('auto') }}">
+            <button class="sortable-table__sort" type="button" data-sort="{{ column.key }}">
+              {{ column.label }}<span class="sortable-table__sort-icon" aria-hidden="true"></span>
+            </button>
+          </th>
+        {% endfor %}
+      </tr>
+    </thead>
+    <tbody class="govuk-table__body">
+      {% for row in rows %}
+        {% set row_loop = loop %}
+        <tr class="govuk-table__row sortable-table__row" data-sortable-table-row{% for column in columns %} data-{{ column.key }}="{{ row[column.key] }}"{% endfor %}>
+          {% for column in columns %}
+            {% if loop.first and expandable %}
+              <th scope="row" class="govuk-table__header">
+                <button class="sortable-table__expand" type="button" aria-expanded="false" aria-controls="{{ table_id }}-detail-{{ row_loop.index }}" title="Show details">
+                  <span class="sortable-table__expand-icon" aria-hidden="true"></span>
+                  <span class="govuk-visually-hidden">Show details for </span>{{ row[column.key] }}
+                </button>
+              </th>
+            {% elif loop.first %}
+              <th scope="row" class="govuk-table__header">{{ row[column.key] }}</th>
+            {% else %}
+              <td class="govuk-table__cell">
+                {% if column.key == "status" %}
+                  <span class="sortable-table__status sortable-table__status--{{ row[column.key]|lower }}">{{ row[column.key] }}</span>
+                {% else %}
+                  {{ row[column.key] }}
+                {% endif %}
+              </td>
+            {% endif %}
+          {% endfor %}
+        </tr>
+        {% if expandable %}
+          <tr class="govuk-table__row sortable-table__detail" id="{{ table_id }}-detail-{{ row_loop.index }}" hidden>
+            <td class="govuk-table__cell" colspan="{{ columns|length }}">
+              {{ caller(row) }}
+            </td>
+          </tr>
+        {% endif %}
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% if paginated %}
+  <nav class="govuk-pagination sortable-table__pagination" aria-label="Pagination">
+    <ul class="govuk-pagination__list">
+      {% for page_number in rows.paginator.page_range %}
+        <li class="govuk-pagination__item{% if page_number == rows.number %} govuk-pagination__item--current{% endif %}">
+          {% if page_number == rows.number %}
+            <a class="govuk-link govuk-pagination__link" href="?page={{ page_number }}" aria-current="page">{{ page_number }}</a>
+          {% else %}
+            <a class="govuk-link govuk-pagination__link" href="?page={{ page_number }}">{{ page_number }}</a>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  </nav>
+{% endif %}
+{% endmacro %}
