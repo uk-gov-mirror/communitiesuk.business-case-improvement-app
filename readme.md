@@ -37,6 +37,9 @@ cp .env.example .env
 
 Ensure the settings in `.env` (such as `SECRET_KEY`) are configured as needed for local development.
 
+*Note: the service needs to have users Logged into use, set ENTRA_ID_ENABLED to use local or ENTRA auth*
+`ENTRA_ID_ENABLED=false` is the default and is for local use or if you need to allow testing with users who do not have an MHCLG account — the app then uses standard Django username/password login and needs no external services. See [Authentication](#authentication) for what changes when it's enabled.
+
 ### 3. Install Dependencies & Setup Assets
 
 The project uses a Makefile helper to perform a clean setup of frontend assets (HMRC and GOV.UK Frontend) and Node dependencies.
@@ -77,7 +80,28 @@ Apply the database migrations to set up your local database:
 poetry run python manage.py migrate
 ```
 
-### 5. Start the Development Server
+### 5. Create a User Account
+
+**Every page in the application requires a signed-in user** — there is no public area. Before you can use the app locally you need a user account. You can either use Entra, or you can create a standard Django user.
+
+With `ENTRA_ID_ENABLED=false` (the default in `.env.example`), the app uses standard Django username/password login, so create a superuser:
+
+```bash
+poetry run python manage.py createsuperuser
+```
+
+You'll be prompted for three things, in this order:
+
+```
+Username: your.name
+Email address: your.name@communities.gov.uk
+Password: ********
+Password (again): ********
+```
+
+> **You sign in with your email address, nut username** The user model sets `USERNAME_FIELD = "email"`, so the sign-in form's first field expects the email you entered above. 
+
+### 6. Start the Development Server
 
 Start the local Django server:
 
@@ -85,7 +109,7 @@ Start the local Django server:
 poetry run python manage.py runserver 8080
 ```
 
-The application will be accessible at [http://localhost:8080/](http://localhost:8080/).
+The application will be accessible at [http://localhost:8080/](http://localhost:8080/). You'll be redirected to `/accounts/login/` — sign in with the email and password from step 5.
 
 ---
 
@@ -125,6 +149,15 @@ You can run the entire application, including a PostgreSQL database and pgAdmin,
 
 When running with Docker, the Postgres database is accessible on port `5432` and pgAdmin (when using extras) is accessible at [http://localhost:5050/](http://localhost:5050/) (Credentials: `admin@local.dev` / `admin`). Use the password `local_password` to connect to the database.
 
+### Creating a user in Docker
+
+The Docker setup uses its own Postgres volume, separate from any local database, so you'll need an account there too:
+
+```bash
+docker compose run web python manage.py createsuperuser
+```
+As above, sign in with the **email address** you provide, not the username.
+
 ---
 
 ## Running Tests & Quality Control
@@ -136,6 +169,10 @@ The project uses `pytest` with `pytest-django`. Run the test suite using:
 make test
 # Or: poetry run pytest tests/ -v
 ```
+
+The authentication tests require `ENTRA_ID_ENABLED=true` at settings load time, because the app registers a different set of URLs and middleware depending on that flag. Set it in your `.env` before running.
+
+Without this enabled you'll get the error`AttributeError: 'Settings' object has no attribute 'ENTRA_AUTH'`.
 
 ### Code Style & Linting
 We use `ruff` for fast python linting and formatting.
@@ -172,6 +209,74 @@ Here is a quick summary of the available `Makefile` targets:
 ---
 
 
+
+## Authentication
+
+Authentication is handled by the `apps/accounts` app. It runs in one of two modes, controlled by a single environment variable, `ENTRA_ID_ENABLED`:
+
+| | `ENTRA_ID_ENABLED=false` (local dev) | `ENTRA_ID_ENABLED=true` (test/prod) |
+|---|---|---|
+| Sign-in | Django username/password form | Redirect to Microsoft Entra ID |
+| User accounts | Created manually | Created automatically on first sign-in |
+| Admin access | `createsuperuser`, or promote via `/admin/` | Promote via `/admin/` (see below) |
+
+**Every route requires a signed-in user in both modes.** There is no public area — a request without a valid session is always redirected to sign in. Once signed in, everyone has the same level of access to the application itself; `/admin/` is the only area requiring additional permissions.
+
+### Local development (`ENTRA_ID_ENABLED=false`)
+
+This is the default and requires no external services. See [Create a User Account](#5-create-a-user-account) in Getting Started.
+
+**Sign in with your email address** The user model uses email as its identifier (`USERNAME_FIELD = "email"`). The form field is labelled "Email address" for this reason.
+
+**Adding more test users.** Once you have a superuser, you can create additional accounts at `/admin/` → **Accounts → Users**. Set a password via the "Password" field on the add form; that user can then sign in with their email and that password. This is useful for testing with users who do not have an ENTRA email address.
+
+> Accounts created by an Entra sign-in have **no usable password** — they authenticate against Microsoft, not locally. If you switch a database from Entra mode to local mode, those users won't be able to sign in until an admin sets a password for them via `/admin/`.
+
+### Entra ID (`ENTRA_ID_ENABLED=true`)
+
+Used in the deployed environments and can be used in local testing if the below env vars are set locally. Authorisation is handled and verrified by Entra, the app verifies the token and allowed tenants. The app maps the resulting claims onto a local user record (creating one on first sign-in), and from then on a standard Django session keeps them signed in.
+
+Requires these environment variables — ask for access to the values and make sure they are set in Secrets Manager. 
+
+| Variable | Purpose |
+|---|---|
+| `ENTRA_CLIENT_ID` | Application (client) ID from the app registration |
+| `ENTRA_CLIENT_SECRET` | Client secret from the app registration |
+| `ENTRA_AUTHORITY` | e.g. `https://login.microsoftonline.com/organizations` |
+| `ENTRA_REDIRECT_URI` | Must match the app registration's Redirect URI **exactly** - this is set to /auth_callback in the app|
+| `ENTRA_LOGOUT_REDIRECT` | Where to send someone after signing out |
+| `ENTRA_ALLOWED_TENANTS` | Space-separated tenant IDs permitted to sign in |
+| `ENTRA_BOOTSTRAP_ADMIN_EMAIL` | Email of the first admin (see below), useful for first time deployment|
+
+
+### Administrator access
+
+Admin rights need to be manually promoted to avoid any user automatically acquiring them. Elevated access is granted in one of two ways:
+
+**Routine:** an existing admin promotes someone at `/admin/` → **Accounts → Users** → tick **Staff status** and **Superuser status**. The person must have signed in at least once so their record exists. Changes take effect on their next request; they don't need to sign out.
+
+**Bootstrapping a new environment:** there's no admin yet to do the promoting, and no password login in Entra mode. The `promote_superuser` management command covers this:
+
+```bash
+python manage.py promote_superuser                            # uses ENTRA_BOOTSTRAP_ADMIN_EMAIL
+python manage.py promote_superuser --email someone@email.com  # or name explicitly
+```
+
+It flags that person's account as an administrator, creating the record first if they haven't signed in yet. It grants nothing on its own — they still authenticate through Entra as normal — and it's idempotent, so it's safe to re-run. Run it once per environment on first deploy, or after a database reset.
+
+In deployed environments this runs as a one-off ECS task; see `infrastructure/maintenance-tasks/`.
+
+### Troubleshooting
+Some issues that might happen on first deploy
+
+| Symptom | Likely cause |
+|---|---|
+| Redirect loop between the app and Microsoft | `ENTRA_REDIRECT_URI` doesn't match the app registration exactly |
+| `AADSTS50011` | Redirect URI not registered |
+| `/admin/` redirects to `/` | Signed in but not an admin — needs promoting |
+| Sign-in page times out in a deployed environment | The container can't reach `login.microsoftonline.com`; check outbound  egress  |
+
+---
 
 ## Managing the Triage Flow
 
