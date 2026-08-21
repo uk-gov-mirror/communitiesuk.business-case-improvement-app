@@ -1,14 +1,13 @@
+from django.conf import settings
 from django.http import JsonResponse
 from django.core.paginator import Paginator
 from django.shortcuts import render
 
 from apps.triage.models import BusinessCase
 
-BUSINESS_CASES_PER_PAGE = 20
-
 
 def index(request):
-    paginator = Paginator(BusinessCase.objects.all(), BUSINESS_CASES_PER_PAGE)
+    paginator = Paginator(BusinessCase.objects.all(), settings.BUSINESS_CASES_PER_PAGE)
     business_cases = paginator.get_page(request.GET.get("page"))
 
     return render(
