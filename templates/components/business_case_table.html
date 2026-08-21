@@ -1,0 +1,15 @@
+{% from "components/sortable_table.html" import sortable_table %}
+
+{% macro business_case_table(business_cases) %}
+{% set columns = [
+  {"key": "name", "label": "Title", "width": "45%"},
+  {"key": "directorate", "label": "Directorate", "width": "25%"},
+  {"key": "type", "label": "Type", "width": "15%"},
+  {"key": "status", "label": "Status", "width": "15%"}
+] %}
+{% call(row) sortable_table(columns, business_cases, "Business cases", true, "business-cases", true) %}
+  <p class="govuk-body">{{ row.summary }}</p>
+  <p class="govuk-body"><strong>Lead contact</strong><br>{{ row.lead_contact }}</p>
+  <a class="govuk-link" href="#">View business case</a>
+{% endcall %}
+{% endmacro %}

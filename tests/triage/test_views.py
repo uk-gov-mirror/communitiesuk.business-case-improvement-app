@@ -1,10 +1,12 @@
 import pytest
 import time
-from django.test import Client
+from django.contrib.auth.models import AnonymousUser
+from django.test import Client, RequestFactory
 from django.urls import reverse
 from apps.triage.models import BusinessCase, BusinessCaseTriageResponse
 from apps.triage.flow import get_first_question_slug, QUESTION_SLUGS
 from apps.triage.slugs import *
+from apps.triage.views import _get_lead_contact
 from apps.accounts.models import User
 
 """ 
@@ -16,7 +18,10 @@ Force login and create a session so that Entra has a valid token
 @pytest.fixture
 def client(db):
     user = User.objects.create_user(
-        username="test.user@example.gov.uk", email="test.user@example.gov.uk"
+        username="test.user@example.gov.uk",
+        email="test.user@example.gov.uk",
+        first_name="Test",
+        last_name="User",
     )
     client = Client()
     client.force_login(user)
@@ -223,21 +228,44 @@ def test_procurement_template_route(client, db):
                 data={"answer": answer},
             )
 
-    session = BusinessCaseTriageResponse.objects.filter(
-        completed_at__isnull=False
-    ).last()
+    session = BusinessCaseTriageResponse.objects.filter(completed_at__isnull=False).last()
     assert session is not None
     assert session.result != "in-progress"
     assert session.result != ""
-
+    assert session.answers.get(give_your_bjc_a_name) == "*"
+    
     business_case = BusinessCase.objects.last()
     assert business_case is not None
+    assert business_case.name == "*"
+    assert business_case.directorate == "*"
+    assert business_case.type == "Corporate Spend FBP"
+    assert business_case.lead_contact == "Test User"
+    assert business_case.summary == "*"
+    assert business_case.status == BusinessCase.Status.ACTIVE
     assert business_case.created_at is not None
     assert business_case.modified_at is not None
     assert business_case.deleted_at is None
 
 
 #  Result pages
+
+
+def test_get_lead_contact_returns_users_full_name_when_authenticated(db):
+    user = User.objects.create_user(
+        username="another.user@example.gov.uk",
+        email="another.user@example.gov.uk",
+        first_name="Another",
+        last_name="User",
+    )
+    request = RequestFactory().get("/")
+    request.user = user
+    assert _get_lead_contact(request) == "Another User"
+
+
+def test_get_lead_contact_falls_back_when_not_authenticated(db):
+    request = RequestFactory().get("/")
+    request.user = AnonymousUser()
+    assert _get_lead_contact(request) == "Not Available"
 
 
 def test_result_page_loads(client, db):

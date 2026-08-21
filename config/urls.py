@@ -20,12 +20,13 @@ from django.conf import settings
 from django.urls import include, path
 from apps.triage import views as triage_views
 from apps.accounts import views as accounts_views
+from apps.core import views as core_views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("accounts/", include("apps.accounts.urls", namespace="accounts")),
     path("triage/", include("apps.triage.urls", namespace="triage")),
-    path("", triage_views.index, name="index"),  # home route
+    path("", core_views.index, name="index"),
 ]
 
 if settings.ENTRA_ID_ENABLED:

@@ -1,7 +1,35 @@
 {% extends "layouts/base_layout.html" %}
-{% from "components/macros.html" import govuk_button %}
-{% set service_name = "Business Case Improvement" %}
-{% set page_title = "Home" %}
+{% from "govuk_frontend_jinja/templates/components/button/macro.html" import govukButton %}
+{% from "components/business_case_table.html" import business_case_table %}
 
 {% block content %}
+<h1 class="govuk-heading-l">
+  Start or view a business case
+</h1>
+<p class="govuk-body">
+  Want to know more about the end-to-end business case process before you start?
+  Need some guidance about approvals and finding out who you need to engage with?
+  <a class="govuk-link" href="{{ external_links.project_delivery_hub }}" target="_blank" rel="noopener noreferrer">
+    Link here (opens in new tab)
+  </a>
+</p>
+{{ govukButton({
+  "text": "Start now",
+  "href": url("triage:index"),
+  "isStartButton": true
+}) }}
+<hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+<h2 class="govuk-heading-m">
+  Find a business case
+</h2>
+<p class="govuk-body">
+  You can use this directory to find other business cases in MHCLG that are below £2million.
+</p>
+{{ business_case_table(business_cases) }}
+<p class="govuk-body-s govuk-!-text-align-centre">
+  Business cases appear in order of activity, with most recent activity at the top.
+</p>
+{% endblock %}
+{% block extra_js %}
+<script src="{{ static('js/sortable-table.js') }}"></script>
 {% endblock %}
