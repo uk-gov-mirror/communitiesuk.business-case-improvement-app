@@ -1,7 +1,6 @@
 from django.db import models
 from django.utils import timezone
-
-
+    
 class BusinessCaseTriageResponse(models.Model):
     """
     Stores a user's answers for one Business Case triage journey.
@@ -67,4 +66,78 @@ class BusinessCase(models.Model):
         ordering = ["-created_at"]
 
     def __str__(self):
-        return f"BusinessCase {self.pk} (triage={self.business_case_triage_response_id})"
+        return f"BusinessCase id: {self.pk}"
+
+
+class BusinessCaseResponse(models.Model):
+    class BusinessCaseResponseStatus(models.TextChoices):
+        COMPLETED = "Completed", "Completed"
+
+    version = models.IntegerField(default=1)
+    created_at = models.DateTimeField(default=timezone.now)
+    uploaded_by = models.CharField(max_length=150, blank=False, null=False, default="-")
+    
+    business_case_id = models.ForeignKey(
+        BusinessCase,
+        on_delete=models.PROTECT,
+    )
+
+    status = models.TextField(
+        choices=BusinessCaseResponseStatus.choices,
+        default=BusinessCaseResponseStatus.COMPLETED
+    )
+
+    def __str__(self):
+        return f"BusinessCase: {self.business_case_id} - response version: {self.version}"
+
+
+class BusinessCaseResponseSummary(models.Model):
+    business_case_response_id = models.ForeignKey(
+        BusinessCaseResponse,
+        on_delete=models.PROTECT,
+    )
+    summary_text = models.TextField(blank=False, null=False, )
+    whole_of_life_cost = models.CharField(blank=False, null=False, default="0")
+    directorate = models.CharField(blank=False, null=False, default="-")
+    sro_scs = models.CharField(blank=False, null=False, default="-")
+    approved_by_sro_scs = models.DateField(default=timezone.now)
+    author = models.CharField(blank=False, null=False, default="-")
+
+
+    def __str__(self):
+        return f"BusinessCaseResponse: id: {self.business_case_response_id}"
+
+
+class BusinessCaseResponseSection(models.Model):
+    business_case_response_id = models.ForeignKey(
+        BusinessCaseResponse,
+        on_delete=models.PROTECT,
+    )
+
+    header_text = models.CharField(max_length=100, blank=False, null=False, default="")
+    
+    def __str__(self):
+        return f"BusinessCaseResponseSection: header: {self.header_text}"
+
+
+class BusinessCaseResponseBlock(models.Model):
+    class BlockType(models.TextChoices):
+        PARGRAPH = "Paragraph", "Paragraph"
+        TABLE = "Table", "Table"
+
+    business_case_response_section_id = models.ForeignKey(
+        BusinessCaseResponseSection,
+        on_delete=models.PROTECT,
+    )
+    block_type = models.TextField(
+        choices=BlockType.choices,
+        default=BlockType.PARGRAPH,
+        help_text="The type of Block this data represents, e.g Paragraph, Table, etc."
+    )
+
+    block_number = models.IntegerField(default=0, help_text="The order in which this block appeared under the header")
+    block_data = models.BinaryField(blank=False, null=False)
+
+    def __str__(self):
+        return f"Content: {self.block_data} - Content Type: {self.block_type}"
+    

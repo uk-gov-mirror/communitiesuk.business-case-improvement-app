@@ -27,6 +27,10 @@ urlpatterns = [
     path("accounts/", include("apps.accounts.urls", namespace="accounts")),
     path("triage/", include("apps.triage.urls", namespace="triage")),
     path("", core_views.index, name="index"),
+    
+    #temporary
+    path("upload/", triage_views.upload, name="upload"),
+    path("api/word-doc-parsing/", triage_views.trigger_work_view, name="upload-word-doc"),
 ]
 
 if settings.ENTRA_ID_ENABLED:
