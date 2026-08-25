@@ -1,0 +1,52 @@
+{% extends "layouts/base_layout.html" %}
+{% from "govuk_frontend_jinja/templates/components/button/macro.html" import govukButton %}
+
+{% block content %}
+<div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+        <h1 class='govuk-heading-l'>Placeholder page for uploading a word doc</h1>
+
+        <form action="{{ url('upload-word-doc') }}" method="post">
+            {{ csrf_input }}
+
+            <button id="async-upload-document-btn" type="submit" class="govuk-button" data-module="govuk-button"
+                data-url="{{ url('upload-word-doc') }}" data-csrf="{{ csrf_token }}" type="button"
+                data-prevent-double-click="true">
+                Upload
+            </button>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.getElementById("async-upload-document-btn").addEventListener("click", async (event) => {
+        event.preventDefault();
+        const button = event.currentTarget;
+        const targetUrl = button.getAttribute('data-url');
+        const csrfToken = button.getAttribute('data-csrf');
+
+        try {
+            button.disabled = true;
+            const response = await fetch(targetUrl, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrfToken,
+                    'Content-Type': "application/json"
+                }
+            });
+
+            const data = await response.json();
+
+            if (response.ok && data.status == 'success') {
+                alert(data.message)
+            }
+        }
+        catch (error) {
+        }
+        finally {
+            button.disabled = false
+        }
+    });
+</script>
+
+{% endblock %}

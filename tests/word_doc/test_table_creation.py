@@ -3,7 +3,7 @@ from apps.word_doc_services.create_document_objects import (
     create_table,
     TableDefinition
 )
-from docx.document import Document as doc
+
 from docx import Document
  
 def test_create_table_method_adds_table_to_document():

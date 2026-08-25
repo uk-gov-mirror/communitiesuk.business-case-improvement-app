@@ -2,15 +2,14 @@ import pytest
 from apps.triage.flow import (
     get_question,
     get_next,
-    get_result_from_answers,
     get_first_question_slug,
     get_business_case_type_from_result_slug,
     QUESTION_SLUGS,
     QUESTIONS,
-    DIGITAL_STRING
 )
 
 from apps.triage.slugs import *
+from apps.triage.calculate_result_helpers import *
 
 #  Question definitions
 
@@ -95,8 +94,8 @@ def test_result_always_returns_a_slug():
 
 def test_over_2m_exit_screen_routing():
     # act
-    result = get_next(total_value_of_business_case, "above-2m")
-    exit = get_result_from_answers({total_value_of_business_case: "above-2m"})
+    result = get_next(total_value_of_business_case, AnswerConstants.ABOVE_2M)
+    exit = get_result_from_answers({total_value_of_business_case: AnswerConstants.ABOVE_2M})
 
     # assert
     assert result == "calculate-result"
@@ -252,7 +251,7 @@ def test_procurement_routes_including_digital_routes_away_from_procurement():
         "no",
         "no",
         "Any Answer",
-        DIGITAL_STRING,
+        AnswerConstants.DIGITAL_STRING,
         "Any Answer",
         procure_goods_and_services_from_third_party,
         spend_on_corporate_activities,
@@ -304,7 +303,7 @@ def test_commission_research_routing():
         "no",
         "no",
         "Any Answer",
-        DIGITAL_STRING,
+        AnswerConstants.DIGITAL_STRING,
         "Any Answer",
         commission_research
     ]
