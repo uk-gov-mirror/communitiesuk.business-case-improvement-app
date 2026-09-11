@@ -19,6 +19,7 @@ on:
         options:
           - aws-dev
           - aws-test
+          - aws-prod
 
 defaults:
   run:
