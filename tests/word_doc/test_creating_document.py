@@ -94,3 +94,31 @@ def test_adding_fixed_text():
     assert wrapper.doc.paragraphs[0].runs[0].font.size == Pt(12)
     assert wrapper.doc.paragraphs[0].runs[0].font.name == italic_font_name
 
+
+
+'''
+    Input Box
+'''
+def test_adding_input_box():
+    # Arrange
+    wrapper = BusinessCaseWordDocumentWrapper()
+
+    # Act
+    wrapper.add_input_box()
+
+    # Assert
+    assert len(wrapper.doc.tables) == 1
+
+
+def test_adding_input_box_with_footer():
+    # Arrange
+    wrapper = BusinessCaseWordDocumentWrapper()
+    word_count: int = 200
+
+    # Act
+    wrapper.add_input_box(word_count)
+
+    # Assert
+    assert len(wrapper.doc.tables) == 1
+    assert len(wrapper.doc.paragraphs) == 1
+    assert wrapper.doc.paragraphs[0].text == "Word count guideline: {} words".format(word_count)

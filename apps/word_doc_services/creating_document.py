@@ -1,7 +1,8 @@
 from docx import Document
 from docx.document import Document as doc
+from docx.enum.table import WD_ROW_HEIGHT_RULE
 from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
-from docx.shared import Pt, RGBColor
+from docx.shared import Cm, Pt, RGBColor
 from docx.oxml import parse_xml
 from docx.oxml.ns import qn, nsdecls
 from docx.oxml.parser import OxmlElement
@@ -55,7 +56,7 @@ Summary:
     This requires having a doc somewhere which would couple things together.
     BusinessCaseWordDocument is wrapping the logic so as to separate calling code fromm logic as much as possible.
     
-    Hopefully in this way the wrapper is souly responsible for styling/ handling the word document logic,
+    In this way the wrapper is souly responsible for styling/ handling the word document logic,
     and the methods are simply called by whatever needs a document created.
 '''
 class BusinessCaseWordDocumentWrapper:
@@ -90,6 +91,7 @@ class BusinessCaseWordDocumentWrapper:
         r = p.add_run(paragraph_content)
         self.style_paragraph_run(r)
 
+
     '''
     Summary:
         Get a paragraph with some basic styling applied that
@@ -99,6 +101,7 @@ class BusinessCaseWordDocumentWrapper:
         p = self.doc.add_paragraph()
         p.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
         return p
+
 
     '''
     Summary:
@@ -125,6 +128,7 @@ class BusinessCaseWordDocumentWrapper:
             r.font.bold = False
             r.font.italic = False
             r.font.name = regular_font_name
+
 
     '''
     Summary:
@@ -225,6 +229,17 @@ class BusinessCaseWordDocumentWrapper:
 
 
     '''
+    Summary:
+        Add an input box to the Word Document.
+    Params:
+        word_limit: optional, guidance on how many words to use in the Input box.
+    '''
+    def add_input_box(self, word_limit: int = -1):
+        input_box = _InputBox(word_limit)
+        input_box.add_input_box(self.doc)
+
+
+    '''
     Summary;
         Save the document to the location required.
         If errors are encountered return a failing result.
@@ -295,3 +310,81 @@ class _HelpBox:
     def set_cell_background(self, cell: _Cell):
         shading_elm_xml = f'<w:shd {nsdecls("w")} w:fill="{_blue_help_box_background_hex}"/>'
         cell._tc.get_or_add_tcPr().append(parse_xml(shading_elm_xml))
+
+'''
+Summary:
+    Wraps the creation of the input box logic so as to not bloat the word doc wrapper.
+    Creates the input box, styling, and footer, and adds it to the Document
+'''
+class _InputBox:
+
+    _footer_string: str = "Word count guideline: {} words"
+    _table_width: Cm = Cm(16.30)
+
+
+    def __init__(self, word_limit: int = -1):
+        self.word_limit = word_limit
+
+
+    '''
+    Summary:
+        Addds an input box to the Word Document
+    '''
+    def add_input_box(self, doc: doc):
+        tbl = doc.add_table(1, 1)
+        box = tbl.rows[0]
+
+        tbl._cells[0].width = self._table_width
+        tbl.style = "Table Grid" # adds gridlines (in this case, a border) to the table
+        box_paragraph = tbl._cells[0].paragraphs[0]
+        self.set_box_formatting(box_paragraph)
+
+        box.height = Cm(2.55)
+        box.height_rule = WD_ROW_HEIGHT_RULE.AT_LEAST
+
+        box_paragraph.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
+
+        # add a footer to the input box with the word limit
+        if self.word_limit != -1:
+            tbl_footer = doc.add_paragraph()
+            tbl_footer.paragraph_format.space_before = 0
+
+            r = tbl_footer.add_run(self._footer_string.format(self.word_limit))
+            r.font.color.rgb = get_general_font_colour_rgb()
+            r.font.size = Pt(12)
+            r.font.bold = False
+            r.font.italic = False
+            r.font.name = regular_font_name
+
+
+    '''
+    Summary:
+        Set some default formatting on the input box.
+        Because we are using the default paragraph that exists when creating a table,
+        we need to set this here via Oxml. If we add a paragraph through add_paragraph()
+        this formatting won't be applied and the user will use the default styling in Word.
+    '''
+    def set_box_formatting(self, p: Paragraph):
+        pPr = p._p.get_or_add_pPr()
+
+        # Get or create paragraph-level run properties (<w:rPr>)
+        rPr = pPr.find(qn('w:rPr'))
+        if rPr is None:
+            rPr = OxmlElement('w:rPr')
+            pPr.append(rPr)
+            
+        # Set the font name
+        rFonts = OxmlElement('w:rFonts')
+        rFonts.set(qn('w:ascii'), regular_font_name)
+        rFonts.set(qn('w:hAnsi'), regular_font_name)
+        rPr.append(rFonts)
+
+        # Set the deafult font colour
+        color = OxmlElement('w:color')
+        color.set(docx.oxml.ns.qn('w:val'), regular_font_name)
+        rPr.append(color)
+
+        # Set the font size (Word measures this in half-points, so 12pt = 24)
+        sz = OxmlElement('w:sz')
+        sz.set(qn('w:val'), "24")
+        rPr.append(sz)
