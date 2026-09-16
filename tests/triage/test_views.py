@@ -213,7 +213,6 @@ def test_procurement_template_route(client, db):
         is_this_request_part_of_a_wider_programme_with_existing_business_case: "no",
         any_other_business_cases_that_are_connected_to_this_work: "*",
         where_is_the_budget_held: "*",
-        is_this_a_retrospective_case: "*",
         which_option_describes_what_you_are_trying_to_do: procure_goods_and_services_from_third_party,
         which_best_describes_your_spend: spend_on_corporate_activities,
         give_your_bjc_a_name: "*",

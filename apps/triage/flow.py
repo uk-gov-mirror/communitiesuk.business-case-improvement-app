@@ -93,15 +93,6 @@ QUESTIONS = [
         ]
     },
     {
-        "slug": is_this_a_retrospective_case,
-        "title": "Is this a retrospective case?",
-        "type": "radio",
-        "choices": [
-            ("yes","Yes"),
-            ("no", "No")
-        ]
-    },
-    {
         "slug": which_option_describes_what_you_are_trying_to_do,
         "title": "Which option best describes what you're trying to do?",
         "type": "radio",
@@ -300,8 +291,7 @@ ROUTING = {
     (is_this_request_a_pilot, "no"): is_this_request_part_of_a_wider_programme_with_existing_business_case,
     (is_this_request_part_of_a_wider_programme_with_existing_business_case, "no"): any_other_business_cases_that_are_connected_to_this_work,
     (any_other_business_cases_that_are_connected_to_this_work, "*"): where_is_the_budget_held,
-    (where_is_the_budget_held, "*"): is_this_a_retrospective_case,
-    (is_this_a_retrospective_case, "*"): which_option_describes_what_you_are_trying_to_do,
+    (where_is_the_budget_held, "*"): which_option_describes_what_you_are_trying_to_do,
     (which_option_describes_what_you_are_trying_to_do, commission_research): "calculate-result",
     (which_option_describes_what_you_are_trying_to_do, procure_goods_and_services_from_third_party): which_best_describes_your_spend,
     (which_option_describes_what_you_are_trying_to_do, hire_contracted_workers_to_fill_temporary_capacity_gap): give_your_bjc_a_name,
