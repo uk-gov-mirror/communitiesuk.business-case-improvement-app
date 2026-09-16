@@ -94,7 +94,7 @@ QUESTIONS = [
     },
     {
         "slug": which_option_describes_what_you_are_trying_to_do,
-        "title": "Which option best describes what you're trying to do?",
+        "title": "Select the option that best describes what you're trying to do.",
         "type": "radio",
         "choices":[
             (commission_research, "Commision Research"),
