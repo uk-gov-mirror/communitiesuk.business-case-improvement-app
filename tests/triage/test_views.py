@@ -210,7 +210,7 @@ def test_procurement_template_route(client, db):
         total_value_of_business_case: "between-12k-and-2m",
         novel_repercussive_contentious_hmt_consent: "no",
         is_this_request_a_pilot: "no",
-        is_this_request_part_of_a_wider_programme_with_existing_business_case: "no",
+        making_a_change_to_or_additional_money_for_existing_business_case: "no",
         any_other_business_cases_that_are_connected_to_this_work: "*",
         where_is_the_budget_held: "*",
         is_this_a_retrospective_case: "*",
