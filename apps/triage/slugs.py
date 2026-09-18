@@ -7,7 +7,6 @@ novel_repercussive_contentious_hmt_consent: str = "novel-repercussive-contentiou
 making_a_change_to_or_additional_money_for_existing_business_case: str = "is-this-request-part-of-a-wider-programme-with-existing-business-case"
 any_other_business_cases_that_are_connected_to_this_work: str = "any-other-business-cases-that-are-connected-to-this-work"
 where_is_the_budget_held: str = "where-is-the-budget-held"
-is_this_a_retrospective_case: str ="is-this-a-retrospective-case"
 which_option_describes_what_you_are_trying_to_do: str = "which-option-describes-what-you-are-trying-to-do"
 commission_research: str = "commission-research"
 procure_goods_and_services_from_third_party: str = "procure-goods-and-services-from-third-party"
