@@ -111,7 +111,7 @@
 
       {% if question.help_text %}
       {{ govukDetails({
-      "summaryText": "Why am I seeing this message?" if question.type == "notice" else "Help with this question",
+      "summaryText": question.help_title if question.help_title else "Help with this question",
       "html": "<p class='govuk-body'>" + question.help_text + "</p>"
       }) }}
       {% endif %}

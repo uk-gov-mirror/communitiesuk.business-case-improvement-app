@@ -25,3 +25,5 @@ novel_repercussive_contentious_hmt_consent_notice: str = "novel-repercussive-con
 is_this_request_a_pilot_notice: str = "is-this-request-a-pilot-notice"
 is_this_request_part_of_a_wider_programme_with_existing_business_case_notice: str = "is-this-request-part-of-a-wider-programme-with-existing-business-case-notice"
 any_other_business_cases_that_are_connected_to_this_work_notice: str = "any-other-business-cases-that-are-connected-to-this-work-notice"
+are_you_procuring_consulting_and_professional_services_notice: str = "are-you-procuring-consulting-and-professional-services-notice"
+hire_contracted_workers_to_fill_temporary_capacity_gap_notice: str = "hire-contracted-workers-to-fill-temporary-capacity-gap-notice"
