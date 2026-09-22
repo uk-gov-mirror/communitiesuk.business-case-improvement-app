@@ -265,7 +265,8 @@ def test_3_stage_process_for_novel():
     # arrange
     responses = [
         "between-12k-and-2m",
-        "yes"
+        "yes",
+        "*"
     ]
 
     # act
@@ -280,7 +281,8 @@ def test_3_stage_process_for_pilot():
     responses = [
         "between-12k-and-2m",
         "no",
-        "yes"
+        "yes",
+        "*"
     ]
 
     # act

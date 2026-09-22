@@ -13,6 +13,9 @@ Each question is a dict with:
   choices     — list of (value, label) tuples
   help_text   - help text for pages 
 
+Notice types provide information or guidance during the triage journey between questions.
+They do not require an answer.
+
 Routing is defined by ROUTING — a dict of:
   (question_slug, answer_value) -> next_question_slug OR result_slug
 
@@ -273,6 +276,87 @@ QUESTIONS = [
         "title": "Provide a high level summary",
         "type": "input"
     },
+    
+    # Types: notice
+    {
+        "slug": novel_repercussive_contentious_hmt_consent_notice,
+        "title": 'What you need to know',
+        "type": "notice",
+        "content": """<p>Before you start drafting a business case, speak to your <strong>Finance Business Partner (FBP)</strong> and/or a <strong>Commercial colleague</strong>.</p>
+        <p>They can help you confirm:</p>
+        <ul class="govuk-list govuk-list--bullet">
+            <li>whether a business case is needed</li>
+            <li>which template is right for your proposal</li>
+            <li>any approvals, assurance or governance requirements you should be aware of</li>
+        </ul>""",
+        "help_text": """
+        <p>You told us your proposal may be novel, contentious, repercussive, high risk or may need HM Treasury approval.</p>
+        <p>These proposals often need extra assurance and approval. Speaking to your FBP and/or Commercial colleague early will help you follow the right business case and approvals process.</p>
+        """,
+    },
+    {
+        "slug": is_this_request_a_pilot_notice,
+        "title": 'What you need to know',
+        "type": "notice",
+        "content": """<p>Before you start drafting a business case, speak to your <strong>Finance Business Partner (FBP)</strong> and/or a <strong>Commercial colleague</strong>.</p>
+        <p>Your proposal is likely to need the standard 3-stage business case process. It may also need approval from the Investment Sub-Committee (ISC) and, in some cases, His Majesty’s Treasury (HM Treasury).</p>
+        <p>The template you need depends on the stage your proposal has reached. This could be a:</p>
+        <ul class="govuk-list govuk-list--bullet">
+            <li>Project Brief</li>
+            <li>Strategic Outline Case (SOC)</li>
+            <li>Outline Business Case (OBC)</li>
+            <li>Full Business Case (FBC)</li>
+        </ul>
+        <p>If you are not sure which template to use, speak to your FBP, Commercial colleague or the ISC Secretariat.</p>
+        <p>If you know which template you need, select <strong>Continue</strong>.</p>  
+        """,
+        "help_text": """
+        <p>You told us your proposal may be novel, contentious, repercussive, high risk or may need HM Treasury approval.</p>
+        <p>These proposals often need extra assurance and approval. Speaking to your FBP and/or Commercial colleague early will help you follow the right business case and approvals process.</p>
+        """,
+    },
+    {
+        "slug": is_this_request_part_of_a_wider_programme_with_existing_business_case_notice,
+        "title": 'What you need to know',
+        "type": "notice",
+        "content": """<p>Before you start drafting a business case, speak to your <strong>Finance Business Partner (FBP)</strong> and/or a <strong>Commercial colleague</strong>.</p>
+        <p>They can help you decide whether you can:</p>
+        <ul class="govuk-list govuk-list--bullet">
+            <li>update an existing approved business case using an addendum</li>
+            <li>use the change control tolerance process</li>
+            <li>create a new Business Justification Case (BJC)</li>
+        </ul>
+        <p>An addendum is used to record and seek approval for changes to an existing approved business case.</p>
+        <p>If an addendum or the change control tolerance process is not suitable, select <strong>Continue</strong> to access a Business Justification Case (BJC) template.</p>
+        <p>Reviewers may ask how your request relates to the wider programme and any existing approvals.</p>
+        """,
+        "help_text": """
+        <p>You told us that your request relates to an existing approved business case or wider programme.</p>
+        <p>In some cases, changes can be managed through an addendum or an existing change control process instead of creating a new business case.</p>
+        <p>Speaking to your FBP and/or Commercial colleague before you start will help you identify the correct route and avoid unnecessary work.</p>
+        """,
+    },
+    {
+        "slug": any_other_business_cases_that_are_connected_to_this_work_notice,
+        "title": 'What you need to know',
+        "type": "notice",
+        "content": """<p>Before continuing, consider whether this work could be included in an <strong>existing business case</strong> or <strong>combined into a single business case</strong> with related work.</p>
+        <p>Combining business cases can help provide a complete view of:</p>
+        <ul class="govuk-list govuk-list--bullet">
+            <li>costs</li>
+            <li>benefits</li>
+            <li>risks</li>
+            <li>dependencies</li>
+        </ul>
+        <p>This can make it easier for decision-makers to understand the wider initiative and assess its overall value.</p>
+        <p>We understand this is not always practical. If separate business cases are needed, select <strong>Continue</strong>.</p>
+        """,
+        "help_text": """
+        <p>You told us that there are other business cases connected to this work or initiative. Where possible, combining related business cases can help provide a clearer view of the overall investment, outcomes and risks.</p>
+        <p>It can also help reviewers understand how different pieces of work fit together.</p>
+        <p>If combining business cases is not appropriate, you can continue and create a separate business case.</p>
+        """,
+    },
 ]
 
 
@@ -286,11 +370,17 @@ ROUTING = {
     (does_request_involve_anything_digital, "yes"): "calculate-result",
     (does_request_involve_anything_digital, "no"): "calculate-result",
     (novel_repercussive_contentious_hmt_consent, "no"): is_this_request_a_pilot,
-    (novel_repercussive_contentious_hmt_consent, "yes"): "calculate-result",
-    (is_this_request_a_pilot, "yes"): "calculate-result",
+    (novel_repercussive_contentious_hmt_consent, "yes"): novel_repercussive_contentious_hmt_consent_notice,
+    (novel_repercussive_contentious_hmt_consent_notice, "*"): "calculate-result",
+    (is_this_request_a_pilot, "yes"): is_this_request_a_pilot_notice,
+    (is_this_request_a_pilot_notice, "*"): "calculate-result",
     (is_this_request_a_pilot, "no"): is_this_request_part_of_a_wider_programme_with_existing_business_case,
+    (is_this_request_part_of_a_wider_programme_with_existing_business_case, "yes"): is_this_request_part_of_a_wider_programme_with_existing_business_case_notice,
+    (is_this_request_part_of_a_wider_programme_with_existing_business_case_notice, "*"): any_other_business_cases_that_are_connected_to_this_work,
     (is_this_request_part_of_a_wider_programme_with_existing_business_case, "no"): any_other_business_cases_that_are_connected_to_this_work,
     (any_other_business_cases_that_are_connected_to_this_work, "*"): where_is_the_budget_held,
+    (any_other_business_cases_that_are_connected_to_this_work, "yes"): any_other_business_cases_that_are_connected_to_this_work_notice,
+    (any_other_business_cases_that_are_connected_to_this_work_notice, "*"): where_is_the_budget_held,
     (where_is_the_budget_held, "*"): which_option_describes_what_you_are_trying_to_do,
     (which_option_describes_what_you_are_trying_to_do, commission_research): "calculate-result",
     (which_option_describes_what_you_are_trying_to_do, procure_goods_and_services_from_third_party): which_best_describes_your_spend,
@@ -302,6 +392,7 @@ ROUTING = {
     (give_your_bjc_a_name, "*"): provide_a_high_level_summary,
     (provide_a_high_level_summary, "*"): "calculate-result"
 }
+
 
 BUSINESS_CASE_EXIT_SCREEN_TYPES = {
     "exit-to-download-template-procurement-route": "Procurement",

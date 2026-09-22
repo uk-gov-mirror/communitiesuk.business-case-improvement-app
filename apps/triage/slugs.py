@@ -21,4 +21,7 @@ are_you_procuring_consulting_and_professional_services: str = "are-you-procuring
 we_want_to_continue_improving_our_service: str = "we-want-to-continue-mproving-our-service"
 provide_a_high_level_summary: str = "provide-a-high-level-summary"
 you_need_to_start_a_business_justification_case: str = "you-need-to-start-a-business-justification-case"
-
+novel_repercussive_contentious_hmt_consent_notice: str = "novel-repercussive-contentious-hmt-consent-notice"
+is_this_request_a_pilot_notice: str = "is-this-request-a-pilot-notice"
+is_this_request_part_of_a_wider_programme_with_existing_business_case_notice: str = "is-this-request-part-of-a-wider-programme-with-existing-business-case-notice"
+any_other_business_cases_that_are_connected_to_this_work_notice: str = "any-other-business-cases-that-are-connected-to-this-work-notice"

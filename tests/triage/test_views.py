@@ -178,6 +178,12 @@ def test_question_with_answer_redirects(started_session, db):
     )
     assert resp.status_code == 302
 
+def test_notice_without_answer_redirects(started_session, db):
+    resp = started_session.post(
+        reverse("triage:question", kwargs={"slug": "novel-repercussive-contentious-hmt-consent-notice"}),
+        data={},
+    )
+    assert resp.status_code == 302
 
 #  Session / answer saving
 
