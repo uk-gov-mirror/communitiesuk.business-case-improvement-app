@@ -43,21 +43,11 @@ QUESTIONS = [
         "slug": part_of_wider_programme_with_existing_fbc,
         "title": "Is this request part of a wider programme with an existing FBC?",
         "type": "radio",
-        "help_text": "",
+        "help_text": "We ask this to make sure spend is routed through the correct approvals process. If this work is part of a wider piece of activity, or if multiple related pieces of spend together exceed approval thresholds, you should answer Yes, even if this individual business case is for a smaller amount.",
         "choices": [
             ("yes", "Yes"),
             ("no", "No")
         ]
-    },
-    {
-        "slug": request_part_of_wider_programme,
-        "title": "Is this request part of a wider programme with an existing FBC?",
-        "type": "radio",
-        "help_text": "We ask this to make sure spend is routed through the correct approvals process. If this work is part of a wider piece of activity, or if multiple related pieces of spend together exceed approval thresholds, you should answer Yes, even if this individual business case is for a smaller amount.",
-        "choices": [
-            ("yes", "Yes"),
-            ("no", "No"),
-        ],
     },
     {
         "slug": does_request_involve_anything_digital,
@@ -78,9 +68,10 @@ QUESTIONS = [
         ]
     },
     {
-        "slug": is_this_request_part_of_a_wider_programme_with_existing_business_case,
-        "title": "Is this request part of a wider programme with an existing full business case in place?",
+        "slug": making_a_change_to_or_additional_money_for_existing_business_case,
+        "title": "Are you making a change to, or asking for additional money for an existing business case?",
         "type": "radio",
+        "help_text": "We ask this to make sure spend is routed through the correct approvals process. If this work is part of a wider piece of activity, or if multiple related pieces of spend together exceed approval thresholds, you should answer Yes, even if this individual business case is for a smaller amount.",
         "choices":[
             ("yes", "Yes"),
             ("no", "No")
@@ -97,7 +88,7 @@ QUESTIONS = [
     },
     {
         "slug": which_option_describes_what_you_are_trying_to_do,
-        "title": "Which option best describes what you're trying to do?",
+        "title": "Select the option that best describes what you're trying to do.",
         "type": "radio",
         "choices":[
             (commission_research, "Commision Research"),
@@ -464,10 +455,10 @@ ROUTING = {
     (novel_repercussive_contentious_hmt_consent_notice, "*"): "calculate-result",
     (is_this_request_a_pilot, "yes"): is_this_request_a_pilot_notice,
     (is_this_request_a_pilot_notice, "*"): "calculate-result",
-    (is_this_request_a_pilot, "no"): is_this_request_part_of_a_wider_programme_with_existing_business_case,
-    (is_this_request_part_of_a_wider_programme_with_existing_business_case, "yes"): is_this_request_part_of_a_wider_programme_with_existing_business_case_notice,
+    (is_this_request_a_pilot, "no"): making_a_change_to_or_additional_money_for_existing_business_case,
+    (making_a_change_to_or_additional_money_for_existing_business_case, "yes"): is_this_request_part_of_a_wider_programme_with_existing_business_case_notice,
     (is_this_request_part_of_a_wider_programme_with_existing_business_case_notice, "*"): any_other_business_cases_that_are_connected_to_this_work,
-    (is_this_request_part_of_a_wider_programme_with_existing_business_case, "no"): any_other_business_cases_that_are_connected_to_this_work,
+    (making_a_change_to_or_additional_money_for_existing_business_case, "no"): any_other_business_cases_that_are_connected_to_this_work,
     (any_other_business_cases_that_are_connected_to_this_work, "*"): where_is_the_budget_held,
     (any_other_business_cases_that_are_connected_to_this_work, "yes"): any_other_business_cases_that_are_connected_to_this_work_notice,
     (any_other_business_cases_that_are_connected_to_this_work_notice, "*"): where_is_the_budget_held,
