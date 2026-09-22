@@ -228,6 +228,7 @@ def test_procurement_routes_to_hrbp_labour():
         "Any Answer",
         "Any Answer",
         hire_contracted_workers_to_fill_temporary_capacity_gap,
+        "yes",
         "title",
         "details"
     ]
