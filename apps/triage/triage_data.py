@@ -29,7 +29,7 @@ class TriageData():
 
     @property
     def is_existing_programme(self) -> bool:
-        return self.triage_data.get(is_this_request_part_of_a_wider_programme_with_existing_business_case, None) == "yes"
+        return self.triage_data.get(making_a_change_to_or_additional_money_for_existing_business_case, None) == "yes"
 
     @property
     def where_is_the_budget_held(self) -> str:
@@ -59,7 +59,7 @@ class TriageData():
     def is_commission_research(self) -> bool:
         is_not_novel = self.triage_data.get(novel_repercussive_contentious_hmt_consent, None) == "no"
         is_not_pilot = self.triage_data.get(is_this_request_a_pilot, None) == "no"
-        is_not_existing_programme = self.triage_data.get(is_this_request_part_of_a_wider_programme_with_existing_business_case, None) == "no"
+        is_not_existing_programme = self.triage_data.get(making_a_change_to_or_additional_money_for_existing_business_case, None) == "no"
         is_not_digital_budget = self.triage_data.get(where_is_the_budget_held, None) != ""
         is_trying_to_commission_research = self.triage_data.get(which_option_describes_what_you_are_trying_to_do, None) == commission_research
 
