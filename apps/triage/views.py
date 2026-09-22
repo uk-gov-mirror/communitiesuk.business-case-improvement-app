@@ -85,7 +85,12 @@ def question(request, slug: str):
     if request.method == "POST":
         answer = request.POST.get("answer", "").strip()
 
-        if not answer:
+        question_type = question_def.get("type") if question_def else None
+
+        # Notices don't require answers
+        if question_type == "notice":
+            pass
+        elif not answer:
             return render(
                 request,
                 "triage/question.html",

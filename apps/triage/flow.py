@@ -13,6 +13,9 @@ Each question is a dict with:
   choices     — list of (value, label) tuples
   help_text   - help text for pages 
 
+Notice types provide information or guidance during the triage journey between questions.
+They do not require an answer.
+
 Routing is defined by ROUTING — a dict of:
   (question_slug, answer_value) -> next_question_slug OR result_slug
 
@@ -264,6 +267,177 @@ QUESTIONS = [
         "title": "Provide a high level summary",
         "type": "input"
     },
+    
+    # Types: notice
+    {
+        "slug": novel_repercussive_contentious_hmt_consent_notice,
+        "title": 'What you need to know',
+        "type": "notice",
+        "content": """<p>Before you start drafting a business case, speak to your <strong>Finance Business Partner (FBP)</strong> and/or a <strong>Commercial colleague</strong>.</p>
+        <p>They can help you confirm:</p>
+        <ul class="govuk-list govuk-list--bullet">
+            <li>whether a business case is needed</li>
+            <li>which template is right for your proposal</li>
+            <li>any approvals, assurance or governance requirements you should be aware of</li>
+        </ul>""",
+        "help_title": "Why am I seeing this message?",
+        "help_text": """
+        <p>You told us your proposal may be novel, contentious, repercussive, high risk or may need HM Treasury approval.</p>
+        <p>These proposals often need extra assurance and approval. Speaking to your FBP and/or Commercial colleague early will help you follow the right business case and approvals process.</p>
+        """,
+    },
+    {
+        "slug": is_this_request_a_pilot_notice,
+        "title": 'What you need to know',
+        "type": "notice",
+        "content": """<p>Before you start drafting a business case, speak to your <strong>Finance Business Partner (FBP)</strong> and/or a <strong>Commercial colleague</strong>.</p>
+        <p>Your proposal is likely to need the standard 3-stage business case process. It may also need approval from the Investment Sub-Committee (ISC) and, in some cases, His Majesty’s Treasury (HM Treasury).</p>
+        <p>The template you need depends on the stage your proposal has reached. This could be a:</p>
+        <ul class="govuk-list govuk-list--bullet">
+            <li>Project Brief</li>
+            <li>Strategic Outline Case (SOC)</li>
+            <li>Outline Business Case (OBC)</li>
+            <li>Full Business Case (FBC)</li>
+        </ul>
+        <p>If you are not sure which template to use, speak to your FBP, Commercial colleague or the ISC Secretariat.</p>
+        <p>If you know which template you need, select <strong>Continue</strong>.</p>  
+        """,
+        "help_title": "Why am I seeing this message?",
+        "help_text": """
+        <p>You told us your proposal may be novel, contentious, repercussive, high risk or may need HM Treasury approval.</p>
+        <p>These proposals often need extra assurance and approval. Speaking to your FBP and/or Commercial colleague early will help you follow the right business case and approvals process.</p>
+        """,
+    },
+    {
+        "slug": is_this_request_part_of_a_wider_programme_with_existing_business_case_notice,
+        "title": 'What you need to know',
+        "type": "notice",
+        "content": """<p>Before you start drafting a business case, speak to your <strong>Finance Business Partner (FBP)</strong> and/or a <strong>Commercial colleague</strong>.</p>
+        <p>They can help you decide whether you can:</p>
+        <ul class="govuk-list govuk-list--bullet">
+            <li>update an existing approved business case using an addendum</li>
+            <li>use the change control tolerance process</li>
+            <li>create a new Business Justification Case (BJC)</li>
+        </ul>
+        <p>An addendum is used to record and seek approval for changes to an existing approved business case.</p>
+        <p>If an addendum or the change control tolerance process is not suitable, select <strong>Continue</strong> to access a Business Justification Case (BJC) template.</p>
+        <p>Reviewers may ask how your request relates to the wider programme and any existing approvals.</p>
+        """,
+        "help_title": "Why am I seeing this message?",
+        "help_text": """
+        <p>You told us that your request relates to an existing approved business case or wider programme.</p>
+        <p>In some cases, changes can be managed through an addendum or an existing change control process instead of creating a new business case.</p>
+        <p>Speaking to your FBP and/or Commercial colleague before you start will help you identify the correct route and avoid unnecessary work.</p>
+        """,
+    },
+    {
+        "slug": any_other_business_cases_that_are_connected_to_this_work_notice,
+        "title": 'What you need to know',
+        "type": "notice",
+        "content": """<p>Before continuing, consider whether this work could be included in an <strong>existing business case</strong> or <strong>combined into a single business case</strong> with related work.</p>
+        <p>Combining business cases can help provide a complete view of:</p>
+        <ul class="govuk-list govuk-list--bullet">
+            <li>costs</li>
+            <li>benefits</li>
+            <li>risks</li>
+            <li>dependencies</li>
+        </ul>
+        <p>This can make it easier for decision-makers to understand the wider initiative and assess its overall value.</p>
+        <p>We understand this is not always practical. If separate business cases are needed, select <strong>Continue</strong>.</p>
+        """,
+        "help_title": "Why am I seeing this message?",
+        "help_text": """
+        <p>You told us that there are other business cases connected to this work or initiative. Where possible, combining related business cases can help provide a clearer view of the overall investment, outcomes and risks.</p>
+        <p>It can also help reviewers understand how different pieces of work fit together.</p>
+        <p>If combining business cases is not appropriate, you can continue and create a separate business case.</p>
+        """,
+    },
+    {
+        "slug": are_you_procuring_consulting_and_professional_services_notice,
+        "title": 'What you need to know',
+        "type": "notice",
+        "content": """<p>You told us that your proposal involves <strong>Consultancy and Professional Services (C&PS)</strong>.</p>
+        <p>C&PS spend is subject to additional approvals and spend controls.</p>
+        
+        <h2>What you need to do</h2>
+        <p>1. Download your business case template</p>
+        <p>2. Review the C&PS guidance</p>
+        <p>Before starting your business case, review the C&PS guidance to understand the approvals and controls that may apply.</p>
+        <p>3. Allow time for approvals</p>
+
+        <p class="govuk-!-margin-bottom-2">You should allow time for reviews and approvals before starting any procurement. Typical timescales include:</p>
+        <ul class="govuk-list govuk-list--bullet">
+            <li><strong>Commercial review:</strong> approximately 2 weeks</li>
+            <li><strong>Chief Financial Officer (CFO) approval:</strong> approximately 1 week</li>
+            <li><strong>Ministerial approvals:</strong> standard ministerial timescales</li>
+        </ul>
+
+        <h2>Who will approve this?</h2>
+        <p>Approval requirements depend on the value and nature of the spend.</p>
+        <p>Where different approval thresholds apply, the highest level of approval will be required.</p>
+
+        <h3>Need help?</h3>
+        <p>If you're unsure whether your requirement should be treated as C&PS, <a class="govuk-link" href="mailto:BFRG-CCM@communities.gov.uk">email the team</a>.</p>
+        <p>Learn more about the <a class="govuk-link" href="https://intranet.communities.gov.uk/guidance/procurement-and-grants/procurement/buying-consultancy-and-professional-services/">C&PS</a> process and controls here.</p>
+        """
+    },
+    {
+        "slug": hire_contracted_workers_to_fill_temporary_capacity_gap_notice,
+        "title": 'What you need to know',
+        "type": "radio",
+        "hint": """<p class="govuk-body">You selected "Hire contracted workers to fill a temporary capacity gap". This is otherwise known as Contingent labour. </p>
+        <p class="govuk-body">Before continuing, we need to check whether you need:</p>
+        <p class="govuk-body"><strong>Contingent labour</strong> (temporary people working as part of your team), or</p>
+        <p class="govuk-body"><strong>Consultancy and Professional Services (C&PS)</strong> (external advice, expertise or specialist services).</p>
+        <h2 class="govuk-heading-m">Are you looking for temporary staff to fill a resource or capacity gap?</h2>
+        """,
+        "choices": [
+            ("yes", "Yes, I need contingent labour"),
+            ("no", "No, I need Consultancy and Professional Services (C&PS)"),
+        ],
+        "help_title": "What do these terms mean?",
+        "help_text": """
+
+        <p><strong>Contingent labour</strong></p>
+        <p>Temporary people who work as part of your team and help fill a resource or capacity gap.</p>
+        <p class="govuk-!-margin-bottom-2">Examples include:</p>
+        <ul class="govuk-list govuk-list--bullet">
+            <li>maternity cover</li>
+            <li>temporary project support</li>
+            <li>additional administrative support</li>
+            <li>interim staff</li>
+        </ul>
+
+        <p><strong>Consultancy</strong></p>
+        <p>External experts who provide advice, recommendations or specialist expertise.</p>
+        <p class="govuk-!-margin-bottom-2">Examples include:</p>
+        <ul class="govuk-list govuk-list--bullet">
+            <li>strategic planning</li>
+            <li>organisational change</li>
+            <li>market analysis</li>
+            <li>specialist policy advice</li>
+        </ul>
+
+        <p><strong>Professional Services</strong></p>
+        <p>A supplier delivers specialist work or a specific outcome for you.</p>
+        <p class="govuk-!-margin-bottom-2">Examples include:</p>
+        <ul class="govuk-list govuk-list--bullet">
+            <li>software development</li>
+            <li>cyber security services</li>
+            <li>systems integration</li>
+            <li>specialist technical services</li>
+        </ul>
+
+        <p class="govuk-!-margin-bottom-2"><strong>A simple way to tell the difference:</strong></p>
+        <ul class="govuk-list">
+            <li><strong>Contingent labour</strong> fills a temporary resource gap.</li>
+            <li><strong>Consultancy provides</strong>  advice and expertise.</li>
+            <li><strong>Professional services</strong> delivers specialist work or outcomes.</li>
+        </ul>
+        <p><strong>Not sure?</strong></p>
+        <p>Speak to your Finance Business Partner (FBP), a Commercial colleague or the HR Business Partner (HRBP) team before continuing.</p>
+        """,
+    },
 ]
 
 
@@ -277,22 +451,33 @@ ROUTING = {
     (does_request_involve_anything_digital, "yes"): "calculate-result",
     (does_request_involve_anything_digital, "no"): "calculate-result",
     (novel_repercussive_contentious_hmt_consent, "no"): is_this_request_a_pilot,
-    (novel_repercussive_contentious_hmt_consent, "yes"): "calculate-result",
-    (is_this_request_a_pilot, "yes"): "calculate-result",
+    (novel_repercussive_contentious_hmt_consent, "yes"): novel_repercussive_contentious_hmt_consent_notice,
+    (novel_repercussive_contentious_hmt_consent_notice, "*"): "calculate-result",
+    (is_this_request_a_pilot, "yes"): is_this_request_a_pilot_notice,
+    (is_this_request_a_pilot_notice, "*"): "calculate-result",
     (is_this_request_a_pilot, "no"): making_a_change_to_or_additional_money_for_existing_business_case,
+    (making_a_change_to_or_additional_money_for_existing_business_case, "yes"): is_this_request_part_of_a_wider_programme_with_existing_business_case_notice,
+    (is_this_request_part_of_a_wider_programme_with_existing_business_case_notice, "*"): any_other_business_cases_that_are_connected_to_this_work,
     (making_a_change_to_or_additional_money_for_existing_business_case, "no"): any_other_business_cases_that_are_connected_to_this_work,
     (any_other_business_cases_that_are_connected_to_this_work, "*"): where_is_the_budget_held,
+    (any_other_business_cases_that_are_connected_to_this_work, "yes"): any_other_business_cases_that_are_connected_to_this_work_notice,
+    (any_other_business_cases_that_are_connected_to_this_work_notice, "*"): where_is_the_budget_held,
     (where_is_the_budget_held, "*"): which_option_describes_what_you_are_trying_to_do,
     (which_option_describes_what_you_are_trying_to_do, commission_research): "calculate-result",
     (which_option_describes_what_you_are_trying_to_do, procure_goods_and_services_from_third_party): which_best_describes_your_spend,
-    (which_option_describes_what_you_are_trying_to_do, hire_contracted_workers_to_fill_temporary_capacity_gap): give_your_bjc_a_name,
+    (which_option_describes_what_you_are_trying_to_do, hire_contracted_workers_to_fill_temporary_capacity_gap): hire_contracted_workers_to_fill_temporary_capacity_gap_notice,
+    (hire_contracted_workers_to_fill_temporary_capacity_gap_notice, "yes"): give_your_bjc_a_name,
+    (hire_contracted_workers_to_fill_temporary_capacity_gap_notice, "no"): are_you_procuring_consulting_and_professional_services_notice,
     (which_best_describes_your_spend, spend_on_corporate_activities): give_your_bjc_a_name,
     (which_best_describes_your_spend, procuring_something_else): are_you_procuring_consulting_and_professional_services,
-    (are_you_procuring_consulting_and_professional_services, "*"): we_want_to_continue_improving_our_service,
+    (are_you_procuring_consulting_and_professional_services, "no"): we_want_to_continue_improving_our_service,
+    (are_you_procuring_consulting_and_professional_services, "yes"): are_you_procuring_consulting_and_professional_services_notice,
+    (are_you_procuring_consulting_and_professional_services_notice, "*"): we_want_to_continue_improving_our_service,
     (we_want_to_continue_improving_our_service, "*"): give_your_bjc_a_name,
     (give_your_bjc_a_name, "*"): provide_a_high_level_summary,
     (provide_a_high_level_summary, "*"): "calculate-result"
 }
+
 
 BUSINESS_CASE_EXIT_SCREEN_TYPES = {
     "exit-to-download-template-procurement-route": "Procurement",

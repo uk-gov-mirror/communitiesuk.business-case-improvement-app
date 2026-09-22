@@ -99,13 +99,19 @@
       "errorMessage": {"text": error} if error else {},
       "hint": {"text": question.hint} if question.hint else {}
       }) }}
-
+      
+      {# Notice #}
+      {% elif question.type == "notice" %}
+       <h1 class="govuk-heading-l">{{ question.title }}</h1>
+        <div class="govuk-body">
+          {{ question.content | safe }}
+        </div>
       {% endif %}
 
 
       {% if question.help_text %}
       {{ govukDetails({
-      "summaryText": "Help with this question",
+      "summaryText": question.help_title if question.help_title else "Help with this question",
       "html": "<p class='govuk-body'>" + question.help_text + "</p>"
       }) }}
       {% endif %}
