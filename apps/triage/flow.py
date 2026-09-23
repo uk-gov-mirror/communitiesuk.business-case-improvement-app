@@ -166,32 +166,35 @@ QUESTIONS = [
     },
     {
         "slug": novel_repercussive_contentious_hmt_consent,
-        "title": "Is it novel, repercussive, contentious, or needs HMT consent?",
+        "title": "Is your proposal novel, contentious, sets precedent, repercussive or requires HM Treasury consent because of legislation?",
         "type": "radio",
-        "hint": '<div class="govuk-inset-text">This includes something that could be deemed unusual, risky or is likely to be challenged.</div>',
-        "help_text": """<p>We ask this because anything that may be deemed novel, contentious or repercussive will need to go through particular approvals (including HM Treasury for consent due to legislation). </p>
+        "hint": '<div class="govuk-inset-text">This includes proposals that are new, high risk, likely to attract challenge or may require approval from HM Treasury.</div>',
+        "help_text": """<p><b>Does your proposal involve anything unusual, sensitive or likely to need additional approval?</b>
+        <p>We ask this because some proposals need additional review and approval before they can proceed. This includes proposals that are unusual, sensitive, high risk, or have wider implications beyond the project.</p>
 
-      <p>What do these terms mean?</p>
+        <p><b>What do these terms mean?</b></p>
 
-      <p><b>Novel</b> - Something new or unusual for government. For example, a type of spend, funding approach, or arrangement that hasn\'t been done before. </p>
+        <p><b>Novel</b> Something new or unusual for government. For example, a type of spending, funding arrangement, or approach that has not been used before. </p>
 
-      <p><b>Contentious</b> - The proposal could be challenged or criticised. For example, by Ministers, Parliament, the media, or internally. </p>
+        <p><b>Contentious</b> Something that may be challenged or criticised by Ministers, Parliament, the media, stakeholders, or colleagues. </p>
 
-      <p><b>Repercussive</b> - The decision could have knock-on effects beyond this project, such as affecting other departments, organisations, or future spending decisions across government. </p>
+        <p><b>Repercussive</b> Something that could affect other projects, organisations, departments, or future government decisions. </p>
 
-      <p><b>Sets a precedent</b> - Approving it could make it harder to say no to similar requests in future, because others may expect the same treatment. </p>
+        <p><b>Sets a precedent</b> Approving the proposal could make it more difficult to refuse similar requests in the future because others may expect the same treatment. </p>
 
-      <p><b>Requires HM Treasury consent because of legislation</b> - Requires HM Treasury consent because of legislation - Some types of spending must go to HM Treasury by law, even if the value is low. An FBP can advise if this applies. </p>
+        <p><b>Requires</b> HM Treasury consent Some types of spending must be approved by HM Treasury because of legal or policy requirements, regardless of the value of the proposal. </p>
 
-      <p><b>Not sure?</b><br>
-        If you\'re unsure, check with your Finance Business Partner or speak to the ISC Secretariat at <a
-          class="govuk-link" href="ISCSecretariat@communities.gov.uk">
-          ISCSecretariat@communities.gov.uk</a>. It\'s normal to need advice at this stage.
-      </p>""",
-        "choices": [
-            ("yes", "Yes"),
-            ("no", "No"),
-        ],
+        <p><b>Not sure?</b></p>
+        <p>
+            If you're unsure, speak to your Finance Business Partner (FBP) or contact the <a
+            class="govuk-link" href="mailto:ISCSecretariat@communities.gov.uk">
+            Investment Sub-Committee (ISC) Secretariat</a> for advice. It's common to need support with this question.
+        </p>""",
+            "choices": [
+                ("yes", "Yes"),
+                ("no", "No"),
+                ("dont-know", "I don't know"),
+            ],
     },
     {
         "slug": where_is_the_budget_held,
@@ -452,6 +455,7 @@ ROUTING = {
     (does_request_involve_anything_digital, "no"): "calculate-result",
     (novel_repercussive_contentious_hmt_consent, "no"): is_this_request_a_pilot,
     (novel_repercussive_contentious_hmt_consent, "yes"): novel_repercussive_contentious_hmt_consent_notice,
+    (novel_repercussive_contentious_hmt_consent, "*"): novel_repercussive_contentious_hmt_consent_notice,
     (novel_repercussive_contentious_hmt_consent_notice, "*"): "calculate-result",
     (is_this_request_a_pilot, "yes"): is_this_request_a_pilot_notice,
     (is_this_request_a_pilot_notice, "*"): "calculate-result",
