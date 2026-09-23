@@ -27,6 +27,9 @@ run-build-nocache:
 run-extras:
 	docker compose --profile dev-extras up -d --build
 
+redeploy-local-lambda:
+	docker compose exec ministack sh /docker-entrypoint-initaws.d/ready.d/02-deploy-process-business-case-response-lambda.sh
+
 test:
 	poetry run pytest tests/ -v
 

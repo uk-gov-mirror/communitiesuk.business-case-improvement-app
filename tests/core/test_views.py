@@ -1,5 +1,6 @@
 import pytest
 import time
+from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import Client
 from django.urls import reverse
 
@@ -55,3 +56,83 @@ def test_index_paginates_business_cases(client, db):
     assert "Business case 0" not in first_page.content.decode()
     assert "Business case 0" in second_page.content.decode()
     assert 'aria-label="Pagination"' in first_page.content.decode()
+
+
+@pytest.fixture
+def business_case(db):
+    triage_response = BusinessCaseTriageResponse.objects.create(session_key="test-session")
+    return BusinessCase.objects.create(
+        business_case_triage_response=triage_response,
+        name="Test business case",
+        type="Procurement",
+        status="Active",
+    )
+
+
+def test_case_detail_shows_business_case_name(client, business_case):
+    response = client.get(reverse("case-detail", kwargs={"pk": business_case.pk}))
+
+    assert response.status_code == 200
+    assert business_case.name in response.content.decode()
+
+
+def test_case_detail_shows_type_status_and_reference_number(client, business_case):
+    response = client.get(reverse("case-detail", kwargs={"pk": business_case.pk}))
+    content = response.content.decode()
+
+    assert response.status_code == 200
+    assert "Business Justification Case: Procurement" in content
+    assert f"Case reference number: {business_case.pk}" in content
+    assert "govuk-tag--blue" in content
+    assert "Active" in content
+
+
+def test_case_detail_upload_accepts_valid_docx(client, business_case):
+    upload = SimpleUploadedFile(
+        "document.docx",
+        b"file contents",
+        content_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    )
+
+    response = client.post(
+        reverse("case-detail", kwargs={"pk": business_case.pk}),
+        {"document": upload},
+    )
+
+    assert response.status_code == 200
+    assert "Business case uploaded!" in response.content.decode()
+
+
+def test_case_detail_upload_rejects_wrong_extension(client, business_case):
+    upload = SimpleUploadedFile("document.pdf", b"file contents", content_type="application/pdf")
+
+    response = client.post(
+        reverse("case-detail", kwargs={"pk": business_case.pk}),
+        {"document": upload},
+    )
+
+    assert response.status_code == 200
+    assert "must be a Word document" in response.content.decode()
+
+
+def test_case_detail_upload_rejects_file_too_large(client, business_case):
+    upload = SimpleUploadedFile(
+        "document.docx",
+        b"0" * (100 * 1024 * 1024 + 1),
+        content_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    )
+
+    response = client.post(
+        reverse("case-detail", kwargs={"pk": business_case.pk}),
+        {"document": upload},
+    )
+
+    assert response.status_code == 200
+    assert "must be smaller than 100MB" in response.content.decode()
+
+
+def test_case_detail_upload_rejects_missing_file(client, business_case):
+    response = client.post(reverse("case-detail", kwargs={"pk": business_case.pk}), {})
+
+    assert response.status_code == 200
+    assert "Select a file to upload" in response.content.decode()

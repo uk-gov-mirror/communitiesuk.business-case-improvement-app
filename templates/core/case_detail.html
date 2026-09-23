@@ -1,0 +1,178 @@
+{% extends "layouts/base_layout.html" %}
+{% from "govuk_frontend_jinja/templates/components/breadcrumbs/macro.html" import govukBreadcrumbs %}
+{% from "govuk_frontend_jinja/templates/components/error-summary/macro.html" import govukErrorSummary %}
+{% from "govuk_frontend_jinja/templates/components/tag/macro.html" import govukTag %}
+{% from "govuk_frontend_jinja/templates/components/accordion/macro.html" import govukAccordion %}
+{% from "govuk_frontend_jinja/templates/components/notification-banner/macro.html" import govukNotificationBanner %}
+{% from "govuk_frontend_jinja/templates/components/summary-list/macro.html" import govukSummaryList %}
+{% from "govuk_frontend_jinja/templates/components/details/macro.html" import govukDetails %}
+
+{% block before_content %}
+{{ govukBreadcrumbs({
+"items": [
+{"text": "Home", "href": url("index")},
+{"text": "Business cases", "href": url("index") ~ "#business-cases"}
+]
+}) }}
+{% endblock %}
+
+{% block content %}
+{% set status_colours = {"Active": "blue", "Uploaded": "green", "Withdrawn": "grey"} %}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+
+    {% if error %}
+    {{ govukErrorSummary({
+    "titleText": "There is a problem",
+    "errorList": [{"text": error}]
+    }) }}
+    {% endif %}
+
+    {% if latest_response and latest_response.status == "Pending"%}
+      {{ govukNotificationBanner({
+      "text": "Business case uploaded and processing. This page will refresh automatically.",
+      "attributes": {"id": "auto-refresh-banner", "data-status": latest_response.status}
+      }) }}
+    {% endif %}
+
+    <div class="case-detail__header">
+      <span class="govuk-caption-l">Business Justification Case: {{ business_case.type }}</span>
+      {{ govukTag({
+      "text": business_case.status,
+      "classes": "govuk-tag--" ~ status_colours.get(business_case.status, "grey")
+      }) }}
+    </div>
+    <h1 class="govuk-heading-l">{{ business_case.name }}</h1>
+    <p class="govuk-body-s">Case reference number: {{ business_case.pk }}</p>
+
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
+
+    {% if uploaded_response_summary %}
+
+    <div class="case-detail__summary-panel">
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+          <h2 class="govuk-heading-m">Summary</h2>
+          {% for paragraph in uploaded_response_summary.summary_text.split("\n") %}
+          {% if paragraph.strip() %}
+          <p class="govuk-body">{{ paragraph }}</p>
+          {% endif %}
+          {% endfor %}
+        </div>
+        <div class="govuk-grid-column-one-third">
+          {{ govukSummaryList({
+          "classes": "govuk-summary-list--no-border",
+          "rows": [
+          {"key": {"text": "Whole life cost"}, "value": {"text": uploaded_response_summary.whole_of_life_cost}},
+          {"key": {"text": "Directorate"}, "value": {"text": uploaded_response_summary.directorate}},
+          {"key": {"text": "SRO/SCS"}, "value": {"text": uploaded_response_summary.sro_scs}},
+          {"key": {"text": "Approved by SRO/SCS"}, "value": {"text": uploaded_response_summary.approved_by_sro_scs.strftime("%-d %B %Y")}},
+          {"key": {"text": "Lead SME"}, "value": {"text": business_case.lead_contact}},
+          {"key": {"text": "Author"}, "value": {"text": uploaded_response_summary.author}}
+          ]
+          }) }}
+        </div>
+      </div>
+
+      <hr class="govuk-section-break govuk-section-break--visible">
+
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-one-half">
+          <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Approved business case</h3>
+          <a class="govuk-link" href="{{ url('case-response-download', pk=business_case.pk, response_id=latest_response.pk) }}">{{ latest_response.original_filename or "Download" }}</a>
+        </div>
+        <div class="govuk-grid-column-one-half">
+          <h3 class="govuk-heading-s govuk-!-margin-bottom-1">File upload date</h3>
+          <p class="govuk-body">{{ latest_response.created_at.strftime("%-d %B %Y at %H:%M:%S") }}</p>
+        </div>
+      </div>
+    </div>
+
+    {% call govukDetails({"summaryText": "Make a change to this business case", "open": true, "id": "make-a-change-details"}) %}
+    <p class="govuk-body">Any changes to this business case must be recorded in this service to keep our records up to date.</p>
+    <p class="govuk-body">Update the Word document, make sure any changes have been approved, and upload the latest version when you are ready.</p>
+    <form method="post" novalidate enctype="multipart/form-data" id="upload-form">
+      {{ csrf_field(request) }}
+      <label for="document" class="govuk-link upload-link">Choose file</label>
+      <input class="govuk-visually-hidden" type="file" id="document" name="document" accept=".doc,.docx">
+      <noscript>
+        <button type="submit" class="govuk-button" data-module="govuk-button">Upload</button>
+      </noscript>
+    </form>
+    {% endcall %}
+
+    {% else %}
+
+    <h2 class="govuk-heading-m">You've downloaded your template.</h2>
+    <p class="govuk-body">Return to this page when your business case has been completed and approved.</p>
+
+    {% call govukNotificationBanner({"titleText": "Important"}) %}
+    <p class="govuk-notification-banner__heading">You must return to this page and upload your completed and approved business case so it can be recorded.</p>
+    <form method="post" novalidate enctype="multipart/form-data" id="upload-form">
+      {{ csrf_field(request) }}
+      <p class="govuk-body">
+        When you're ready,
+        <label for="document" class="govuk-link upload-link">click here to upload</label>
+        your business case.
+      </p>
+      <input class="govuk-visually-hidden" type="file" id="document" name="document" accept=".doc,.docx">
+      <noscript>
+        <button type="submit" class="govuk-button" data-module="govuk-button">Upload</button>
+      </noscript>
+    </form>
+    <p class="govuk-body">Upload your business case as a Word document (.doc or .docx). PDF files are not accepted.</p>
+    <p class="govuk-body">After you select your file, the page will refresh and display a summary of your business case.</p>
+    {% endcall %}
+
+    {{ govukAccordion({
+    "id": "case-detail-accordion",
+    "items": [
+    {"heading": {"text": "Before you start drafting"}, "content": {"html": ""}},
+    {"heading": {"text": "Who approves my business case?"}, "content": {"html": ""}}
+    ]
+    }) }}
+
+    {% endif %}
+
+  </div>
+</div>
+
+<script>
+  (function () {
+    if (document.getElementById("auto-refresh-banner")) {
+      setTimeout(() => window.location.assign(window.location.pathname + window.location.search), 5000);
+    }
+  })();
+</script>
+
+<script>
+  (function () {
+    const MAX_UPLOAD_SIZE_BYTES = 100 * 1024 * 1024;
+    const form = document.getElementById("upload-form");
+    const input = document.getElementById("document");
+
+    input.addEventListener("change", () => {
+      const file = input.files[0];
+
+      if (!file) {
+        return;
+      }
+
+      if (!/\.docx?$/i.test(file.name)) {
+        alert("The selected file must be a Word document (.doc or .docx)");
+        input.value = "";
+        return;
+      }
+
+      if (file.size > MAX_UPLOAD_SIZE_BYTES) {
+        alert("The selected file must be smaller than 100MB");
+        input.value = "";
+        return;
+      }
+
+      form.submit();
+    });
+  })();
+</script>
+{% endblock %}
+

@@ -18,6 +18,7 @@ psycopg = {extras = ["binary"], version = "^3.3.4"}
 python-docx = "^1.2.0"
 msal = "^1.37.0"
 requests = "^2.34.2"
+boto3 = "^1.43.100"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.15"

@@ -2,9 +2,6 @@
 from docx.document import Document
 from docx.text.paragraph import Paragraph
 from docx.table import Table
-from docx import Document as WordDoc
-
-from django.views.decorators.http import require_POST
 
 import json
 import logging
@@ -14,8 +11,6 @@ from ..triage.models import (
     BusinessCaseResponseBlock,
     BusinessCaseResponseSection,
     BusinessCaseResponseSummary,
-    BusinessCase,
-    BusinessCaseTriageResponse
 )
 
 model_exception_string: str = "Exception occurred submitting summary data to the {} model.\nException: {}"
@@ -45,13 +40,6 @@ class _SectionContent():
         self.content.append(item)
 
 
-@require_POST
-def trigger_parsing(request):
-    doc = WordDoc("FullDoc.docx")
-    result = parse_word_document(doc)
-    return result  
-
-
 '''
 Summary:
     Take the summary and document data sections and submit them to the models.
@@ -60,19 +48,15 @@ Returns:
 Params:
     summary_section: dict. Contains key value pair of summary data.
     document_data: list[_SectionContent]. Needs splitting and itterating over.
+    business_case_response_object: The already-existing BusinessCaseResponse the parsed data belongs to.
 '''
-def submit_data_to_models(summary_section: dict, document_data: list[_SectionContent]) -> tuple[bool, bool]:
+def submit_data_to_models(
+    summary_section: dict,
+    document_data: list[_SectionContent],
+    business_case_response_object: BusinessCaseResponse,
+) -> tuple[bool, bool]:
     summary_data_successful: bool = True
     document_data_successful: bool = True
-    triage_response_object = BusinessCaseTriageResponse.objects.create()
-    business_case_object, _ = BusinessCase.objects.get_or_create(business_case_triage_response=triage_response_object)
-
-    BusinessCaseResponse.objects.create(
-        uploaded_by="DefaultTestUser",
-        business_case_id=business_case_object
-    )
-
-    business_case_response_object = BusinessCaseResponse.objects.get(business_case_id=business_case_object)
 
     # submit summary data to the model
     try:
@@ -84,7 +68,7 @@ def submit_data_to_models(summary_section: dict, document_data: list[_SectionCon
     # submit Document data to the models required.
     for data in document_data:
         business_Case_response_section=BusinessCaseResponseSection.objects.create(
-            business_case_response_id=business_case_response_object,
+            business_case_response=business_case_response_object,
             header_text=data.section_header
         )
 
@@ -95,7 +79,7 @@ def submit_data_to_models(summary_section: dict, document_data: list[_SectionCon
 
                 try:
                     BusinessCaseResponseBlock.objects.create(
-                        business_case_response_section_id=business_Case_response_section,
+                        business_case_response_section=business_Case_response_section,
                         block_type="Paragraph",
                         block_number=order_of_block,
                         block_data=paragraph_bytes
@@ -110,7 +94,7 @@ def submit_data_to_models(summary_section: dict, document_data: list[_SectionCon
                     dict_bytes = json_con_data_string.encode('utf-8')
 
                     BusinessCaseResponseBlock.objects.create(
-                        business_case_response_section_id=business_Case_response_section,
+                        business_case_response_section=business_Case_response_section,
                         block_type="Table",
                         block_number=order_of_block,
                         block_data=dict_bytes
@@ -135,7 +119,7 @@ Params:
 '''
 def submit_summary_data(business_case_response_object: BusinessCaseResponse, summary_section: dict[str, str]):
     BusinessCaseResponseSummary.objects.create(
-            business_case_response_id = business_case_response_object,
+            business_case_response = business_case_response_object,
             summary_text = summary_section.get(summary_key_text, "-"),
             whole_of_life_cost = summary_section.get(summary_key_whole_life_cost, "-"),
             directorate = summary_section.get(summary_key_directorate, "-"),
@@ -152,8 +136,9 @@ Returns:
      -
 Params:
     doc: Word Document.
+    business_case_response: The already-existing BusinessCaseResponse the parsed data belongs to.
 '''
-def parse_word_document(doc: Document):
+def parse_word_document(doc: Document, business_case_response: BusinessCaseResponse):
     document_sections: list[_SectionContent] = []
     temp_section: _SectionContent
     summary_section: dict[str, str] = {}
@@ -188,7 +173,7 @@ def parse_word_document(doc: Document):
                 document_sections.append(temp_section)
 
     summary_section = _get_summary_data(doc)
-    submit_data_to_models(summary_section, document_sections)
+    submit_data_to_models(summary_section, document_sections, business_case_response)
 
 
 '''

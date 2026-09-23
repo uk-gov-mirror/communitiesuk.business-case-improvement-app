@@ -113,6 +113,18 @@
     color: #0b0c0c;
 }
 
+.case-detail__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.case-detail__summary-panel {
+    background: #d9e8f5;
+    padding: 20px;
+}
+
 .sortable-table__pagination {
     align-items: center;
     justify-content: center;

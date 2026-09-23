@@ -18,7 +18,6 @@ Including another URLconf
 from django.contrib import admin
 from django.conf import settings
 from django.urls import include, path
-from apps.triage import views as triage_views
 from apps.accounts import views as accounts_views
 from apps.core import views as core_views
 
@@ -27,10 +26,12 @@ urlpatterns = [
     path("accounts/", include("apps.accounts.urls", namespace="accounts")),
     path("triage/", include("apps.triage.urls", namespace="triage")),
     path("", core_views.index, name="index"),
-    
-    #temporary
-    path("upload/", triage_views.upload, name="upload"),
-    path("api/word-doc-parsing/", triage_views.trigger_work_view, name="upload-word-doc"),
+    path("case/<str:pk>/", core_views.case_detail, name="case-detail"),
+    path(
+        "case/<str:pk>/response/<int:response_id>/download/",
+        core_views.download_response_document,
+        name="case-response-download",
+    ),
 ]
 
 if settings.ENTRA_ID_ENABLED:

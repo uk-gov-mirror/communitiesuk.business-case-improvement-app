@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 from pathlib import Path
 from dotenv import load_dotenv
 import os
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -185,3 +186,19 @@ USE_TZ = True
 
 # Miscellaneous Application Settings
 BUSINESS_CASES_PER_PAGE = 20
+
+# Business Case Document Upload Settings
+MAX_UPLOAD_SIZE_BYTES = 100 * 1024 * 1024
+ALLOWED_UPLOAD_EXTENSIONS = (".doc", ".docx")
+PENDING_RESPONSE_TIMEOUT = timedelta(minutes=1)
+
+# AWS S3 Settings
+# AWS_S3_ENDPOINT_URL/AWS_ACCESS_KEY_ID/AWS_SECRET_ACCESS_KEY/AWS_S3_REGION_NAME are
+# only set locally (e.g. by docker-compose, pointing at MiniStack). When deployed,
+# these are left unset so boto3 falls back to the task/instance IAM role and default
+# AWS endpoints, and only AWS_STORAGE_BUCKET_NAME is required.
+AWS_STORAGE_BUCKET_NAME = os.environ.get("AWS_STORAGE_BUCKET_NAME")
+AWS_S3_ENDPOINT_URL = os.environ.get("AWS_S3_ENDPOINT_URL")
+AWS_S3_REGION_NAME = os.environ.get("AWS_S3_REGION_NAME")
+AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY")

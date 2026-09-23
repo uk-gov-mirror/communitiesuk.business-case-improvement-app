@@ -21,6 +21,10 @@ def csrf_field(request):
     )
 
 
+def url(viewname, *args, **kwargs):
+    return reverse(viewname, args=args, kwargs=kwargs)
+
+
 def environment(**options):
     options.pop("loader", None)
     options.pop("undefined", None)
@@ -47,7 +51,7 @@ def environment(**options):
     env.globals.update(
         {
             "static": static,
-            "url": reverse,
+            "url": url,
             "get_messages": get_messages,
             "csrf_field": csrf_field,
             "external_links": external_links(None)["links"],

@@ -71,20 +71,24 @@ class BusinessCase(models.Model):
 
 class BusinessCaseResponse(models.Model):
     class BusinessCaseResponseStatus(models.TextChoices):
+        PENDING = "Pending", "Pending"
         COMPLETED = "Completed", "Completed"
+        ERROR = "Error", "Error"
 
     version = models.IntegerField(default=1)
     created_at = models.DateTimeField(default=timezone.now)
     uploaded_by = models.CharField(max_length=150, blank=False, null=False, default="-")
-    
-    business_case_id = models.ForeignKey(
+    original_filename = models.CharField(max_length=255, blank=True, default="")
+    s3_key = models.CharField(max_length=255, blank=True, default="")
+
+    business_case = models.ForeignKey(
         BusinessCase,
         on_delete=models.PROTECT,
     )
 
     status = models.TextField(
         choices=BusinessCaseResponseStatus.choices,
-        default=BusinessCaseResponseStatus.COMPLETED
+        default=BusinessCaseResponseStatus.PENDING
     )
 
     def __str__(self):
@@ -92,7 +96,7 @@ class BusinessCaseResponse(models.Model):
 
 
 class BusinessCaseResponseSummary(models.Model):
-    business_case_response_id = models.ForeignKey(
+    business_case_response = models.ForeignKey(
         BusinessCaseResponse,
         on_delete=models.PROTECT,
     )
@@ -109,7 +113,7 @@ class BusinessCaseResponseSummary(models.Model):
 
 
 class BusinessCaseResponseSection(models.Model):
-    business_case_response_id = models.ForeignKey(
+    business_case_response = models.ForeignKey(
         BusinessCaseResponse,
         on_delete=models.PROTECT,
     )
@@ -125,7 +129,7 @@ class BusinessCaseResponseBlock(models.Model):
         PARGRAPH = "Paragraph", "Paragraph"
         TABLE = "Table", "Table"
 
-    business_case_response_section_id = models.ForeignKey(
+    business_case_response_section = models.ForeignKey(
         BusinessCaseResponseSection,
         on_delete=models.PROTECT,
     )
