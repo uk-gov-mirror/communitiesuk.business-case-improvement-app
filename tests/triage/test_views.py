@@ -185,6 +185,22 @@ def test_notice_without_answer_redirects(started_session, db):
     )
     assert resp.status_code == 302
 
+def test_answer_within_max_words_redirects(started_session, db):
+    resp = started_session.post(
+        reverse("triage:question", kwargs={"slug": "provide-a-high-level-summary"}),
+        data={"answer": "text"},
+    )
+    assert resp.status_code == 302
+
+def test_answer_exceeds_max_words_of_30_error(started_session, db):
+    resp = started_session.post(
+        reverse("triage:question", kwargs={"slug": "provide-a-high-level-summary"}),
+        data={"answer": "text " * 31},
+    )
+    assert resp.status_code == 200
+    assert f"Summary must be 30 characters or less"
+
+
 #  Session / answer saving
 
 
