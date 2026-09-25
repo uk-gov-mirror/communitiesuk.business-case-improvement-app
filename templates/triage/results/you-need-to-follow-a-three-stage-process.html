@@ -3,12 +3,12 @@
 {% from "components/macros.html" import govuk_notification_banner %}
 
 {% block main_content %}
-    <h1 class="govuk-heading-l">You need to follow the 3-stage business process.</h1>
+    <h1 class="govuk-heading-l">You need to follow the 3-stage business case process.</h1>
 
     <p class="govuk-body">Based on your answers, your proposal should follow the 3-stage business case process.</p>
 
     <p class="govuk-body">
-        This service is currently being updated and cannot yet identify the exact template you need, but the template you'll need will depend on the stage your proposal has reached. This may be a:
+        The template you need will depend on the stage your proposal has reached. This may be a:
     </p>
     <ul class="govuk-list govuk-list--bullet">
         <li>Project Brief</li>
@@ -18,33 +18,42 @@
     </ul>
 
      <p class="govuk-body">
-        In some cases, such as minor changes to a previously approved business case, you may not need to complete a new template.
-        Instead, you may be able to use an addendum to update the existing approved business case.
+        In some cases, such as a change to an approved business case, you may not need a new template. 
+        Instead, you may be able to update the existing business case using an addendum.
     </p>
 
     <p class="govuk-body">
-        Always use the latest template from the template library. Avoid using a template from a previous business case or one provided by a colleague.
+        Always use the latest template from the template library. Avoid using a template from a previous business case or one shared by a colleague.
     </p>
 
-    <p class="govuk-body">
-        You do not need to return to this service to upload your business case after it has been approved.
-    </p>
+    <div class="govuk-warning-text">
+        <span class="govuk-warning-text__icon govuk-!-margin-top-1" aria-hidden="true">!</span>
+
+        <strong class="govuk-warning-text__text">
+            <span class="govuk-visually-hidden">Warning</span>
+            You do not need to return to this service to upload your business case after it has been approved.
+        </strong>
+    </div>
 
     <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
 
 
     <h2 class="govuk-heading-m">What to do next</h2>
-    <h3 class="govuk-heading-s">If you know which template you need:</h3>
+    <h3 class="govuk-heading-s">If you know which template you need</h3>
     <ul class="govuk-list govuk-list--bullet govuk-list--spaced">
-        <li>engage with your Subject Matters Experts as early as possible</li>
-        <li>download the template from the template library</li>
+        <li>Speak to your Subject Matter Experts (SMEs) as early as possible.</li>
+        <li>Download the template from the
+            <a class='govuk-link' href='{{external_links.template_library}}' target='_blank' rel='noopener noreferrer'>template library</a></li>
     </ul>
 
-    <h3 class="govuk-heading-s">If you are unsure which template you need:</h3>
+    <h3 class="govuk-heading-s">If you're not sure which template you need</h3>
     <ul class="govuk-list govuk-list--bullet govuk-list--spaced">
-        <li>engage with your Subject Matter Experts as early as possible</li>
-        <li>review the stages guidance on the Project Delivery hub to see which stage your proposal fits in.</li>
-        <li>if you're still unsure, contact the ISC Secretariat at *link*. The ISC Secretariat can help you identify the correct starting template and explain the approval process.</li>
+        <li>Speak to your Subject Matter Experts (SMEs) as early as possible.</li>
+        <li>Review the guidance on the 
+            <a class='govuk-link' href='{{external_links.business_cases}}' target='_blank' rel='noopener noreferrer'>Project Delivery Hub</a>
+            to identify the stage your proposal has reached.</li>
+        <li>If you're still unsure, contact the <a class='govuk-link' href='mailto:{{external_links.isc_secretariat_email}}' target='_blank' rel='noopener noreferrer'>Investment Sub-Committee (ISC) Secretariat</a>. 
+            They can help you identify the correct starting template and explain the approval process.</li>
     </ul>
 
     <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
@@ -112,21 +121,23 @@
         "items": [
             {
                 "heading": {
-                    "text": "New or standalone projects or programmes with whole life cost equal or above the spend threshold"
+                    "text": "New or standalone projects or programmes above the approval threshold"
                 },
                 "content":{
                     "html": "<div class='govuk-details__text'>
-                        <h3 class='govuk-heading-s'>You need to go to Investment Sub-Committee (ISC)</h2>
-                        <p class='govuk-body'>Contact the Secretariat to book an ISC slot:</p>
-                        <p class='govuk-body'>Note, HM Treasury approval will be required if:</p>
+                        <h3 class='govuk-heading-s'>You need to go to Investment Sub-Committee (ISC).</h3>
+                        <p class='govuk-body'>Contact the <a class='govuk-link' href='mailto:{{external_links.isc_secretariat_email}}' target='_blank' rel='noopener noreferrer'>ISC Secretariat</a>
+                             to arrange an ISC slot.</p>
+                        <p class='govuk-body'>HM Treasury approval is also required if:</p>
                         <ul class='govuk-list govuk-list--bullet'>
-                            <li>CDEL above £250m</li>
-                            <li>RDEL above £80m</li>
-                            <li>CDEL FT above £50m</li>
-                            <li>RDEL Admin above £10m</li>
-                            <li>Local Gov DEL including an S31 Grant</li>
-                        </ul>
-                        <p class='govuk-body'>Not sure? Contact your Finance Business Partner.</p>
+                            <li>CDEL exceeds £250 million</li>
+                            <li>RDEL exceeds £80 million</li>
+                            <li>CDEL FT exceeds £50 million</li>
+                            <li>RDEL Admin exceeds £10 million</li>
+                            <li>Local Gov DEL includes a Section 31 Grant</li>
+                        </ul> 
+                        <h3 class='govuk-heading-s'>Not sure?</h3>
+                        <p class='govuk-body'>Speak to your Finance Business Partner (FBP).</p>
                     </div>"
                 }
             }
