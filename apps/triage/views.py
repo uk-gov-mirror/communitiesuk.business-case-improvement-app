@@ -101,6 +101,19 @@ def question(request, slug: str):
                 },
             )
 
+        question_maxwords = question_def.get("maxwords") if question_def else None
+
+        if question_type == "charactercounttextarea" and question_maxwords and len(answer.split()) > question_maxwords:
+            return render(
+                request,
+                "triage/question.html",
+                {
+                    "question": question_def,
+                    "value": answer,
+                    "error": f"Summary must be {question_maxwords} characters or less",
+                },
+            )
+
         triage_session.set_answer(slug, answer)
         triage_session.result = triage_session.result or "in-progress"
         triage_session.save()

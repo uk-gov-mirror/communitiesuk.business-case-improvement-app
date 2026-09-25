@@ -290,7 +290,7 @@ Edit the `QUESTIONS` list in `apps/triage/flow.py`. Each dictionary represents a
 {
     "slug": "new-question-slug",
     "title": "What is your question?",
-    "type": "radio", # or "checkbox", "select", "input", "notice"
+    "type": "radio", # or "checkbox", "select", "input", "notice", "charactercounttextarea"
     "choices": [
         ("value-1", "Display Label 1"),
         ("value-2", "Display Label 2"),

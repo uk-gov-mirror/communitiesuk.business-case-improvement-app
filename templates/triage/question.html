@@ -6,6 +6,7 @@
 {% from "govuk_frontend_jinja/templates/components/details/macro.html" import govukDetails %}
 {% from "govuk_frontend_jinja/templates/components/button/macro.html" import govukButton %}
 {% from "govuk_frontend_jinja/templates/components/input/macro.html" import govukInput %}
+{% from "govuk_frontend_jinja/templates/components/character-count/macro.html" import govukCharacterCount %}
 
 {% block content %}
 <div class="govuk-grid-row">
@@ -98,6 +99,25 @@
       },
       "errorMessage": {"text": error} if error else {},
       "hint": {"text": question.hint} if question.hint else {}
+      }) }}
+
+      {# Character Count Textarea #}
+      {% elif question.type == "charactercounttextarea" %}
+      {{ govukCharacterCount({
+        "id": "answer",
+        "name": "answer",
+        "value": value,
+        "maxwords": question.maxwords,
+        "label": {
+          "text": question.title,
+          "isPageHeading": true,
+          "classes": "govuk-label--l"
+        },
+        "errorMessage": {"text": error} if error else {},
+        "hint": {"text": question.hint} if question.hint else {},
+        "wordsUnderLimitText": {
+          "other": "You can enter up to %{count} words"
+        },
       }) }}
       
       {# Notice #}

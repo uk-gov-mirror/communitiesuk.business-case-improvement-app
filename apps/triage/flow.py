@@ -1,5 +1,6 @@
 from markupsafe import Markup
 from .slugs import *
+from apps.core.shared_context import external_links
 from .calculate_result_helpers import AnswerConstants
 
 """
@@ -25,19 +26,34 @@ If there's no specific match for an answer, the fallback key (slug, "*") is used
 Result pages are defined in RESULTS.
 """
 
-# Types: Radio, Checkbox, Select, Input
+# Types: Radio, Checkbox, Select, Input, Character Count Textarea
 QUESTIONS = [
     {
         "slug": total_value_of_business_case,
-        "title": "What is the estimated total value of your request?",
+        "title": "What is the estimated total value of your business case?",
         "type": "radio",
-        "hint": '<div class="govuk-inset-text">The total value means the whole life cost of the business case including VAT.</div>',
-        "help_text": "We ask this first because the value influences whether you need a business case at all. The total value is the whole life cost of the business case, including staffing costs, capital and revenue.",
+        "hint": '<div class="govuk-inset-text">This is the total cost of your proposal over its full lifetime, including VAT. Select one option:</div>',
         "choices": [
             (AnswerConstants.BELOW_12K, "Below £12,000"),
             (AnswerConstants.BETWEEN_12K_AND_2M, "Between £12,000 and 2m"),
             (AnswerConstants.ABOVE_2M, "Above 2m")
         ],
+        "help_text": f"""
+        <p>We ask this question first because the value of your proposal helps us determine:</p>
+        <ul class="govuk-list govuk-list--bullet">
+            <li>whether you need a business case</li>
+            <li>which business case route you need to follow</li>
+            <li>what approvals may be required</li>
+        </ul>
+        <p>The total value should include all expected costs over the lifetime of the proposal, including:</p>
+        <ul class="govuk-list govuk-list--bullet">
+            <li>whether you need a business case</li>
+            <li>which business case route you need to follow</li>
+            <li>what approvals may be required</li>
+        </ul>
+        <p>Speak to your Finance Business Partner (FBP) or a Commercial colleague before continuing.</p>
+        <p>If you're not sure who to contact, visit the <a class="govuk-link" href="{external_links('').get("links", {}).get("subject_matter_expert_assurance", "")}" target="_blank" rel="noopener noreferrer">Project Delivery Hub</a> to find the right Subject Matter Expert (SME) for advice and support.</p>
+        """,
     },
     {
         "slug": part_of_wider_programme_with_existing_fbc,
@@ -267,8 +283,20 @@ QUESTIONS = [
     },
     {
         "slug": provide_a_high_level_summary,
-        "title": "Provide a high level summary",
-        "type": "input"
+        "title": "What’s this business case about?",
+        "type": "charactercounttextarea",
+        "maxwords": 30,
+        "hint": Markup('<div class="govuk-inset-text">Provide a brief summary of your proposal (up to 30 words).</div>'),
+        "help_text": """
+        <p>Describe what you are proposing and why.</p>
+        <p>For example:</p>
+        <p>Procure a supplier to deliver a new grants management system, replacing manual processes and improving efficiency for applicants and staff.</p>
+        <p>Keep your summary short and avoid unnecessary detail. You can provide more information later in the business case.</p>
+        
+        <p><strong>Not sure?</strong></p>
+        <p>Imagine you only had one sentence to explain your proposal to someone unfamiliar with the work. What would you say?</p>    
+        """,
+        "errorMessage": "Summary must be 30 characters or less",
     },
     
     # Types: notice
