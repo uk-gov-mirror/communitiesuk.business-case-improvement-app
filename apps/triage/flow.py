@@ -1,5 +1,6 @@
 from markupsafe import Markup
 from .slugs import *
+from apps.core.shared_context import external_links
 from .calculate_result_helpers import AnswerConstants
 
 """
@@ -29,15 +30,30 @@ Result pages are defined in RESULTS.
 QUESTIONS = [
     {
         "slug": total_value_of_business_case,
-        "title": "What is the estimated total value of your request?",
+        "title": "What is the estimated total value of your business case?",
         "type": "radio",
-        "hint": '<div class="govuk-inset-text">The total value means the whole life cost of the business case including VAT.</div>',
-        "help_text": "We ask this first because the value influences whether you need a business case at all. The total value is the whole life cost of the business case, including staffing costs, capital and revenue.",
+        "hint": '<div class="govuk-inset-text">This is the total cost of your proposal over its full lifetime, including VAT. Select one option:</div>',
         "choices": [
             (AnswerConstants.BELOW_12K, "Below £12,000"),
             (AnswerConstants.BETWEEN_12K_AND_2M, "Between £12,000 and 2m"),
             (AnswerConstants.ABOVE_2M, "Above 2m")
         ],
+        "help_text": f"""
+        <p>We ask this question first because the value of your proposal helps us determine:</p>
+        <ul class="govuk-list govuk-list--bullet">
+            <li>whether you need a business case</li>
+            <li>which business case route you need to follow</li>
+            <li>what approvals may be required</li>
+        </ul>
+        <p>The total value should include all expected costs over the lifetime of the proposal, including:</p>
+        <ul class="govuk-list govuk-list--bullet">
+            <li>whether you need a business case</li>
+            <li>which business case route you need to follow</li>
+            <li>what approvals may be required</li>
+        </ul>
+        <p>Speak to your Finance Business Partner (FBP) or a Commercial colleague before continuing.</p>
+        <p>If you're not sure who to contact, visit the <a class="govuk-link" href="{external_links('').get("links", {}).get("subject_matter_expert_assurance", "")}" target="_blank" rel="noopener noreferrer">Project Delivery Hub</a> to find the right Subject Matter Expert (SME) for advice and support.</p>
+        """,
     },
     {
         "slug": part_of_wider_programme_with_existing_fbc,
