@@ -25,7 +25,7 @@ If there's no specific match for an answer, the fallback key (slug, "*") is used
 Result pages are defined in RESULTS.
 """
 
-# Types: Radio, Checkbox, Select, Input
+# Types: Radio, Checkbox, Select, Input, Character Count Textarea
 QUESTIONS = [
     {
         "slug": total_value_of_business_case,
@@ -267,8 +267,20 @@ QUESTIONS = [
     },
     {
         "slug": provide_a_high_level_summary,
-        "title": "Provide a high level summary",
-        "type": "input"
+        "title": "What’s this business case about?",
+        "type": "charactercounttextarea",
+        "maxwords": 30,
+        "hint": Markup('<div class="govuk-inset-text">Provide a brief summary of your proposal (up to 30 words).</div>'),
+        "help_text": """
+        <p>Describe what you are proposing and why.</p>
+        <p>For example:</p>
+        <p>Procure a supplier to deliver a new grants management system, replacing manual processes and improving efficiency for applicants and staff.</p>
+        <p>Keep your summary short and avoid unnecessary detail. You can provide more information later in the business case.</p>
+        
+        <p><strong>Not sure?</strong></p>
+        <p>Imagine you only had one sentence to explain your proposal to someone unfamiliar with the work. What would you say?</p>    
+        """,
+        "errorMessage": "Summary must be 30 characters or less",
     },
     
     # Types: notice
