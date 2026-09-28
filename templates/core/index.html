@@ -6,13 +6,14 @@
 <h1 class="govuk-heading-l">
   Start or view a business case
 </h1>
-<p class="govuk-body">
-  Want to know more about the end-to-end business case process before you start?
-  Need some guidance about approvals and finding out who you need to engage with?
-  <a class="govuk-link" href="{{ external_links.project_delivery_hub }}" target="_blank" rel="noopener noreferrer">
-    Link here (opens in new tab)
-  </a>
+<p class="govuk-body">Use this service to start a new business case or view an existing one.</p>
+<p class="govuk-body">If you want to understand the end-to-end business case process before you start the business case process, or need guidance
+  on approvals and who to engage with, visit the
+  <a class="govuk-link" href="{{ external_links.business_cases }}" target="_blank"
+    rel="noopener noreferrer">Project Delivery Hub</a> (opens in new tab).
 </p>
+<p class="govuk-body">Select Start now to continue.</p>
+
 {{ govukButton({
   "text": "Start now",
   "href": url("triage:index"),
@@ -23,7 +24,7 @@
   Find a business case
 </h2>
 <p class="govuk-body">
-  You can use this directory to find other business cases in MHCLG that are below £2million.
+  You can use this directory to find other MHCLG business justification cases (BJC) below £2 million.
 </p>
 {{ business_case_table(business_cases) }}
 <p class="govuk-body-s govuk-!-text-align-centre">
