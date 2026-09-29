@@ -18,5 +18,6 @@ def external_links(request):
             "business_cases": "https://mhclg.sharepoint.com.mcas.ms/sites/ProjectDeliveryNetwork/SitePages/Business-cases.aspx",
             "subject_matter_expert_assurance": "https://mhclg.sharepoint.com.mcas.ms/sites/ProjectDeliveryNetwork/SitePages/Subject-Matter-Expert-assurance.aspx?web=1",
             "procurement_sharepoint": "https://intranet.communities.gov.uk/guidance/procurement-and-grants/procurement/procurements-under-12k",
+            "hr_business_partners_email" : "HRBusinessPartners@communities.gov.uk",
         }
     }
