@@ -6,7 +6,7 @@ def external_links(request):
             "research_gateway": "https://your-research-gateway-url",
             "p2p": "https://mhclg.sharepoint.com.mcas.ms/sites/FinanceKnowledgeCentre/SitePages/Purchase-to-Pay-(P2P).aspx",
             "speak_to_the_team": "https://intranet.communities.gov.uk/guidance/procurement-and-grants/procurement/buying-consultancy-and-professional-services/",
-            "government_legal_department": "https://intranet.communities.gov.uk/guidance/contact-legal/",
+            "government_legal_department": "https://intranet.communities.gov.uk/guidance/procurement-and-grants/procurement/buying-consultancy-and-professional-services/",
             "research_gateway": "https://intranet.communities.gov.uk/guidance/quality-assurance-and-analysis/evidence-analysis-and-statistics/research-gateway/",
             "digital_front_door": "https://intranet.communities.gov.uk/find-teams/digital-front-door/",
             "feedback_survey": "https://forms.office.com.mcas.ms/Pages/ResponsePage.aspx?id=EGg0v32c3kOociSi7zmVqGAkEPlcQ5NPoeljmLYYJyNURUZXSldLN1dENU1VWjFGWEU0VEJRUVI4Ni4u",
