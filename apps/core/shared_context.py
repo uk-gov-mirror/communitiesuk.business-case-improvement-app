@@ -16,6 +16,7 @@ def external_links(request):
             "procurement_guidance": "https://mhclg.sharepoint.com.mcas.ms/sites/ProjectDeliveryNetwork/SitePages/BJC-Contingent-Labour-Route.aspx?or=WORD-WEB.BODY.NT&ct=1785751227706",
             "template_library": "https://mhclg.sharepoint.com.mcas.ms/sites/ProjectDeliveryNetwork/SitePages/Template-l.aspx",
             "business_cases": "https://mhclg.sharepoint.com.mcas.ms/sites/ProjectDeliveryNetwork/SitePages/Business-cases.aspx",
-            "subject_matter_expert_assurance": "https://mhclg.sharepoint.com.mcas.ms/sites/ProjectDeliveryNetwork/SitePages/Subject-Matter-Expert-assurance.aspx?web=1"
+            "subject_matter_expert_assurance": "https://mhclg.sharepoint.com.mcas.ms/sites/ProjectDeliveryNetwork/SitePages/Subject-Matter-Expert-assurance.aspx?web=1",
+            "procurement_sharepoint": "https://intranet.communities.gov.uk/guidance/procurement-and-grants/procurement/procurements-under-12k",
         }
     }
