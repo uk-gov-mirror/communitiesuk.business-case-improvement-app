@@ -331,7 +331,7 @@ QUESTIONS = [
             <li>Full Business Case (FBC)</li>
         </ul>
         <p>If you are not sure which template to use, speak to your FBP, Commercial colleague or the ISC Secretariat.</p>
-        <p>If you know which template you need, select <strong>Continue</strong>.</p>  
+        <p><a class="govuk-link" href="{external_links('').get("links", {}).get("template_library", "")}" target="_blank" rel="noopener noreferrer">If you know which template you need</a>, select <strong>Continue</strong>.</p>  
         """,
         "help_title": "Why am I seeing this message?",
         "help_text": """
