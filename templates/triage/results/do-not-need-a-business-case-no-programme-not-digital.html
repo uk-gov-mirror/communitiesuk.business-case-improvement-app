@@ -29,7 +29,7 @@
                     "content": {
                         "html": "<div class='govuk-details__text'>
                             <h3 class='govuk-heading-s'>You need to follow the Low Value Purchase process.</h3>
-                            <p class='govuk-body'>For guidance on the steps to do this, visit the Procurement Sharepoint page.</p>
+                            <p class='govuk-body'>For guidance on the steps to do this, visit the <a class='govuk-link' href='" + external_links.procurement_sharepoint + "' target='_blank' rel='noopener noreferrer'>Procurement Sharepoint page</a>.</p>
                         </div>"
                     }
                 }
@@ -70,7 +70,8 @@
                     "content": {
                         "html": "<div class='govuk-details__text'>
                             <ul class='govuk-list govuk-list--bullet'>
-                                <li>People, Capabilities & Change can help you. Contact them *here*</li>
+                                <li>People, Capabilities & Change can help you. Contact them 
+                                    <a class='govuk-link' href='mailto:" + external_links.hr_business_partners_email + "' target='_blank' rel='noopener noreferrer'>here</a></li>
                             </ul>
                         </div>"
                     }
@@ -92,11 +93,12 @@
                             <ul class='govuk-list govuk-list--bullet'>
                                 <li>
                                     you need to get agreement from 
-                                    <a class='govuk-link' href='{{external_links.government_legal_department}}'
+                                    <a class='govuk-link' href='" + external_links.government_legal_department + "'
                                         target='_blank' rel='noopener noreferrer'>Government Legal Department (GLD)</a> 
                                     This is due to HM Treasury rules around legal spend that we have to follow as a department</li>
                                 <li>
-                                    you should also contact your Finance Business Partner</li>
+                                    you should also contact your <a class='govuk-link' href='" + external_links.subject_matter_expert_assurance + "'
+                                        target='_blank' rel='noopener noreferrer'>Finance Business Partner</a></li>
                             </ul>
                         </div>"
                     }
