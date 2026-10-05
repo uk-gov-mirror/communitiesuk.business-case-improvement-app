@@ -26,3 +26,19 @@ is_this_request_part_of_a_wider_programme_with_existing_business_case_notice: st
 any_other_business_cases_that_are_connected_to_this_work_notice: str = "any-other-business-cases-that-are-connected-to-this-work-notice"
 are_you_procuring_consulting_and_professional_services_notice: str = "are-you-procuring-consulting-and-professional-services-notice"
 hire_contracted_workers_to_fill_temporary_capacity_gap_notice: str = "hire-contracted-workers-to-fill-temporary-capacity-gap-notice"
+
+
+grant_57: str = "grant-57"
+grant_58: str = "grant-58"
+grant_63: str = "grant-63"
+grant_74: str = "grant-74"
+
+grant_81: str = "grant-81"
+grant_47: str = "grant-47"
+grant_48: str = "grant-48"
+
+formula_grant_choice: str = "formula-grant-choice"
+grant_aid_choice: str = "grant-aid-choice"
+general_grant_choice: str = "general-grant-choice"
+
+grant_choice: str = "grant-choice"

@@ -109,7 +109,8 @@ QUESTIONS = [
         "choices":[
             (commission_research, "Commision Research"),
             (procure_goods_and_services_from_third_party, "Procure goods and services from a 3rd party"),
-            (hire_contracted_workers_to_fill_temporary_capacity_gap, "Hire contracted workers to fill a temporary capacity gap (i.e money for contingent labour)")
+            (hire_contracted_workers_to_fill_temporary_capacity_gap, "Hire contracted workers to fill a temporary capacity gap (i.e money for contingent labour)"),
+            (grant_choice, "grant_choice")
         ]
     },
     {
@@ -469,8 +470,203 @@ QUESTIONS = [
         <p>Speak to your Finance Business Partner (FBP), a Commercial colleague or the HR Business Partner (HRBP) team before continuing.</p>
         """,
     },
-]
+        # newwwwwwwwwwwwwwwwwwwww
+    {
+        "slug": grant_57,
+        "title": 'What you need to know',
+        "type": "notice",
+        "content": f"""<p>Before you continue, it's important to make sure you're using the right funding approach for your proposal.</p>
+            <p><strong>Grants</strong> and <strong>procurement</strong> are used for different purposes and are subject to different rules, approvals and controls.</p>
+            <p>A grant should not be used where a procurement is required, and a procurement should not be used where a grant is the correct approach.</p>
+            <p>Choosing the wrong approach can create legal, financial and delivery risks.</p>
 
+            <h2>What you need to do</h2>
+            <p>Use the <a class="govuk-link" href="{external_links('').get("links", {}).get("business_cases", "")}" target="_blank" rel="noopener noreferrer">Grants vs Procurement checklist</a>
+            to help decide which approach is most appropriate for your proposal.</p>
+            <p>If you know you need a <strong>Grant business case template</strong>, select <strong>Continue.</strong></p>
+        """,
+        "help_title": "Why am I seeing this message?",
+        "help_text": f"""
+            <p>Based on your answers, your proposal may involve grant funding.</p>
+            <p>Understanding whether a proposal should be delivered through a grant or procurement is important because it affects:</p>
+            <ul class="govuk-list govuk-list--bullet">
+                <li>the rules that apply</li>
+                <li>how funding is managed</li>
+                <li>who is responsible for delivery</li>
+                 <li>approval and assurance requirements</li>
+                <li>how value for money is assessed</li>
+            </ul>
+            <p>For more information, visit the <a class="govuk-link" href="{external_links('').get("links", {}).get("business_cases", "")}" target="_blank" rel="noopener noreferrer">Grants Hub.</a></p>
+            
+            <p><strong>Not sure?</strong></p>
+            <p>Speak to your Commercial colleague before continuing.</p>
+        """
+    },
+
+    {
+        "slug": grant_58,
+        "title": 'Which countries will the grant cover?',
+        "hint":   Markup('<div class="govuk-inset-text">Select all that apply.</div>'),
+        "type": "checkbox",
+        "choices":[
+            ("england", "England"),
+            ("wales", "Wales"),
+            ("scotland", "Scotland"),
+            ("northern-ireland", "Northern Ireland")
+        ],
+
+        "help_title": "Help with this question",
+        "help_text": """
+            <p>Select the countries where the grant funding will be used or where the funded activity will take place.</p>
+            <p>For example:</p>
+            <ul class="govuk-list govuk-list--bullet">
+                <li>Select England if the grant only supports activity in England.</li>
+                <li>Select multiple countries if the grant supports activity across more than one nation.</li>
+            </ul>
+
+            <p><strong>Not sure?</strong></p>
+            <p>Select all countries that may benefit from, receive, or be affected by the grant funding.</p>
+        """
+    },
+
+    {
+        "slug": grant_63,
+        "title": 'Which organisations will receive this grant?',
+        "hint":   Markup('<div class="govuk-inset-text">Select all that apply.</div>'),
+        "type": "checkbox",
+        "choices":[
+            ("local-authority", "Local Authority"),
+            ("fire-and-rescue-authority", "Fire and Rescue Authority"),
+            ("mayoral-combined-authority", "Mayoral Combined Authority"),
+            ("combined-authority", "Combined Authority"),
+            ("arm-length-body", "Arm's Length Body"),
+            ("other-government-department", "Other Government Department"),
+            ("charity-third-sector", "Charity / Third Sector"),
+            ("private-sector-organisation", "Private Sector Organisation"),
+            ("individual", "Individual"),
+            ("other", "Other"),
+        ],
+
+        "help_title": "Help with this question",
+        "help_text": """
+            <p>Select the type of organisation or organisations that will receive the grant funding.</p>
+
+            <p>For example:</p>
+            <ul class="govuk-list govuk-list--bullet">
+                <li>Select <strong>Local Authority</strong> if the grant will be awarded to councils.</li>
+                <li>Select <strong>Charity or Third Sector Organisation</strong> if the funding will be awarded to a charity, voluntary organisation or community group.</li>
+                <li>Select <strong>Private Sector Organisation</strong> if the funding will be awarded to a business.</li>
+                <li>Select <strong>Individual</strong> if the funding will be awarded directly to a person.</li>
+            </ul>
+
+            <p>If the grant will be awarded to more than one type of organisation, select all that apply.</p>
+
+            <p><strong>Not sure?</strong></p>
+            <p>Select the organisation that will receive the funding directly, even if they later distribute funding to others.</p>
+        """
+    },
+    {
+        "slug": grant_74,
+        "title": 'Which grant route are you taking?',
+        "hint":   Markup('<div class="govuk-inset-text">Select the option that best matches your proposal.</div>'),
+        "type": "radio",
+        "choices":[
+            (formula_grant_choice, Markup('<strong>Formula Grant</strong>')),
+            (grant_aid_choice, Markup('<strong>Grant In Aid</strong>')),
+            (general_grant_choice, Markup('<strong>General Grant</strong>')),
+        ],
+        "choice_hints": {
+            formula_grant_choice: "Funding allocated using an agreed formula or criteria.",
+            grant_aid_choice: "Funding provided to an arm’s length body to support its core functions.",
+            general_grant_choice: "Funding provided to deliver a specific project, service or set of outcomes."
+        },
+
+        "help_title": "Help with this question",
+        "help_text": """
+            <p>Different grant routes have different rules, approvals and reporting requirements.</p>
+            
+            <p><strong>Formula Grant</strong> Funding is distributed using an agreed methodology or formula. Recipients do not compete for funding and the amount awarded is determined by the agreed approach.</p>
+            <p><strong>Grant in Aid Funding</strong> provided to an arm’s length body to support its ongoing operations and core responsibilities.</p>
+            <p><strong>General Grant</strong> Funding provided to deliver a specific activity, project, service or policy outcome. This is the most common grant route.</p>
+
+            <p><strong>Not sure?</strong></p>
+            <p>Speak to the Central Grants Hub, your Finance Business Partner (FBP), or a Commercial colleague before continuing.</p>
+        """
+    },
+    {
+        "slug": grant_81,
+        "title": 'How will the funding be allocated?',
+        "type": "radio",
+        "choices":[
+            ("competitive", Markup('<strong>Competitive</strong>')),
+            ("criteria-based", Markup('<strong>Criteria-based</strong>')),
+            ("direct-award", Markup('<strong>Direct award</strong>')),
+        ],
+        "choice_hints": {
+            "competitive": "Funding is awarded following a competition between eligible organisations.",
+            "criteria-based": "Funding is awarded to organisations that meet required eligibility criteria.",
+            "direct-award": "Funding is awarded to a specific organisation for a specific purpose."
+        },
+
+        "help_title": "Help with this question",
+        "help_text": """
+            <p>Select the option that best describes how the funding will be awarded.</p>
+            
+            <p><strong>Competitive</strong> Eligible organisations apply for funding and are assessed against the same criteria. Funding is awarded to the strongest applications.</p>
+            <p><strong>Criteria-based</strong> Funding is awarded to organisations that meet the eligibility requirements. There is no competition between applicants.</p>
+            <p><strong>Direct award</strong> Funding is awarded directly to a named organisation without a competitive process.</p>
+
+            <p><strong>Not sure?</strong></p>
+            <p>Think about how recipients will be selected:</p>
+
+            <ul class="govuk-list govuk-list--bullet">
+                <li>If organisations are competing for funding, select <strong>Competitive</strong>.</li>
+                <li>If organisations receive funding because they meet set criteria, select <strong>Criteria-based</strong>.</li>
+                <li>If funding is being awarded directly to a specific organisation, select <strong>Direct award</strong>.</li>
+            </ul>
+        """
+    },
+    {
+        "slug": grant_47,
+        "title": "Give your business case a title",
+        "type": "input",
+        
+        "hint": Markup('<div class="govuk-inset-text">Provide a short, clear title that describes your proposal.</div>'),
+        "help_text": """
+            <p>Provide a title that helps others quickly understand what the proposal is about.</p>
+            <p>For example:</p>
+
+            <ul class="govuk-list govuk-list--bullet">
+                <li>Upgrade planning application system</li>
+                <li>Building Safety Training Programme</li>
+                <li>Digital Grants Service Improvement</li>
+                <li>Temporary Project Delivery Support</li>
+            </ul>
+
+            <p>Avoid abbreviations, version numbers or internal project names unless they are widely recognised.</p>
+
+            <p><strong>Not sure?</strong></p>
+            <p>Imagine someone unfamiliar with your work is reading the title. Would they understand what the proposal is about?</p>
+        """
+    },
+    {
+        "slug": grant_48,
+        "title": "What’s this business case about?",
+        "type": "charactercounttextarea",
+        "maxwords": 30,
+        "hint": Markup('<div class="govuk-inset-text">Provide a brief summary of your proposal (up to 30 words).</div>'),
+        "help_text": """
+        <p>Describe what you are proposing and why.</p>
+        <p>For example:</p>
+        <p>Procure a supplier to deliver a new grants management system, replacing manual processes and improving efficiency for applicants and staff.</p>
+        <p>Keep your summary short and avoid unnecessary detail. You can provide more information later in the business case.</p>
+        
+        <p><strong>Not sure?</strong></p>
+        <p>Imagine you only had one sentence to explain your proposal to someone unfamiliar with the work. What would you say?</p>    
+        """,
+        "errorMessage": "Summary must be 30 characters or less",
+    },
+]
 
 ROUTING = {
     # work-type branches first
@@ -507,12 +703,32 @@ ROUTING = {
     (are_you_procuring_consulting_and_professional_services_notice, "*"): we_want_to_continue_improving_our_service,
     (we_want_to_continue_improving_our_service, "*"): give_your_bjc_a_name,
     (give_your_bjc_a_name, "*"): provide_a_high_level_summary,
-    (provide_a_high_level_summary, "*"): "calculate-result"
+    (provide_a_high_level_summary, "*"): "calculate-result",
+
+    (grant_57, "*"): grant_58,
+    (grant_58, "*"): grant_63,
+    (grant_63, "*"): grant_74,
+
+    (grant_74, formula_grant_choice): grant_81,
+    (grant_74, grant_aid_choice): grant_47,
+    (grant_74, general_grant_choice): grant_47,
+
+    (grant_81, "*"): grant_47,
+    (grant_47, "*"): grant_48,
+
+    (grant_48, "*"): "calculate-result",
+
+
+
+    (which_option_describes_what_you_are_trying_to_do, grant_choice): grant_57,
+
+    
 }
 
 
 BUSINESS_CASE_EXIT_SCREEN_TYPES = {
     "exit-to-download-template-procurement-route": "Procurement",
+    "exit-to-download-template-grant-route": "Grant",
     "exit-to-download-template-corporate-spend-fbp-route": "Corporate Spend FBP",
     "exit-to-download-template-hrbp-contingent-labour-route": "HRBP Contingent Labour",
 }
