@@ -1,11 +1,12 @@
 import pytest
 import time
+from unittest.mock import patch
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import Client
 from django.urls import reverse
 
 from apps.accounts.models import User
-from apps.triage.models import BusinessCase, BusinessCaseTriageResponse
+from apps.triage.models import BusinessCase, BusinessCaseResponse, BusinessCaseTriageResponse
 
 
 @pytest.fixture
@@ -87,7 +88,13 @@ def test_case_detail_shows_type_status_and_reference_number(client, business_cas
     assert "Active" in content
 
 
-def test_case_detail_upload_accepts_valid_docx(client, business_case):
+@patch("apps.core.views.upload_file_to_s3")
+def test_case_detail_upload_accepts_valid_docx(upload_file_to_s3, client, business_case):
+    def check_upload(uploaded_file, key):
+        assert uploaded_file.read() == b"file contents"
+        return key
+
+    upload_file_to_s3.side_effect = check_upload
     upload = SimpleUploadedFile(
         "document.docx",
         b"file contents",
@@ -100,7 +107,20 @@ def test_case_detail_upload_accepts_valid_docx(client, business_case):
     )
 
     assert response.status_code == 200
-    assert "Business case uploaded!" in response.content.decode()
+    assert "Business case uploaded and processing." in response.content.decode()
+
+    uploaded_response = BusinessCaseResponse.objects.get(business_case=business_case)
+    assert uploaded_response.version == 1
+    assert uploaded_response.status == BusinessCaseResponse.BusinessCaseResponseStatus.PENDING
+    assert uploaded_response.original_filename == "document.docx"
+    timestamp = uploaded_response.created_at.strftime("%Y%m%d%H%M%S")
+    assert uploaded_response.s3_key == (
+        f"response_{business_case.pk}_1_{uploaded_response.pk}_{timestamp}.docx"
+    )
+    upload_file_to_s3.assert_called_once()
+    uploaded_file, key = upload_file_to_s3.call_args.args
+    assert uploaded_file.name == "document.docx"
+    assert key == uploaded_response.s3_key
 
 
 def test_case_detail_upload_rejects_wrong_extension(client, business_case):
