@@ -193,10 +193,8 @@ ALLOWED_UPLOAD_EXTENSIONS = (".doc", ".docx")
 PENDING_RESPONSE_TIMEOUT = timedelta(minutes=1)
 
 # AWS S3 Settings
-# AWS_S3_ENDPOINT_URL/AWS_ACCESS_KEY_ID/AWS_SECRET_ACCESS_KEY/AWS_S3_REGION_NAME are
-# only set locally (e.g. by docker-compose, pointing at MiniStack). When deployed,
-# these are left unset so boto3 falls back to the task/instance IAM role and default
-# AWS endpoints, and only AWS_STORAGE_BUCKET_NAME is required.
+# AWS_S3_ENDPOINT_URL/AWS_ACCESS_KEY_ID/AWS_SECRET_ACCESS_KEY/AWS_S3_REGION_NAME are for local use only.
+# Only AWS_STORAGE_BUCKET_NAME should be set in deployed environments.
 AWS_STORAGE_BUCKET_NAME = os.environ.get("AWS_STORAGE_BUCKET_NAME")
 AWS_S3_ENDPOINT_URL = os.environ.get("AWS_S3_ENDPOINT_URL")
 AWS_S3_REGION_NAME = os.environ.get("AWS_S3_REGION_NAME")

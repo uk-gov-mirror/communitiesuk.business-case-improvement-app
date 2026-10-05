@@ -60,17 +60,7 @@
           {% endfor %}
         </div>
         <div class="govuk-grid-column-one-third">
-          {{ govukSummaryList({
-          "classes": "govuk-summary-list--no-border",
-          "rows": [
-          {"key": {"text": "Whole life cost"}, "value": {"text": uploaded_response_summary.whole_of_life_cost}},
-          {"key": {"text": "Directorate"}, "value": {"text": uploaded_response_summary.directorate}},
-          {"key": {"text": "SRO/SCS"}, "value": {"text": uploaded_response_summary.sro_scs}},
-          {"key": {"text": "Approved by SRO/SCS"}, "value": {"text": uploaded_response_summary.approved_by_sro_scs.strftime("%-d %B %Y")}},
-          {"key": {"text": "Lead SME"}, "value": {"text": business_case.lead_contact}},
-          {"key": {"text": "Author"}, "value": {"text": uploaded_response_summary.author}}
-          ]
-          }) }}
+          <!-- TODO: Summary information -->
         </div>
       </div>
 
