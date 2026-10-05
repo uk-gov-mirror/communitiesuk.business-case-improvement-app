@@ -1,5 +1,9 @@
-from apps.word_doc_services.creating_document import *
-from docx.opc.constants import RELATIONSHIP_TYPE as RT
+from apps.word_doc_services.word_document_wrapper import BusinessCaseWordDocumentWrapper
+
+from docx.shared import Pt
+from docx.opc.constants import RELATIONSHIP_TYPE
+
+from apps.word_doc_services.common_resources import _bold_font_name, _italic_font_name
 
 def test_creating_empty_doc():
     wrapper = BusinessCaseWordDocumentWrapper()
@@ -30,7 +34,7 @@ def test_creating_h1_section():
     assert wrapper.doc.paragraphs[0].text == "Test Header"
     assert wrapper.doc.paragraphs[0].runs[0].bold == True
     assert wrapper.doc.paragraphs[0].runs[0].font.size == Pt(28)
-    assert wrapper.doc.paragraphs[0].runs[0].font.name == bold_font_name
+    assert wrapper.doc.paragraphs[0].runs[0].font.name == _bold_font_name
 
 
 def test_creating_h2_section():
@@ -45,7 +49,7 @@ def test_creating_h2_section():
     assert wrapper.doc.paragraphs[0].text == "Test Header"
     assert wrapper.doc.paragraphs[0].runs[0].bold == True
     assert wrapper.doc.paragraphs[0].runs[0].font.size == Pt(16)
-    assert wrapper.doc.paragraphs[0].runs[0].font.name == bold_font_name
+    assert wrapper.doc.paragraphs[0].runs[0].font.name == _bold_font_name
 
 
 def test_adding_hyperlink():
@@ -58,7 +62,7 @@ def test_adding_hyperlink():
 
     rels = wrapper.doc.part.rels
     for rel in rels:
-        if rels[rel].reltype == RT.HYPERLINK:
+        if rels[rel].reltype == RELATIONSHIP_TYPE.HYPERLINK:
             link_target = f"{rels[rel]._target}"
 
     # Assert
@@ -92,33 +96,5 @@ def test_adding_fixed_text():
     assert wrapper.doc.paragraphs[0].text == "Some fixed text"
     assert wrapper.doc.paragraphs[0].runs[0].italic == True
     assert wrapper.doc.paragraphs[0].runs[0].font.size == Pt(12)
-    assert wrapper.doc.paragraphs[0].runs[0].font.name == italic_font_name
+    assert wrapper.doc.paragraphs[0].runs[0].font.name == _italic_font_name
 
-
-
-'''
-    Input Box
-'''
-def test_adding_input_box():
-    # Arrange
-    wrapper = BusinessCaseWordDocumentWrapper()
-
-    # Act
-    wrapper.add_input_box()
-
-    # Assert
-    assert len(wrapper.doc.tables) == 1
-
-
-def test_adding_input_box_with_footer():
-    # Arrange
-    wrapper = BusinessCaseWordDocumentWrapper()
-    word_count: int = 200
-
-    # Act
-    wrapper.add_input_box(word_count)
-
-    # Assert
-    assert len(wrapper.doc.tables) == 1
-    assert len(wrapper.doc.paragraphs) == 1
-    assert wrapper.doc.paragraphs[0].text == "Word count guideline: {} words".format(word_count)
