@@ -104,14 +104,30 @@ QUESTIONS = [
     },
     {
         "slug": which_option_describes_what_you_are_trying_to_do,
-        "title": "Select the option that best describes what you're trying to do.",
+        "title": "What are you trying to do?",
+        "hint":   Markup('<div class="govuk-inset-text">Select the option that best matches your proposal.</div>'),
         "type": "radio",
         "choices":[
-            (commission_research, "Commision Research"),
-            (procure_goods_and_services_from_third_party, "Procure goods and services from a 3rd party"),
-            (hire_contracted_workers_to_fill_temporary_capacity_gap, "Hire contracted workers to fill a temporary capacity gap (i.e money for contingent labour)"),
-            (grant_choice, "grant_choice")
-        ]
+            (procure_goods_and_services_from_third_party, Markup('<strong>Buy goods or services from an external supplier</strong>')),
+            (commission_research, Markup('<strong>Commission research</strong>')),
+            (hire_contracted_workers_to_fill_temporary_capacity_gap, Markup('<strong>Hire contractors, agency staff or consultants to fill a temporary capacity gap</strong>')),
+            (grant_choice, Markup('<strong>Provide a grant or transfer funding to another organisation</strong>'))
+        ],
+        "choice_hints": {
+            procure_goods_and_services_from_third_party : "For example, buying software, equipment or a service from a supplier.",
+            commission_research : "For example, carrying out research, analysis, evaluation or user research.",
+            hire_contracted_workers_to_fill_temporary_capacity_gap: "For example, bringing in temporary staff to support your team or project.",
+            grant_choice: "For example, providing funding to a local authority, charity or other organisation."
+        },
+        "help_title": "Help with this question",
+        "help_text": """
+            <p>We ask this because different types of proposals follow different business case routes and approval processes.</p>
+            <p>Your answer helps us direct you to the right guidance, template and next steps.</p>
+
+            <p><strong>Not sure which option to choose?</strong></p>
+            <p>Choose the option that best reflects the main purpose of the funding.</p>
+            <p>If your proposal includes more than one type of activity, select the option that represents the largest part of the spend or the primary objective.</p>
+        """
     },
     {
         "slug": which_best_describes_your_spend,
@@ -279,8 +295,26 @@ QUESTIONS = [
     },
     {
         "slug": give_your_bjc_a_name,
-        "title": "Give your BJC a name",
+        "title": "Give your business case a title",
         "type": "input",
+        
+        "hint": Markup('<div class="govuk-inset-text">Provide a short, clear title that describes your proposal.</div>'),
+        "help_text": """
+            <p>Provide a title that helps others quickly understand what the proposal is about.</p>
+            <p>For example:</p>
+
+            <ul class="govuk-list govuk-list--bullet">
+                <li>Upgrade planning application system</li>
+                <li>Building Safety Training Programme</li>
+                <li>Digital Grants Service Improvement</li>
+                <li>Temporary Project Delivery Support</li>
+            </ul>
+
+            <p>Avoid abbreviations, version numbers or internal project names unless they are widely recognised.</p>
+
+            <p><strong>Not sure?</strong></p>
+            <p>Imagine someone unfamiliar with your work is reading the title. Would they understand what the proposal is about?</p>
+        """
     },
     {
         "slug": provide_a_high_level_summary,
@@ -470,9 +504,9 @@ QUESTIONS = [
         <p>Speak to your Finance Business Partner (FBP), a Commercial colleague or the HR Business Partner (HRBP) team before continuing.</p>
         """,
     },
-        # newwwwwwwwwwwwwwwwwwwww
+    # grant routes
     {
-        "slug": grant_57,
+        "slug": grant_notice,
         "title": 'What you need to know',
         "type": "notice",
         "content": f"""<p>Before you continue, it's important to make sure you're using the right funding approach for your proposal.</p>
@@ -502,9 +536,8 @@ QUESTIONS = [
             <p>Speak to your Commercial colleague before continuing.</p>
         """
     },
-
     {
-        "slug": grant_58,
+        "slug": grant_covered_countries,
         "title": 'Which countries will the grant cover?',
         "hint":   Markup('<div class="govuk-inset-text">Select all that apply.</div>'),
         "type": "checkbox",
@@ -528,9 +561,8 @@ QUESTIONS = [
             <p>Select all countries that may benefit from, receive, or be affected by the grant funding.</p>
         """
     },
-
     {
-        "slug": grant_63,
+        "slug": eligible_organisations,
         "title": 'Which organisations will receive this grant?',
         "hint":   Markup('<div class="govuk-inset-text">Select all that apply.</div>'),
         "type": "checkbox",
@@ -566,7 +598,7 @@ QUESTIONS = [
         """
     },
     {
-        "slug": grant_74,
+        "slug": grant_routes,
         "title": 'Which grant route are you taking?',
         "hint":   Markup('<div class="govuk-inset-text">Select the option that best matches your proposal.</div>'),
         "type": "radio",
@@ -594,7 +626,7 @@ QUESTIONS = [
         """
     },
     {
-        "slug": grant_81,
+        "slug": funding_allocation,
         "title": 'How will the funding be allocated?',
         "type": "radio",
         "choices":[
@@ -625,47 +657,7 @@ QUESTIONS = [
                 <li>If funding is being awarded directly to a specific organisation, select <strong>Direct award</strong>.</li>
             </ul>
         """
-    },
-    {
-        "slug": grant_47,
-        "title": "Give your business case a title",
-        "type": "input",
-        
-        "hint": Markup('<div class="govuk-inset-text">Provide a short, clear title that describes your proposal.</div>'),
-        "help_text": """
-            <p>Provide a title that helps others quickly understand what the proposal is about.</p>
-            <p>For example:</p>
-
-            <ul class="govuk-list govuk-list--bullet">
-                <li>Upgrade planning application system</li>
-                <li>Building Safety Training Programme</li>
-                <li>Digital Grants Service Improvement</li>
-                <li>Temporary Project Delivery Support</li>
-            </ul>
-
-            <p>Avoid abbreviations, version numbers or internal project names unless they are widely recognised.</p>
-
-            <p><strong>Not sure?</strong></p>
-            <p>Imagine someone unfamiliar with your work is reading the title. Would they understand what the proposal is about?</p>
-        """
-    },
-    {
-        "slug": grant_48,
-        "title": "What’s this business case about?",
-        "type": "charactercounttextarea",
-        "maxwords": 30,
-        "hint": Markup('<div class="govuk-inset-text">Provide a brief summary of your proposal (up to 30 words).</div>'),
-        "help_text": """
-        <p>Describe what you are proposing and why.</p>
-        <p>For example:</p>
-        <p>Procure a supplier to deliver a new grants management system, replacing manual processes and improving efficiency for applicants and staff.</p>
-        <p>Keep your summary short and avoid unnecessary detail. You can provide more information later in the business case.</p>
-        
-        <p><strong>Not sure?</strong></p>
-        <p>Imagine you only had one sentence to explain your proposal to someone unfamiliar with the work. What would you say?</p>    
-        """,
-        "errorMessage": "Summary must be 30 characters or less",
-    },
+    }
 ]
 
 ROUTING = {
@@ -704,25 +696,14 @@ ROUTING = {
     (we_want_to_continue_improving_our_service, "*"): give_your_bjc_a_name,
     (give_your_bjc_a_name, "*"): provide_a_high_level_summary,
     (provide_a_high_level_summary, "*"): "calculate-result",
-
-    (grant_57, "*"): grant_58,
-    (grant_58, "*"): grant_63,
-    (grant_63, "*"): grant_74,
-
-    (grant_74, formula_grant_choice): grant_81,
-    (grant_74, grant_aid_choice): grant_47,
-    (grant_74, general_grant_choice): grant_47,
-
-    (grant_81, "*"): grant_47,
-    (grant_47, "*"): grant_48,
-
-    (grant_48, "*"): "calculate-result",
-
-
-
-    (which_option_describes_what_you_are_trying_to_do, grant_choice): grant_57,
-
-    
+    (which_option_describes_what_you_are_trying_to_do, grant_choice): grant_notice,
+    (grant_notice, "*"): grant_covered_countries,
+    (grant_covered_countries, "*"): eligible_organisations,
+    (eligible_organisations, "*"): grant_routes,
+    (grant_routes, formula_grant_choice): funding_allocation,
+    (grant_routes, grant_aid_choice): give_your_bjc_a_name,
+    (grant_routes, general_grant_choice): give_your_bjc_a_name,
+    (funding_allocation, "*"): give_your_bjc_a_name,
 }
 
 

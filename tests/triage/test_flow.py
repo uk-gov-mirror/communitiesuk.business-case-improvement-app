@@ -312,6 +312,82 @@ def test_commission_research_routing():
     assert result == 'you-need-to-speak-to-the-research-team'
 
 
+def test_grant_routes():
+    # arrange
+    grant_answers = [
+        "between-12k-and-2m",
+        "no",
+        "no",
+        "no",
+        "Any Answer",
+        "Any Answer",
+        grant_choice,
+        "yes",
+        "Any Answer",
+        "Any Answer",
+        formula_grant_choice,
+        "*",
+        "title",
+        "details"
+    ]
+
+    # act
+    result = get_routing_exit_page(grant_answers)
+
+    # assert
+    assert result == "exit-to-download-template-grant-route"
+
+
+def test_grant_including_aid_choice_routes():
+    # arrange
+    grant_answers = [
+        "between-12k-and-2m",
+        "no",
+        "no",
+        "no",
+        "Any Answer",
+        "Any Answer",
+        grant_choice,
+        "yes",
+        "Any Answer",
+        "Any Answer",
+        grant_aid_choice,
+        "title",
+        "details"
+    ]
+
+    # act
+    result = get_routing_exit_page(grant_answers)
+
+    # assert
+    assert result == "exit-to-download-template-grant-route"
+
+
+def test_grant_including_general_grant_choice_routes():
+    # arrange
+    grant_answers = [
+        "between-12k-and-2m",
+        "no",
+        "no",
+        "no",
+        "Any Answer",
+        "Any Answer",
+        grant_choice,
+        "yes",
+        "Any Answer",
+        "Any Answer",
+        general_grant_choice,
+        "title",
+        "details"
+    ]
+
+    # act
+    result = get_routing_exit_page(grant_answers)
+
+    # assert
+    assert result == "exit-to-download-template-grant-route"
+
+
 '''
 Provide a list of triage responses, starting from the cost.
 This will then go through each response to reach the end of the journey and provide

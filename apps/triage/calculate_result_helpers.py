@@ -57,7 +57,8 @@ if we reached the end of the journey
 def full_12k_to_2m_flow_completed(triage_data: TriageData) -> bool:
     correct_options_chosen = triage_data.which_option_best_describes_what_is_trying_to_be_done in {
         procure_goods_and_services_from_third_party,
-        hire_contracted_workers_to_fill_temporary_capacity_gap
+        hire_contracted_workers_to_fill_temporary_capacity_gap,
+        grant_choice
     }
     
     return (not triage_data.is_novel and
@@ -85,6 +86,9 @@ def get_procurement_exit(triage_data: TriageData) -> str:
 
     if best_describes_your_situation == hire_contracted_workers_to_fill_temporary_capacity_gap:
         return "exit-to-download-template-hrbp-contingent-labour-route"
+
+    if best_describes_your_situation == grant_choice:
+        return "exit-to-download-template-grant-route"
  
     return "we-could-not-find-the-right-process-for-you"
 
