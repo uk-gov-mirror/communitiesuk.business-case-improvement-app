@@ -88,6 +88,37 @@ def test_case_detail_shows_type_status_and_reference_number(client, business_cas
     assert "Active" in content
 
 
+def test_case_detail_shows_success_banner_on_completed_poll(client, business_case):
+    BusinessCaseResponse.objects.create(
+        business_case=business_case,
+        status=BusinessCaseResponse.BusinessCaseResponseStatus.COMPLETED,
+    )
+
+    response = client.get(
+        reverse("case-detail", kwargs={"pk": business_case.pk}),
+        {"upload_refresh": "1"},
+    )
+
+    content = response.content.decode()
+    assert response.status_code == 200
+    assert 'id="upload-success-banner"' in content
+    assert "govuk-notification-banner--success" in content
+    assert "Success" in content
+    assert "Business case uploaded" in content
+
+
+def test_case_detail_hides_success_banner_on_normal_completed_visit(client, business_case):
+    BusinessCaseResponse.objects.create(
+        business_case=business_case,
+        status=BusinessCaseResponse.BusinessCaseResponseStatus.COMPLETED,
+    )
+
+    response = client.get(reverse("case-detail", kwargs={"pk": business_case.pk}))
+
+    assert response.status_code == 200
+    assert 'id="upload-success-banner"' not in response.content.decode()
+
+
 @patch("apps.core.views.upload_file_to_s3")
 def test_case_detail_upload_accepts_valid_docx(upload_file_to_s3, client, business_case):
     def check_upload(uploaded_file, key):

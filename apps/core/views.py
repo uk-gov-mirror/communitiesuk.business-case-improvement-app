@@ -77,6 +77,12 @@ def case_detail(request, pk):
             business_case_response=latest_response
         ).first()
 
+    show_upload_success = (
+        request.GET.get("upload_refresh") == "true"
+        and latest_response is not None
+        and latest_response.status == BusinessCaseResponse.BusinessCaseResponseStatus.COMPLETED
+    )
+
     return render(
         request,
         "core/case_detail.html",
@@ -85,6 +91,7 @@ def case_detail(request, pk):
             "error": error,
             "latest_response": latest_response,
             "uploaded_response_summary": uploaded_response_summary,
+            "show_upload_success": show_upload_success,
         },
     )
 

@@ -35,6 +35,15 @@
       }) }}
     {% endif %}
 
+    {% if show_upload_success %}
+      {{ govukNotificationBanner({
+      "type": "success",
+      "titleText": "Success",
+      "text": "Business case uploaded",
+      "attributes": {"id": "upload-success-banner"}
+      }) }}
+    {% endif %}
+
     <div class="case-detail__header">
       <span class="govuk-caption-l">Business Justification Case: {{ business_case.type }}</span>
       {{ govukTag({
@@ -78,7 +87,7 @@
       </div>
     </div>
 
-    {% call govukDetails({"summaryText": "Make a change to this business case", "open": true, "id": "make-a-change-details"}) %}
+    {% set reupload_content %}
     <p class="govuk-body">Any changes to this business case must be recorded in this service to keep our records up to date.</p>
     <p class="govuk-body">Update the Word document, make sure any changes have been approved, and upload the latest version when you are ready.</p>
     <form method="post" novalidate enctype="multipart/form-data" id="upload-form">
@@ -89,7 +98,14 @@
         <button type="submit" class="govuk-button" data-module="govuk-button">Upload</button>
       </noscript>
     </form>
-    {% endcall %}
+    {% endset %}
+
+    {{ govukAccordion({
+    "id": "case-detail-reupload",
+    "items": [
+      {"heading": {"text": "Make a change to this business case"}, "content": {"html": reupload_content}}
+      ]
+    }) }}
 
     {% else %}
 
@@ -114,23 +130,27 @@
     <p class="govuk-body">After you select your file, the page will refresh and display a summary of your business case.</p>
     {% endcall %}
 
-    {{ govukAccordion({
+    <!-- {{ govukAccordion({
     "id": "case-detail-accordion",
     "items": [
     {"heading": {"text": "Before you start drafting"}, "content": {"html": ""}},
     {"heading": {"text": "Who approves my business case?"}, "content": {"html": ""}}
     ]
-    }) }}
+    }) }} TODO: Insert content here - raised as separate ticket due to complexity -->
 
-    {% endif %}
+    {% endif %} 
 
   </div>
 </div>
 
 <script>
   (function () {
-    if (document.getElementById("auto-refresh-banner")) {
-      setTimeout(() => window.location.assign(window.location.pathname + window.location.search), 5000);
+    const autoRefreshBanner = document.getElementById("auto-refresh-banner");
+    const currentUrl = new URL(window.location.href);
+
+    if (autoRefreshBanner) {
+      currentUrl.searchParams.set("upload_refresh", "true");
+      setTimeout(() => window.location.assign(currentUrl.toString()), 5000);
     }
   })();
 </script>
