@@ -96,7 +96,7 @@ def test_case_detail_shows_success_banner_on_completed_poll(client, business_cas
 
     response = client.get(
         reverse("case-detail", kwargs={"pk": business_case.pk}),
-        {"upload_refresh": "1"},
+        {"upload_refresh": "true"},
     )
 
     content = response.content.decode()
