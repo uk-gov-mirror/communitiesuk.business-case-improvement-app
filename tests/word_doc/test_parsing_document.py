@@ -1,4 +1,5 @@
 from apps.word_doc_services.parsing_document import *
+from apps.word_doc_services.parsing_document import _SectionContent
 
 from apps.triage.models import (
     BusinessCaseResponseSummary,
@@ -11,7 +12,6 @@ from apps.accounts.models import User
 import time
 from django.urls import reverse
 
-from apps.word_doc_services.parsing_document import _SectionContent
 
 @pytest.fixture
 def client(db):
