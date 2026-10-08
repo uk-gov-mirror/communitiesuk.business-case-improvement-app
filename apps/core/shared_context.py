@@ -13,11 +13,13 @@ def external_links(request):
             "full_business_case_template": "https://mhclg.sharepoint.com.mcas.ms/:w:/r/sites/ProjectDeliveryNetwork/_layouts/15/Doc.aspx?sourcedoc=%7BED164C68-A84D-491E-A7BE-5408B486FC40%7D&file=Full%20Business%20Case%20%5Btemplate%20ver.%202.8%5D.docx&action=default&mobileredirect=true",
             "isc_secretariat_email": "ISCSecretariat@communities.gov.uk",
             "digital_business_case_email": "mailto:digitalbusinesscase@communities.gov.uk",
-            "procurement_guidance": "https://mhclg.sharepoint.com.mcas.ms/sites/ProjectDeliveryNetwork/SitePages/BJC-Contingent-Labour-Route.aspx?or=WORD-WEB.BODY.NT&ct=1785751227706",
+            "procurement_grant_guidance": "https://mhclg.sharepoint.com.mcas.ms/:w:/s/ProjectDeliveryNetwork/IQDAf9MAU0gHS6zhpYksvCZ7Ad0j_RIviCXp8FOiN4yuD_s?e=mCSYTt",
             "template_library": "https://mhclg.sharepoint.com.mcas.ms/sites/ProjectDeliveryNetwork/SitePages/Template-l.aspx",
             "business_cases": "https://mhclg.sharepoint.com.mcas.ms/sites/ProjectDeliveryNetwork/SitePages/Business-cases.aspx",
             "subject_matter_expert_assurance": "https://mhclg.sharepoint.com.mcas.ms/sites/ProjectDeliveryNetwork/SitePages/Subject-Matter-Expert-assurance.aspx?web=1",
             "procurement_sharepoint": "https://intranet.communities.gov.uk/guidance/procurement-and-grants/procurement/procurements-under-12k",
             "hr_business_partners_email" : "HRBusinessPartners@communities.gov.uk",
+            "grants_vs_procurement" : "https://mhclg.sharepoint.com.mcas.ms/:w:/s/GrantsCommunityHub/IQCEOEB002TlT4K7bZREYk5qAcqTojmwzoPK0jEJp0cWZ1A?e=Yzk8nN&isSPOFile=1&ovuser=REMOVED&wdExp=TEAMS-TREATMENT&web=1&clickparams=REMOVED",
+            "grants_hub" : "https://mhclg.sharepoint.com.mcas.ms/sites/GrantsCommunityHub"
         }
     }

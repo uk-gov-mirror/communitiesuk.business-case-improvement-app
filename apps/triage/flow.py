@@ -515,7 +515,7 @@ QUESTIONS = [
             <p>Choosing the wrong approach can create legal, financial and delivery risks.</p>
 
             <h2>What you need to do</h2>
-            <p>Use the <a class="govuk-link" href="{external_links('').get("links", {}).get("business_cases", "")}" target="_blank" rel="noopener noreferrer">Grants vs Procurement checklist</a>
+            <p>Use the <a class="govuk-link" href="{external_links('').get("links", {}).get("grants_vs_procurement", "")}" target="_blank" rel="noopener noreferrer">Grants vs Procurement checklist</a>
             to help decide which approach is most appropriate for your proposal.</p>
             <p>If you know you need a <strong>Grant business case template</strong>, select <strong>Continue.</strong></p>
         """,
@@ -527,10 +527,10 @@ QUESTIONS = [
                 <li>the rules that apply</li>
                 <li>how funding is managed</li>
                 <li>who is responsible for delivery</li>
-                 <li>approval and assurance requirements</li>
+                <li>approval and assurance requirements</li>
                 <li>how value for money is assessed</li>
             </ul>
-            <p>For more information, visit the <a class="govuk-link" href="{external_links('').get("links", {}).get("business_cases", "")}" target="_blank" rel="noopener noreferrer">Grants Hub.</a></p>
+            <p>For more information, visit the <a class="govuk-link" href="{external_links('').get("links", {}).get("grants_hub", "")}" target="_blank" rel="noopener noreferrer">Grants Hub.</a></p>
             
             <p><strong>Not sure?</strong></p>
             <p>Speak to your Commercial colleague before continuing.</p>

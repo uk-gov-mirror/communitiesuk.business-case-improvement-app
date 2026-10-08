@@ -29,7 +29,8 @@
       "value": value,
       "text": label,
       "hint": {
-      "text": question.choice_hints[value]
+      "text": question.choice_hints[value],
+      "classes": "govuk-hint--dark"
     } if question.choice_hints and value in question.choice_hints else none,
 
       "checked": selected == value
