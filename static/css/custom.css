@@ -141,3 +141,7 @@
 .govuk-hint--dark {
     color: #0b0c0c;
 }
+
+.no-show-all .govuk-accordion__controls {
+  display: none;
+}
