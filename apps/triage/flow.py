@@ -35,8 +35,8 @@ QUESTIONS = [
         "hint": '<div class="govuk-inset-text">This is the total cost of your proposal over its full lifetime, including VAT. Select one option:</div>',
         "choices": [
             (AnswerConstants.BELOW_12K.value, "Below £12,000"),
-            (AnswerConstants.BETWEEN_12K_AND_2M.value, "Between £12,000 and 2m"),
-            (AnswerConstants.ABOVE_2M.value, "Above 2m")
+            (AnswerConstants.BETWEEN_12K_AND_2M.value, "Between £12,001 and £2million"),
+            (AnswerConstants.ABOVE_2M.value, "Above £2million")
         ],
         "help_text": f"""
         <p>We ask this question first because the value of your proposal helps us determine:</p>
@@ -52,7 +52,7 @@ QUESTIONS = [
             <li>what approvals may be required</li>
         </ul>
         <p>Speak to your Finance Business Partner (FBP) or a Commercial colleague before continuing.</p>
-        <p>If you're not sure who to contact, visit the <a class="govuk-link" href="{external_links('').get("links", {}).get("subject_matter_expert_assurance", "")}" target="_blank" rel="noopener noreferrer">Project Delivery Hub</a> to find the right Subject Matter Expert (SME) for advice and support.</p>
+        <p>If you're not sure who to contact, visit the <a class="govuk-link" href="{external_links('').get("links", {}).get("business_cases", "")}" target="_blank" rel="noopener noreferrer">Project Delivery Hub</a> to find the right Subject Matter Expert (SME) for advice and support.</p>
         """,
     },
     {
@@ -76,12 +76,30 @@ QUESTIONS = [
     },
     {
         "slug": is_this_request_a_pilot,
-        "title": "Is this request a 'pilot' with the potential to turn into a larger proposal in the future?",
+        "title": "Is your proposal a pilot?",
+        "hint": '<div class="govuk-inset-text">A pilot is a small-scale test of an idea, service, process or technology before deciding whether to invest further or roll it out more widely.</div>',
         "type": "radio",
         "choices":[
             ("yes", "Yes"),
             ("no", "No")
-        ]
+        ],
+        "help_text": f"""
+            <p>We ask this because pilot activities can sometimes lead to larger projects or programmes.</p>
+            <p>Understanding whether this is a pilot helps us identify the right business case route and consider the potential long-term cost of the proposal from the start.</p>
+
+            <p><strong>Examples of a pilot</strong></p>
+
+            <p>A pilot might include:</p>
+            <ul class="govuk-list govuk-list--bullet">
+                <li>testing a new service, process or way of working</li>
+                <li>trialling new technology before wider implementation</li>
+                <li>running a proof of concept before seeking additional funding</li>
+                <li>delivering a small-scale version of a proposal that may be expanded in future</li>
+            </ul>
+
+            <p><strong>Not sure?</strong></p>
+            <p>Speak to your <a class="govuk-link" href="{external_links('').get("links", {}).get("subject_matter_expert_assurance", "")}" target="_blank" rel="noopener noreferrer">Finance Business Partner (FBP) or a Commercial colleague</a> before continuing.</p>
+            """
     },
     {
         "slug": making_a_change_to_or_additional_money_for_existing_business_case,

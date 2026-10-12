@@ -3,75 +3,71 @@
 {% from "components/macros.html" import govuk_notification_banner %}
 
 {% block main_content %}
-    <h1 class="govuk-heading-l">You need to follow the 3-stage business case process.</h1>
+<h1 class="govuk-heading-l">You need to follow the 3-stage business case process.</h1>
 
-    <p class="govuk-body">Based on your answers, your proposal should follow the 3-stage business case process.</p>
+<p class="govuk-body">Based on your answers, your proposal should follow the 3-stage business case process.</p>
 
-    <p class="govuk-body">
-        The template you need will depend on the stage your proposal has reached. This may be a:
-    </p>
-    <ul class="govuk-list govuk-list--bullet">
-        <li>Project Brief</li>
-        <li>Strategic Outline Case (SOC)</li>
-        <li>Outline Business Case (OBC)</li>
-        <li>Full Business Case (FBC)</li>
-    </ul>
+<p class="govuk-body">
+    The template you need will depend on the stage your proposal has reached. This may be a:
+</p>
+<ul class="govuk-list govuk-list--bullet govuk-list--spaced">
+    <li>Project Brief</li>
+    <li>Strategic Outline Case (SOC)</li>
+    <li>Outline Business Case (OBC)</li>
+    <li>Full Business Case (FBC)</li>
+</ul>
 
-     <p class="govuk-body">
-        In some cases, such as a change to an approved business case, you may not need a new template. 
-        Instead, you may be able to update the existing business case using an addendum.
-    </p>
+<p class="govuk-body">
+    In some cases, such as a change to an approved business case, you may not need a new template.
+    Instead, you may be able to update the existing business case using an addendum.
+</p>
 
-    <p class="govuk-body">
-        Always use the latest template from the template library. Avoid using a template from a previous business case or one shared by a colleague.
-    </p>
+<p class="govuk-body">
+    Always use the latest template from the template library. Avoid using a template from a previous business case or
+    one shared by a colleague.
+</p>
 
-    <div class="govuk-warning-text">
-        <span class="govuk-warning-text__icon govuk-!-margin-top-1" aria-hidden="true">!</span>
+<div class="govuk-warning-text">
+    <span class="govuk-warning-text__icon govuk-!-margin-top-1" aria-hidden="true">!</span>
 
-        <strong class="govuk-warning-text__text">
-            <span class="govuk-visually-hidden">Warning</span>
-            You do not need to return to this service to upload your business case after it has been approved.
-        </strong>
-    </div>
+    <strong class="govuk-warning-text__text">
+        <span class="govuk-visually-hidden">Warning</span>
+        You do not need to return to this service to upload your business case after it has been approved.
+    </strong>
+</div>
 
-    <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
+<hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
 
+<h2 class="govuk-heading-m">What to do next</h2>
+<h3 class="govuk-heading-s">If you know which template you need</h3>
+<ul class="govuk-list govuk-list--bullet govuk-list--spaced">
+    <li>Speak to your Subject Matter Experts (SMEs) as early as possible.</li>
+    <li>Download the template from the
+        <a class='govuk-link' href='{{external_links.template_library}}' target='_blank'
+            rel='noopener noreferrer'>template library</a>
+    </li>
+</ul>
 
-    <h2 class="govuk-heading-m">What to do next</h2>
-    <h3 class="govuk-heading-s">If you know which template you need</h3>
+<h3 class="govuk-heading-s">If you're not sure which template you need</h3>
+<ul class="govuk-list govuk-list--bullet govuk-list--spaced">
+    <li>Speak to your Subject Matter Experts (SMEs) as early as possible.</li>
+    <li>Review the guidance on the
+        <a class='govuk-link' href='{{external_links.business_cases}}' target='_blank' rel='noopener noreferrer'>Project
+            Delivery Hub</a>
+        to identify the stage your proposal has reached.
+    </li>
+    <li>If you're still unsure, contact the <a class='govuk-link' href='mailto:{{external_links.isc_secretariat_email}}'
+            target='_blank' rel='noopener noreferrer'>Investment Sub-Committee (ISC) Secretariat</a>.
+        They can help you identify the correct starting template and explain the approval process.</li>
+</ul>
+
+<hr class="govuk-section-break govuk-section-break--xl govuk-section-break--visible">
+
+<h2 class="govuk-heading-m">What approvals can I expect?</h2>
+<h3 class="govuk-heading-s">The approvals required for your proposal depend on:</p>
     <ul class="govuk-list govuk-list--bullet govuk-list--spaced">
-        <li>Speak to your Subject Matter Experts (SMEs) as early as possible.</li>
-        <li>Download the template from the
-            <a class='govuk-link' href='{{external_links.template_library}}' target='_blank' rel='noopener noreferrer'>template library</a></li>
-    </ul>
-
-    <h3 class="govuk-heading-s">If you're not sure which template you need</h3>
-    <ul class="govuk-list govuk-list--bullet govuk-list--spaced">
-        <li>Speak to your Subject Matter Experts (SMEs) as early as possible.</li>
-        <li>Review the guidance on the 
-            <a class='govuk-link' href='{{external_links.business_cases}}' target='_blank' rel='noopener noreferrer'>Project Delivery Hub</a>
-            to identify the stage your proposal has reached.</li>
-        <li>If you're still unsure, contact the <a class='govuk-link' href='mailto:{{external_links.isc_secretariat_email}}' target='_blank' rel='noopener noreferrer'>Investment Sub-Committee (ISC) Secretariat</a>. 
-            They can help you identify the correct starting template and explain the approval process.</li>
-    </ul>
-
-    <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
-
-
-    <h2 class="govuk-heading-m">What approvals can I expect?</h2>
-    <h3 class="govuk-heading-s">The approvals required for your proposal depend on:</p>
-    <ul class="govuk-list govuk-list--bullet govuk-list--spaced">
-        <li>the value thresholds and type of funding involved:
-            <ul class="govuk-list govuk-list--bullet">
-                <li>£1m RDEL Admin</li>
-                <li>£5m Local Gov DEL</li>
-                <li>£10m RDEL Programme</li>
-                <li>£30m CDEL</li>
-                <li>£50m CDEL FT</li>
-            </ul>
-        </li>
-        <li>whether this is a new proposal or an update to an existing one</li>
+        <li>the value and type of funding involved</li>
+        <li>whether this is a new proposal or a change to an existing one</li>
         <li>whether approval authority has already been delegated</li>
     </ul>
 
@@ -82,142 +78,173 @@
             </span>
         </summary>
         <div class='govuk-details__text'>
-            <b>RDEL</b>
-            <p class='govuk-body'>
-                Resource Departmental Expenditure Limits (money that is spent on day-to-day resources and administration costs, usually spent within one financial year)
+            <p class="govuk-body"><strong>RDEL</strong><br>
+                <strong>Resource Departmental Expenditure Limits</strong><br>
+                Funding used for day-to-day running costs, resources and administration.
             </p>
-            <b>CDEL</b>
-            <p class='govuk-body'>
-                Capital Departmental Expenditure Limits (money that is spent on investment and things that will create growth in the future)
+
+            <p class="govuk-body"><strong>CDEL</strong><br>
+                <strong>Capital Departmental Expenditure Limit</strong><br>
+                Capital Departmental Expenditure Limits (money that is spent on investment and things that will create
+                growth in the future)
             </p>
-            <b>CDEL FT</b>
-            <p class='govuk-body'>
-                Capital Departmental Expenditure Limit Financial Transactions (Capital funding that is repaid or recovered, like a loan or investment)
+
+            <p class="govuk-body"><strong>CDEL FT</strong><br>
+                <strong>Capital Departmental Expenditure Limit Financial Transactions</strong><br>
+                Funding used for investments that create or improve assets.
             </p>
-            <b>RDEL Admin</b>
-            <p class='govuk-body'>
-                Resource Departmental Expenditure Limits for Administration (Running and administrative costs)
+
+            <p class="govuk-body"><strong>RDEL Admin</strong><br>
+                <strong>Resource Departmental Expenditure Limit for Administration</strong><br>
+                Capital funding that is expected to be repaid, such as loans or investments.
             </p>
-            <b>Local Gov DEL</b>
-            <p class='govuk-body'>
-                Local Government Departmental Expenditure Limits for Local Authorities
+
+            <p class="govuk-body"><strong>Local Gov DEL</strong><br>
+                <strong>Local Government Departmental Expenditure Limit</strong><br>
+                Funding provided to local authorities.
             </p>
-            <b>S31 grant</b>
-            <p class='govuk-body'>
-                A section 31 grant is money a government department gives to a local authority using powers in Section 31 of the Local Government Act 2003
-            </p>
+
+            <p class="govuk-body"><strong>S31 grant</strong><br>
+                Funding provided to local authorities under Section 31 of the Local Government Act 2003.</p>
         </div>
     </details>
 
-    {{govuk_notification_banner("Important", "Some types of spend require additional approvals under government spend controls, including Digital, Legal resource, Consulting and Professional Services.
-        If your proposal includes any of these, contact the relevant approval teams as early as possible and factor the additional approval time into your planning.")
-    }}
-    
+    {{govuk_notification_banner("Important",
+    '<p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-1">
+        Some types of spend require additional approvals under government spend controls, including:
+    </p>
+    <ul class="govuk-list govuk-list--bullet govuk-!-font-weight-bold">
+        <li>Digital</li>
+        <li>Legal resource</li>
+        <li>Consultancy and Professional Services (C&PS)</li>
+    </ul>
+    <p class="govuk-body govuk-!-font-weight-bold">
+        If your proposal includes any of these, contact the relevant approval teams as early as possible and allow time
+        for any additional approvals.
+    </p>
+    ')}}
+
     <h2 class="govuk-heading-m">Expand the option below that applies to your proposal</h2>
-    
+
     <div class="accordion-no-show-all-toggle">
-    {{ govukAccordion({
+        {{ govukAccordion({
         "id": "new-or-standalone-accordion",
+        "classes": "accordion--no-border",
         "items": [
-            {
-                "heading": {
-                    "text": "New or standalone projects or programmes above the approval threshold"
-                },
-                "content":{
-                    "html": "<div class='govuk-details__text'>
-                        <h3 class='govuk-heading-s'>You need to go to Investment Sub-Committee (ISC).</h3>
-                        <p class='govuk-body'>Contact the <a class='govuk-link' href='mailto:{{external_links.isc_secretariat_email}}' target='_blank' rel='noopener noreferrer'>ISC Secretariat</a>
-                             to arrange an ISC slot.</p>
-                        <p class='govuk-body'>HM Treasury approval is also required if:</p>
-                        <ul class='govuk-list govuk-list--bullet'>
-                            <li>CDEL exceeds £250 million</li>
-                            <li>RDEL exceeds £80 million</li>
-                            <li>CDEL FT exceeds £50 million</li>
-                            <li>RDEL Admin exceeds £10 million</li>
-                            <li>Local Gov DEL includes a Section 31 Grant</li>
-                        </ul> 
-                        <h3 class='govuk-heading-s'>Not sure?</h3>
-                        <p class='govuk-body'>Speak to your Finance Business Partner (FBP).</p>
-                    </div>"
-                }
-            }
-        ]
-    }) }}
-    </div>
-
-    <div class="accordion-no-show-all-toggle">
-    {{ govukAccordion({
-    "id": "already-agreed-accordion",
-    "items": [
         {
-            "heading": {
-                "text": "Already agreed by ISC projects or programmes with whole life cost equal or above the spend threshold"
-            },
-            "content":{
-                "html": "<div class='govuk-details__text'>
-                    <h3 class='govuk-heading-s'>You can go straight to your Director General (DG) for approval. These don't need to go back through ISC.</h3>
-                    <p class='govuk-body'>Note, HM Treasury approval is required if:</p>
-                    <ul class='govuk-list govuk-list--bullet'>
-                        <li>CDEL above £250m</li>
-                        <li>RDEL above £80m</li>
-                        <li>CDEL FT above £50m</li>
-                        <li>RDEL Admin above £10m</li>
-                        <li>Local Gov DEL including an S31 Grant</li>
-                    </ul>
-                    <p class='govuk-body'>Not sure? Contact your Finance Business Partner.</p>
-                </div>"
-            }
+        "heading": {
+        "text": "New or standalone projects or programmes above the approval threshold"
+        },
+        "content":{
+        "html": "<div class='govuk-details__text'>
+            <h3 class='govuk-heading-s'>You need to go to Investment Sub-Committee (ISC).</h3>
+            <p class='govuk-body'>Contact the <a class='govuk-link'
+                    href='mailto:{{external_links.isc_secretariat_email}}' target='_blank' rel='noopener noreferrer'>ISC
+                    Secretariat</a>
+                to arrange an ISC slot.</p>
+            <p class='govuk-body govuk-!-margin-bottom-2'>HM Treasury approval is also required if:</p>
+            <ul class='govuk-list govuk-list--bullet'>
+                <li>CDEL exceeds £250 million</li>
+                <li>RDEL exceeds £80 million</li>
+                <li>CDEL FT exceeds £50 million</li>
+                <li>RDEL Admin exceeds £10 million</li>
+                <li>Local Gov DEL includes a Section 31 Grant</li>
+            </ul>
+            <h3 class='govuk-heading-s'>Not sure?</h3>
+            <p class='govuk-body'>Contact your <a class='govuk-link'
+                    href='" + external_links.subject_matter_expert_assurance + "' target='_blank'
+                    rel='noopener noreferrer'>Finance Business Partner (FBP).</a></p>
+        </div>"
         }
-    ]
-    }) }}
-    </div>
-    
-    <div class="accordion-no-show-all-toggle">
-    {{ govukAccordion({
-        "id": "prev-delegated-accordion",
-        "items": [
-            {
-                "heading": {
-                    "text": "Previously delegated by ISC (or Director General) projects or programmes with whole life cost request is greater than £2m but below the spend thresholds"
-                },
-                "content":{
-                    "html": "<div class='govuk-details__text'>
-                        <h3 class='govuk-heading-s'>You can go straight to your Senior Responsible Owner (SRO) for approval. These don't need to go back through ISC.</h3> 
-                        <p class='govuk-body'>HM Treasury not required</p>
-                        <p class='govuk-body'>Not sure? Contact your Finance Business Partner.</p>
-                    </div>"
-                }
-            }
+        }
         ]
-    }) }}
+        }) }}
     </div>
 
     <div class="accordion-no-show-all-toggle">
-    {{ govukAccordion({
-        "id": "related-accordion",
+        {{ govukAccordion({
+        "id": "already-agreed-accordion",
+        "classes": "accordion--no-border",
         "items": [
-            {
-                "heading": {
-                    "text": "Explicitly related to and executed by Homes England"
-                },
-                "content":{
-                    "html": "<div class='govuk-details__text'>
-                        <h3 class='govuk-heading-s'>Projects or programmes already agreed to be delegated by ISC will be approved by Homes England.</h3>
-                        <p class='govuk-body'>Note, HM Treasury approval is required if:</p>
-                        <ul class='govuk-list govuk-list--bullet'>
-                            <li>CDEL above £250m</li>
-                            <li>RDEL above £80m</li>
-                            <li>CDEL FT above £50m</li>
-                            <li>RDEL Admin above £10m</li>
-                            <li>Local Gov DEL including an S31 Grant</li>
-                        </ul>
-                        <p class='govuk-body'>Not sure? Contact your Finance Business Partner.</p>
-                    </div>"
-                }
-            }
+        {
+        "heading": {
+        "text": "Projects or programmes already approved by ISC"
+        },
+        "content":{
+        "html": "<div class='govuk-details__text'>
+            <h3 class='govuk-heading-s'>You can go directly to your Director General (DG). If the project or programme
+                has already been approved by ISC, it does not need to return to ISC for approval.</h3>
+            <p class='govuk-body govuk-!-margin-bottom-2'>HM Treasury approval is still required if:</p>
+            <ul class='govuk-list govuk-list--bullet'>
+                <li>CDEL exceeds £250 million</li>
+                <li>RDEL exceeds £80 million</li>
+                <li>CDEL FT exceeds £50 million</li>
+                <li>RDEL Admin exceeds £10 million</li>
+                <li>Local Gov DEL includes a Section 31 Grant</li>
+            </ul>
+
+            <h3 class='govuk-heading-s'>Not sure?</h3>
+            <p class='govuk-body'>Contact your <a class='govuk-link'
+                    href='" + external_links.subject_matter_expert_assurance + "' target='_blank'
+                    rel='noopener noreferrer'>Finance Business Partner.</a></p>
+        </div>"
+        }
+        }
         ]
-    }) }}
+        }) }}
+    </div>
+
+    <div class="accordion-no-show-all-toggle">
+        {{ govukAccordion({
+        "id": "prev-delegated-accordion",
+        "classes": "accordion--no-border",
+        "items": [
+        {
+        "heading": {
+        "text": "Previously delegated by ISC (or Director General) projects or programmes with whole life cost request
+        is greater than £2m but below the spend threshold"
+        },
+        "content":{
+        "html": "<div class='govuk-details__text'>
+            <h3 class='govuk-heading-s'>You can go directly to your Senior Responsible Owner (SRO).</h3>
+            <p class='govuk-body'>HM Treasury not required.</p>
+        </div>"
+        }
+        }
+        ]
+        }) }}
+    </div>
+
+    <div class="accordion-no-show-all-toggle">
+        {{ govukAccordion({
+        "id": "related-accordion",
+        "classes": "accordion--no-border",
+        "items": [
+        {
+        "heading": {
+        "text": "Homes England projects and programmes"
+        },
+        "content":{
+        "html": "<div class='govuk-details__text'>
+            <h3 class='govuk-heading-s'>Where authority has already been delegated to Homes England, approval will be
+                provided through Homes England's governance arrangements.</h3>
+            <p class='govuk-body govuk-!-margin-bottom-2'>HM Treasury approval is still required if:</p>
+            <ul class='govuk-list govuk-list--bullet'>
+                <li>CDEL exceeds £250 million</li>
+                <li>RDEL exceeds £80 million</li>
+                <li>CDEL FT exceeds £50 million</li>
+                <li>RDEL Admin exceeds £10 million</li>
+                <li>Local Gov DEL includes a Section 31 Grant</li>
+            </ul>
+            <h3 class='govuk-heading-s'>Not sure?</h3>
+            <p class='govuk-body'>Contact your <a class='govuk-link'
+                    href='" + external_links.subject_matter_expert_assurance + "' target='_blank'
+                    rel='noopener noreferrer'>Finance Business Partner.</a></p>
+        </div>"
+        }
+        }
+        ]
+        }) }}
     </div>
 
 {% endblock %}
-

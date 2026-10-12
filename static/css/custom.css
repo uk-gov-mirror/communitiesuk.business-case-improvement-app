@@ -27,6 +27,14 @@
     display: none !important;
 }
 
+.accordion--no-border,
+.accordion--no-border .govuk-accordion__section 
+{
+  border-top: none !important;
+  border-bottom: none !important;
+  border: none !important;
+}
+
 .sortable-table {
     table-layout: fixed;
 }
@@ -152,8 +160,4 @@
 
 .govuk-hint--dark {
     color: #0b0c0c;
-}
-
-.no-show-all .govuk-accordion__controls {
-  display: none;
 }
