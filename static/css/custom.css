@@ -27,8 +27,8 @@
     display: none !important;
 }
 
-.app-accordion--no-border,
-.app-accordion--no-border .govuk-accordion__section 
+.accordion--no-border,
+.accordion--no-border .govuk-accordion__section 
 {
   border-top: none !important;
   border-bottom: none !important;
