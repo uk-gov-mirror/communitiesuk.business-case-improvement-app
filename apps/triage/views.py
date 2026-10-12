@@ -1,6 +1,6 @@
 from django.shortcuts import redirect, render
 from django.utils import timezone
-from django.http import JsonResponse, Http404, HttpRequest, HttpResponse, HttpResponseNotAllowed
+from django.http import JsonResponse, Http404
 from django.shortcuts import redirect
 
 from .flow import (
@@ -18,11 +18,6 @@ def _get_lead_contact(request) -> str:
     return "Not Available"
 
 from .calculate_result_helpers import get_result_from_answers
-from ..word_doc_services.parsing_document import parse_word_document
-
-from pathlib import Path
-
-from docx import Document
 
 def _get_or_create_session(request) -> BusinessCaseTriageResponse:
     if not request.session.session_key:
@@ -38,25 +33,6 @@ def _get_or_create_session(request) -> BusinessCaseTriageResponse:
 
 def index(request):
     return render(request, "triage/index.html")
-
-
-def upload(request):
-    return render(request, "triage/upload_document_placeholder_template.html")
-
-
-def parse_word_doc():
-    current_folder = Path(__file__).resolve().parent
-    doc = Document(f"{current_folder}/FullDoc.docx")
-    parse_word_document(doc)
-    
-def trigger_work_view(request: HttpRequest) -> HttpResponse:
-    if request.method != 'POST':
-        return HttpResponseNotAllowed(['POST'])
-    parse_word_doc()
-    return JsonResponse({
-            'status': 'success',
-            'message': "Complete"
-        })
 
 
 def start(request):

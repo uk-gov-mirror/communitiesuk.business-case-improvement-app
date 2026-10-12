@@ -2,8 +2,11 @@ from apps.word_doc_services.parsing_document import *
 from apps.word_doc_services.parsing_document import _SectionContent
 
 from apps.triage.models import (
+    BusinessCase,
+    BusinessCaseResponse,
     BusinessCaseResponseSummary,
-    BusinessCaseResponseBlock
+    BusinessCaseResponseBlock,
+    BusinessCaseTriageResponse,
 )
 
 from django.test import Client
@@ -24,6 +27,16 @@ def client(db):
     session["id_token_claims"] = {"exp": time.time() + 3600}
     session.save()
     return client
+
+
+@pytest.fixture
+def business_case_response(db):
+    triage_response = BusinessCaseTriageResponse.objects.create()
+    business_case = BusinessCase.objects.create(business_case_triage_response=triage_response)
+    return BusinessCaseResponse.objects.create(
+        uploaded_by="TestUser",
+        business_case=business_case,
+    )
 
 
 @pytest.fixture
@@ -62,7 +75,7 @@ def test_adding_data_to_section_content():
     assert sect_content.section_header == header
 
 
-def test_summary_data_can_be_submitted_to_summary_model(client):
+def test_summary_data_can_be_submitted_to_summary_model(business_case_response):
     # Arrange
     response_summary: BusinessCaseResponseSummary | None = None
 
@@ -82,7 +95,9 @@ def test_summary_data_can_be_submitted_to_summary_model(client):
     test_summary_data[summary_key_whole_life_cost] = test_whole_life_cost
 
     # Act
-    summary_result, document_result = submit_data_to_models(test_summary_data, empty_document_data)
+    summary_result, document_result = submit_data_to_models(
+        test_summary_data, empty_document_data, business_case_response
+    )
 
     response_summary = BusinessCaseResponseSummary.objects.first()
 
@@ -97,7 +112,7 @@ def test_summary_data_can_be_submitted_to_summary_model(client):
     assert response_summary.whole_of_life_cost == test_whole_life_cost, "Incorrect Whole Life Cost"
 
 
-def test_response_data_can_be_submitted_to_response_model(client):
+def test_response_data_can_be_submitted_to_response_model(business_case_response):
     # Arrange
     empty_summary_data: dict = {}
     test_header: str = "TestHeader"
@@ -116,7 +131,9 @@ def test_response_data_can_be_submitted_to_response_model(client):
     document_data.append(section_content)
 
     # Act
-    summary_result, document_result = submit_data_to_models(empty_summary_data, document_data)
+    summary_result, document_result = submit_data_to_models(
+        empty_summary_data, document_data, business_case_response
+    )
 
     response_block_str = BusinessCaseResponseBlock.objects.get(block_type="Paragraph")
     response_block_table = BusinessCaseResponseBlock.objects.get(block_type="Table")

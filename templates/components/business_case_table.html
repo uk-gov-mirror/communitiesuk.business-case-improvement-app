@@ -10,6 +10,6 @@
 {% call(row) sortable_table(columns, business_cases, "Business cases", true, "business-cases", true) %}
   <p class="govuk-body">{{ row.summary }}</p>
   <p class="govuk-body"><strong>Lead contact</strong><br>{{ row.lead_contact }}</p>
-  <a class="govuk-link" href="#">View business case</a>
+  <a class="govuk-link" href="{{ url('case-detail', pk=row.pk) }}">View business case</a>
 {% endcall %}
 {% endmacro %}

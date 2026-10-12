@@ -17,8 +17,15 @@ services:
       DB_PASSWORD: local_password
       DB_HOST: db
       DB_PORT: 5432
+      AWS_S3_ENDPOINT_URL: http://ministack:4566
+      AWS_ACCESS_KEY_ID: test
+      AWS_SECRET_ACCESS_KEY: test
+      AWS_S3_REGION_NAME: eu-west-2
+      AWS_STORAGE_BUCKET_NAME: business-case-uploads
     depends_on:
       db:
+        condition: service_healthy
+      ministack:
         condition: service_healthy
 
   db:
@@ -35,6 +42,43 @@ services:
       test: ["CMD-SHELL", "pg_isready -U local_user -d django"]
       interval: 1s
       timeout: 5s
+      retries: 5
+
+  ministack:
+    image: ministackorg/ministack:latest
+    ports:
+      - "4566:4566"
+    environment:
+      SERVICES: s3,lambda,eventbridge
+      MINISTACK_REGION: eu-west-2
+      AWS_DEFAULT_REGION: eu-west-2
+      AWS_ACCESS_KEY_ID: test
+      AWS_SECRET_ACCESS_KEY: test
+      LOG_LEVEL: INFO
+      PERSIST_STATE: "1"
+      S3_PERSIST: "1"
+      AWS_STORAGE_BUCKET_NAME: business-case-uploads
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: django
+      DB_USER: local_user
+      DB_PASSWORD: local_password
+      SECRET_KEY: docker-local-dev-secret
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ministack_state:/tmp/ministack-state
+      - ministack_s3_data:/tmp/ministack-data/s3
+      - ./scripts/ministack/01-create-bucket.sh:/docker-entrypoint-initaws.d/ready.d/01-create-bucket.sh:ro
+      - ./scripts/ministack/02-deploy-process-business-case-response-lambda.sh:/docker-entrypoint-initaws.d/ready.d/02-deploy-process-business-case-response-lambda.sh:ro
+      - ./lambdas:/lambdas:ro
+      - ./apps:/lambda_project_src/apps:ro
+      - ./config:/lambda_project_src/config:ro
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:4566/_ministack/health')"]
+      interval: 5s
+      timeout: 3s
       retries: 5
 
 # --- Dev Services (Use --profile dev-extras to enable these) ---
@@ -57,3 +101,5 @@ services:
 
 volumes:
   postgres_data:
+  ministack_state:
+  ministack_s3_data:

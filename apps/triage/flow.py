@@ -37,6 +37,9 @@ QUESTIONS = [
             (AnswerConstants.BELOW_12K, "Below £12,000"),
             (AnswerConstants.BETWEEN_12K_AND_2M, "Between £12,001 and £2million"),
             (AnswerConstants.ABOVE_2M, "Above £2million")
+            (AnswerConstants.BELOW_12K.value, "Below £12,000"),
+            (AnswerConstants.BETWEEN_12K_AND_2M.value, "Between £12,000 and 2m"),
+            (AnswerConstants.ABOVE_2M.value, "Above 2m")
         ],
         "help_text": f"""
         <p>We ask this question first because the value of your proposal helps us determine:</p>
