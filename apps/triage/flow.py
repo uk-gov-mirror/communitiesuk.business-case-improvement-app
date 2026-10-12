@@ -67,12 +67,35 @@ QUESTIONS = [
     },
     {
         "slug": does_request_involve_anything_digital,
-        "title": "Does you request involve anything digital?",
+        "title": "Does your proposal involve digital services, technology, software, data or IT systems?",
         "type": "radio",
+        "hint": """<div class="govuk-inset-text">
+            <p>This includes buying, building, changing or extending digital services, technology, software or data solutions.</p>
+
+            <p class="govuk-!-margin-bottom-2">Examples include:</p>
+            <ul class="govuk-list govuk-list--bullet">
+                <li>websites and online services</li>
+                <li>software and software licences</li>
+                <li>Microsoft 365, Power BI or artificial intelligence (AI) tools</li>
+                <li>databases and data platforms</li>
+                <li>data sharing and data collection</li>
+                <li>AI, automation or workflow tools</li>  
+                <li>changes to existing digital systems</li>
+            </ul>
+            <p>If you're unsure, select Yes.</p>
+        """,
         "choices":[
             ("yes", "Yes"),
             ("no", "No")
-        ]
+        ],
+        "help_text": f"""
+            <p>We ask this question because the department needs visibility of digital activity and technology spend, including proposals that do not require a business case.</p>
+            <p>The <a class="govuk-link" href="{external_links('').get("links", {}).get("digital_front_door_email", "")}" target="_blank" rel="noopener noreferrer">Digital Front Door (DFD)</a> 
+            helps the department understand and manage digital activity across MHCLG. This helps teams identify related projects, services and technology investments.</p>
+            <p>If you're unsure whether your proposal is digital, contact the 
+            <a class="govuk-link" href="{external_links('').get("links", {}).get("digital_front_door_email", "")}" target="_blank" rel="noopener noreferrer">Digital Front Door</a> 
+            team before continuing.</p>
+            """
     },
     {
         "slug": is_this_request_a_pilot,
