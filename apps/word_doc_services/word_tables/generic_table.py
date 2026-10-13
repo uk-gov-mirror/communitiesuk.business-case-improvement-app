@@ -1,5 +1,6 @@
 from docx.document import Document as doc
-from docx.shared import Pt, Cm
+from docx.shared import Pt, Cm, Inches
+from docx.enum.table import WD_ROW_HEIGHT_RULE, WD_ALIGN_VERTICAL
 
 from apps.word_doc_services.word_tables.table_definitions import (
     TABLE_DEFINITION,
@@ -11,7 +12,7 @@ from apps.word_doc_services.word_tables.table_definitions import (
 from apps.word_doc_services.common_resources import _regular_font_name
 
 from apps.word_doc_services.word_tables.table_common_resources import (
-    max_table_width,
+    _max_table_width_as_value,
     set_default_paragraph_formatting
 )
 
@@ -33,9 +34,10 @@ class GenericTable():
         columns_needed = len(tbl_content.headers) if tbl_content.header_direction == HEADER_DIRECTION.HORIZONTAL else tbl_content.headers_alternate_direction_object_count
 
         tbl = doc.add_table(rows_needed, columns_needed, "Table Grid")
-        
+        tbl.autofit = False # so columns don't move with text
+
         # equal column widths
-        col_width: float  = max_table_width / len(tbl.columns)
+        col_width: float  = _max_table_width_as_value / len(tbl.columns)
 
         header_row_index = 0
         header_column_index = 0
@@ -66,6 +68,11 @@ class GenericTable():
         # Widths have to be set per cell, not per column (a fun little gotcha).
         # Then for any empty cells we set the formatting so typing in it forces our desired format 
         for c in tbl._cells:
+            c.vertical_alignment = WD_ALIGN_VERTICAL.CENTER
             c.width = Cm(col_width)
             if len(c.paragraphs[0].runs) == 0:
                 set_default_paragraph_formatting(c.paragraphs[0])
+
+        for r in tbl.rows:
+            r.height_rule = WD_ROW_HEIGHT_RULE.AT_LEAST
+            r.height = Inches(0.4) 

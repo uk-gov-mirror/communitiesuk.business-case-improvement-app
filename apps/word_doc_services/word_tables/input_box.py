@@ -5,7 +5,7 @@ from docx.enum.table import WD_ROW_HEIGHT_RULE
 from docx.shared import Cm, Pt
 
 from apps.word_doc_services.word_tables.table_common_resources import (
-    max_table_width,
+    _max_table_width,
     set_default_paragraph_formatting
 )
 
@@ -25,7 +25,7 @@ class InputBox:
         tbl = doc.add_table(1, 1, "Table Grid")
         box = tbl.rows[0]
 
-        tbl._cells[0].width = max_table_width
+        tbl._cells[0].width = _max_table_width
         box_paragraph = tbl._cells[0].paragraphs[0]
         set_default_paragraph_formatting(box_paragraph)
 

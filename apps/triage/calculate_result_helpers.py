@@ -28,7 +28,7 @@ def get_result_from_answers(answers: dict) -> str:
         if triage_data.is_commission_research:
             return 'you-need-to-speak-to-the-research-team'
         
-        if full_12k_to_2m_flow_completed(triage_data):
+        if triage_data.is_procurement_route_completed:
             return get_procurement_exit(triage_data)
         else:
             if triage_data.is_three_stage_process_novel_or_pilot:
@@ -48,27 +48,6 @@ def determine_is_less_than_12k_exit_route(triage_data: TriageData) -> str:
     return (
         "do-not-need-a-business-case-no-programme-digital" if triage_data.does_involve_digital 
         else "do-not-need-a-business-case-no-programme-not-digital")
-        
-
-'''
-Check all the answers that will lead from 12k-2m cost to the end, to determine
-if we reached the end of the journey
-'''
-def full_12k_to_2m_flow_completed(triage_data: TriageData) -> bool:
-    correct_options_chosen = triage_data.which_option_best_describes_what_is_trying_to_be_done in {
-        procure_goods_and_services_from_third_party,
-        hire_contracted_workers_to_fill_temporary_capacity_gap,
-        grant_choice
-    }
-    
-    return (not triage_data.is_novel and
-            not triage_data.is_pilot and
-            not triage_data.is_existing_programme and
-            triage_data.where_is_the_budget_held != "" and
-            correct_options_chosen and
-            triage_data.is_corporate_spend_or_procurement and
-            triage_data.business_case_title != "" and
-            triage_data.summary != "")
 
 
 def get_procurement_exit(triage_data: TriageData) -> str:
