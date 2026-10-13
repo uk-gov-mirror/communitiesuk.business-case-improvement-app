@@ -1,18 +1,25 @@
 from enum import IntEnum, auto
 from dataclasses import dataclass, field
 
-from docx.shared import Cm
-
 class TABLE_DEFINITION(IntEnum):
-    DEVELOP_AND_SUPPORT_PROPOSAL = auto()
+    AUTHOR_SHOULD_COMPLETE_SECTION = auto()
+    OPTIONS_CONSIDERED = auto()
     EXPECTED_BENEFITS = auto()
+    ECONOMIC_CASE = auto()
     ADDITIONAL_PROCUREMENT_AND_COMMERCIAL_INFORMATION = auto()
     BREAKDOWN_OF_COST = auto()
-    COST_CENTRE = auto()
     WHOLE_LIFE_COST = auto()
+    START_END_DATE = auto()
+    RISK_TABLE = auto()
     OTHER_BUSINESS_CASES = auto()
-    SME_AREA = auto()
+    SME_AREA_COMMERCIAL = auto()
+    WBS_OR_COST_CENTRE = auto()
+    BID_REFERENCE_NUMBER = auto()
+    SME_AREA_FINANCE_BUSINESS_PARTNER = auto()
+    ADDITIONAL_SME_OR_REVIEWER = auto()
+    SRO_OR_SCS_APPROVAL = auto()
     ADDITIONAL_APPROVALS = auto()
+
 
 class HEADER_DIRECTION(IntEnum):
     HORIZONTAL = auto()
@@ -30,6 +37,7 @@ class _ExtraCellContent:
 class _TableContent:
     definition: TABLE_DEFINITION
     header_direction: HEADER_DIRECTION
+    optional_headers: dict[str, list[str]] = field(default_factory=dict[str, list[str]])
     headers: list[str] = field(default_factory=list[str])
     bold_headers: bool = field(default=True)
     headers_alternate_direction_object_count: int = field(default=2)
@@ -38,13 +46,14 @@ class _TableContent:
 
 TABLE_REGISTRY = [
     _TableContent(
-        definition = TABLE_DEFINITION.DEVELOP_AND_SUPPORT_PROPOSAL,
+        definition = TABLE_DEFINITION.AUTHOR_SHOULD_COMPLETE_SECTION,
         header_direction = HEADER_DIRECTION.VERTICAL,
         headers = [
-            "Title:",
-            "Primary Author Team",
-            "Case contributors and /or reviewers:",
-            "SRO or area SCS name (approver):",
+            "Business case unique reference number:",
+            "Lead author name",
+            "Lead author team:",
+            "Business case contributors or reviewers:",
+            "SRO or area SCS name:",
             "What project is this part of?",
             "What programme is this part of?",
             "Portfolio area:",
@@ -53,9 +62,9 @@ TABLE_REGISTRY = [
         ],
         extra_content=[
         _ExtraCellContent(
-            row=3,
+            row=4,
             column=2,
-            content="[If applicable, list anyone who helped draft, develop or review the business case before it was submitted for approval. Do not include subject matter experts (SMEs) or SRO/SCS, as these named will be captured separately elsewhere in this document]"
+            content="List any additional people who helped draft, develop or review this business case before it was submitted for approval. You don't need to include anyone listed in sections 9 and 10."
         )
         ]
     ),
@@ -77,11 +86,41 @@ TABLE_REGISTRY = [
         ]
     ),
     _TableContent(
+        definition=TABLE_DEFINITION.OPTIONS_CONSIDERED,
+        header_direction=HEADER_DIRECTION.VERTICAL,
+        headers=[
+            "Option 1 (recommended)",
+            "Option 2",
+            "Option 3"
+        ]
+    ),
+    _TableContent(
+        definition=TABLE_DEFINITION.ECONOMIC_CASE,
+        header_direction=HEADER_DIRECTION.VERTICAL,
+        headers=[
+            "How the project / programme is to be delivered",
+            "Why is this the preferred option?",
+            "What is the quantity of MHCLG resource to be allocated to this grant?",
+            "What costs and resources will the project or programme require?",
+            "How will roles and responsibilities meet the three lines of defence requirements?",
+            "Which organisation will be responsible for carrying out this assurance?",
+            "How will you collect the information needed from grant recipients for assurance?",
+            "Will the grant be used for economic activity?", ####
+        ],
+        optional_headers={
+            "grants_for_local_auth":[
+                "Have you considered and applied the Funding Simplification Doctrine? Funding Simplification Doctrine?",
+                "Describe the outcomes of that consideration",
+                "Confirm that you have completed the required pro forma and validated the outcome with the MHCLG Funding Simplification team."
+            ]
+        }
+    ),
+    _TableContent(
         definition=TABLE_DEFINITION.ADDITIONAL_PROCUREMENT_AND_COMMERCIAL_INFORMATION,
         header_direction=HEADER_DIRECTION.VERTICAL,
         headers=[
-            "Contract number(s) for new contracts",
-            "Contract numbers(s) for contracts being changed",
+            "Contract number(s) for new contracts (if applicable)",
+            "Contract numbers(s) for contracts being changed (if applicable)",
             "Accredited Contract Manager (and accreditation level secured or sought)"
         ]
     ),
@@ -106,14 +145,33 @@ TABLE_REGISTRY = [
         ]
     ),
     _TableContent(
-        definition=TABLE_DEFINITION.COST_CENTRE,
-        header_direction=HEADER_DIRECTION.VERTICAL,
-        headers=["WBS or cost centre"]
-    ),
-    _TableContent(
         definition=TABLE_DEFINITION.WHOLE_LIFE_COST,
         header_direction=HEADER_DIRECTION.VERTICAL,
-        headers=["Whole Life Cost"]
+        headers=["Whole Life Cost"],
+        extra_content=[
+            _ExtraCellContent(row=1, column=2, content="£", is_italic=False)
+        ]
+    ),
+    _TableContent(
+        definition=TABLE_DEFINITION.START_END_DATE,
+        header_direction=HEADER_DIRECTION.VERTICAL,
+        headers=[
+            "Start date",
+            "End date"
+        ]
+    ),
+    _TableContent(
+        definition=TABLE_DEFINITION.RISK_TABLE,
+        header_direction=HEADER_DIRECTION.VERTICAL,
+        headers=[
+            "Desribe the risk",
+            "What's the impact if this risk happens?",
+            "Risk scores:",
+            "Likelihood score =",
+            "Impact score =",
+            "Overall risk score (likelihood x impact) =",
+            "Mitigation: What will you do to reduce or manage the risk? Describe who is responsible and when it will be reviewed."
+        ]
     ),
     _TableContent(
         definition=TABLE_DEFINITION.OTHER_BUSINESS_CASES,
@@ -126,7 +184,7 @@ TABLE_REGISTRY = [
         ]
     ),
     _TableContent(
-        definition=TABLE_DEFINITION.SME_AREA,
+        definition=TABLE_DEFINITION.SME_AREA_COMMERCIAL,
         header_direction=HEADER_DIRECTION.VERTICAL,
         headers=[
             "SME Area:",
@@ -136,12 +194,75 @@ TABLE_REGISTRY = [
             "Date:",
             "Any additional comments, risks or conditions:"
         ],
+        extra_content=[
+            _ExtraCellContent(row=1, column=2, content="Commercial", is_italic=False),
+            _ExtraCellContent(row=2, column=2, 
+                content="I confirm this case has met the minimum standards of good practice and fulfils all applicable compliance criteria. I also confirm that, where necessary, I have advised that this case has been referred to additional corporate experts to ensure adequate technical support was provided.", is_italic=False)
+
+        ]
+    ),
+    _TableContent(
+        definition=TABLE_DEFINITION.WBS_OR_COST_CENTRE,
+        header_direction=HEADER_DIRECTION.VERTICAL,
+        headers=["WBS or cost centre"],
+        headers_alternate_direction_object_count=2
+    ),
+    _TableContent(
+        definition=TABLE_DEFINITION.BID_REFERENCE_NUMBER,
+        header_direction=HEADER_DIRECTION.VERTICAL,
+        headers=["Spending review bid reference number"],
+        headers_alternate_direction_object_count=2
+    ),
+    _TableContent(
+        definition=TABLE_DEFINITION.SME_AREA_FINANCE_BUSINESS_PARTNER,
+        header_direction=HEADER_DIRECTION.VERTICAL,
+        headers=[
+            "SME Area:",
+            "Declaration:",
+            "Name:",
+            "Recommendation:",
+            "Date:",
+            "Any additional comments, risks or conditions:"
+        ],
+        extra_content=[
+            _ExtraCellContent(row=1, column=2, content="Finance Business Partner", is_italic=False),
+            _ExtraCellContent(row=2, column=2,
+                content="I confirm that the planned activity/procurement detailed in this case meets affordability criteria and there are sufficient funds approved within the budget to cover the requested amount of spend.",
+                is_italic=False
+            )
+        ]
+    ),
+    _TableContent(
+        definition=TABLE_DEFINITION.ADDITIONAL_SME_OR_REVIEWER,
+        header_direction=HEADER_DIRECTION.VERTICAL,
+        headers=[
+            "SME Area:",
+            "Name:",
+            "Recommendation:",
+            "Date:",
+            "Any additional comments, risks or conditions:"
+        ]
+    ),
+    _TableContent(
+        definition=TABLE_DEFINITION.SRO_OR_SCS_APPROVAL,
+        header_direction=HEADER_DIRECTION.VERTICAL,
+        headers=[
+            "Approval role:",
+            "Declaration:",
+            "Name:",
+            "Date:"
+        ],
+        extra_content=[
+            _ExtraCellContent(row=1, column=2, content="SRO/Area SCS Declaration", is_italic=False),
+            _ExtraCellContent(row=2, column=2, content="I confirm that the planned activity/procurement in this case complies with departmental guidance and processes. I also confirm that I am satisfied to approve this expenditure, accepting the risks detailed within this case and those inherent to the activity/procurement being undertaken.", is_italic=False)
+        ]
     ),
     _TableContent(
         definition=TABLE_DEFINITION.ADDITIONAL_APPROVALS,
         header_direction=HEADER_DIRECTION.HORIZONTAL,
+        headers_alternate_direction_object_count=4,
         headers=[
-            "Approvals",
+            "Approval activity",
             "Authority holding body/person",
             "Date of approval",
             "Documentation"
@@ -149,10 +270,8 @@ TABLE_REGISTRY = [
         extra_content=[
             _ExtraCellContent(row=2, column=1, content="e.g. Cabinet office spend control"),
             _ExtraCellContent(row=2, column=2, content="e.g. Cabinet office"),
-            _ExtraCellContent(row=2, column=3, content="e.g 11/05/2026"),
-            _ExtraCellContent(row=2, column=4, content="Insert links"),
+            _ExtraCellContent(row=2, column=3, content="e.g. 11/05/2026"),
+            _ExtraCellContent(row=2, column=4, content="e.g. Cabinet office spend control")
         ]
     )
 ]
-
-

@@ -1,11 +1,12 @@
 from docx import Document
 from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
-from docx.shared import Pt
+from docx.shared import Pt, Inches
 from docx.oxml.ns import qn
 import docx.oxml.ns
 from docx.oxml.parser import OxmlElement
 from docx.oxml.xmlchemy import BaseOxmlElement
 from docx.text.run import Run
+from docx.text.paragraph import Paragraph
 
 import docx.opc.constants
 import logging
@@ -44,6 +45,36 @@ class BusinessCaseWordDocumentWrapper:
     def __init__(self):
         self.doc = Document()
 
+    def set_document_margins(self, top: int, bottom: int, side: int):
+        for section in self.doc.sections:
+            section.top_margin = Inches(top)
+            section.bottom_margin = Inches(bottom)
+            section.left_margin = Inches(side)
+            section.right_margin = Inches(side)
+
+
+    def add_empty_paragraph(self):
+        p = self.doc.add_paragraph()
+        p.paragraph_format.space_before = Pt(2)
+        p.paragraph_format.space_after = Pt(2)
+
+    '''
+    Summary:
+        This is content that should appear almost as a list, but not strictly be made like one.
+        The header section with a numbered list of sections is an example
+    '''
+    def add_closely_spaced_content(self, items: list[str]):
+        p: Paragraph | None = None
+
+        for item in items:
+            p = self.get_basic_paragraph()
+            p.paragraph_format.space_after = Pt(0)
+            r = p.add_run(item)
+            self.style_paragraph_run(r)
+
+        if p is not None:
+            p.paragraph_format.space_after = Pt(8)
+
 
     def add_h1_section_header(self, header_text: str):
         p = self.get_basic_paragraph()
@@ -56,7 +87,7 @@ class BusinessCaseWordDocumentWrapper:
 
 
     def add_h2_section_header(self, header_text: str):
-        p = self.get_basic_paragraph()
+        p = self.get_basic_paragraph(add_spacing=True)
         r = p.add_run(header_text)
         r.font.color.rgb = get_mhclg_green_rgb()
         r.font.size = Pt(16)
@@ -65,11 +96,12 @@ class BusinessCaseWordDocumentWrapper:
         r.font.name = _bold_font_name
 
     
-    def add_paragraph(self, paragraph_content: str):
+    def add_paragraph(self, paragraph_content: str, bold: bool = False):
         p = self.get_basic_paragraph()
         p.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
         r = p.add_run(paragraph_content)
         self.style_paragraph_run(r)
+        r.font.bold = bold
 
 
     '''
@@ -77,9 +109,13 @@ class BusinessCaseWordDocumentWrapper:
         Get a paragraph with some basic styling applied that
         applies to all paragraphs.
     '''
-    def get_basic_paragraph(self):
+    def get_basic_paragraph(self, add_spacing: bool = False) -> Paragraph:
         p = self.doc.add_paragraph()
         p.alignment = WD_PARAGRAPH_ALIGNMENT.LEFT
+
+        if add_spacing:
+            p.paragraph_format.space_after = Pt(8)
+
         return p
 
 
@@ -131,13 +167,16 @@ class BusinessCaseWordDocumentWrapper:
         Because there is no explicit hyperlink class in Docx we have to make it using the Oxml.
         Take in a string that represents the URL, the entire text to display, and the text that should become the hyperlink.
     '''
-    def add_hyperlink(self, url: str, text: str, text_to_replace_with_hyperlink):
+    def add_hyperlink(self, url: str, text: str, text_to_replace_with_hyperlink, is_email: bool = False):
         if (text_to_replace_with_hyperlink not in text):
             logger.warning(f"Text to replace with a hyperlink does not exist in the paragraph string. Paragraph: {text}, Text to replace: {text_to_replace_with_hyperlink}")
             self.add_paragraph(text)
             return
         
         p = self.doc.add_paragraph()
+
+        if is_email:
+            url = f"mailto:{url}"
 
         part = p.part
         r_id = part.relate_to(url, docx.opc.constants.RELATIONSHIP_TYPE.HYPERLINK, is_external=True)
@@ -160,12 +199,12 @@ class BusinessCaseWordDocumentWrapper:
         hyperlink.append(new_run)
 
         # join the text before the hyperlink, then the hyperlink, then the text after it
-        start_run = p.add_run(f"{start.strip()} ")
+        start_run = p.add_run(f"{start}")
         self.style_paragraph_run(start_run)
 
         p._p.append(hyperlink)
 
-        end_run = p.add_run(f" {end.strip()}")
+        end_run = p.add_run(f"{end}")
         self.style_paragraph_run(end_run)
 
 

@@ -69,6 +69,27 @@ class TriageData():
             is_not_digital_budget and
             is_trying_to_commission_research)
 
+    '''
+    Check all the answers that will lead from 12k-2m cost to the end, to determine
+    if we reached the end of the journey
+    '''
+    @property
+    def is_procurement_route_completed(self) -> bool:
+        correct_options_chosen = self.which_option_best_describes_what_is_trying_to_be_done in {
+                procure_goods_and_services_from_third_party,
+                hire_contracted_workers_to_fill_temporary_capacity_gap,
+                grant_choice
+            }
+            
+        return (not self.is_novel and
+                not self.is_pilot and
+                not self.is_existing_programme and
+                self.where_is_the_budget_held != "" and
+                correct_options_chosen and
+                self.is_corporate_spend_or_procurement and
+                self.business_case_title != "" and
+                self.summary != "")
+
     def get_answer_string(self, slug: str) -> str:
         return self.triage_data.get(slug, "")
     

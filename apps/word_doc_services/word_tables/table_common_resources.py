@@ -21,7 +21,9 @@ file which contains values common to the entire doc. This file is exclusively fo
 _blue_help_box_background_hex: str = "#E4F2FF"
 _help_box_footer_font_colour_hex: str = "#E8E8E8"
 
-max_table_width: Cm = Cm(15.9)
+# separated as sometimes we need the Cm, and sometimes just the value
+_max_table_width_as_value: float = 16.70
+_max_table_width: Cm = Cm(_max_table_width_as_value)
 
 
 def get_blue_help_box_background_rgb() -> RGBColor:
