@@ -1,4 +1,5 @@
 {% extends "layouts/timeline_layout.html" %}
+{% from "govuk_frontend_jinja/templates/components/accordion/macro.html" import govukAccordion %}
 
 {% block main_content %}
 
@@ -72,48 +73,52 @@
         target="_blank" rel="noopener noreferrer">Contingent Labour Step-by-Step guide.pptx</a>
     </p>
 
-    <details class="govuk-details">
-        <summary class="govuk-details__summary">
-            <span class="govuk-details__summary-text">
-                Who approves my business case?
-            </span>
-        </summary>
-        <div class="govuk-details__text">
-            <p class="govuk-body">After securing assurance sign off from your Procurement Lead SME and Finance Business Partner, you will need to ask your area SRO or SCS to approve this.</p>
-            <p class="govuk-body">Additional approvals may also be required depending on the nature and value of your proposal:</p>
+<div class="accordion-no-show-all-toggle">
+    {{ govukAccordion({
+    "id": "business-case-accordion",
+    "items": [
+    {
+    "heading": {
+    "text": " Who approves my business case?"
+    },
+    "content": {
+    "html": "
+        <p class='govuk-body'>After receiving recommendations from your HR Corporate Partner and Finance Business
+            Partner, approval will usually be required from your SRO or SCS.</p>
 
-            <ul class="govuk-list govuk-list--bullet">
-                <li>
-                    <p class="govuk-body">
-                        <b>Resource DEL Administration (RDEL Admin)</b>
-                        <br/>
-                        If your proposal includes <b>£1 million or more of RDEL Admin spend</b>, approval from the Investment Sub-Committee (ISC) may be required.
-                        Speak to your Finance Business Partner if you're unsure whether this applies. 
-                    </p>
-                </li>
-                <li>
-                    <p class="govuk-body">
-                        <b>Consultancy and Professional Services (C&PS)</b>
-                        <br/>
-                        If your proposal includes <b>more than £10,000 of Consultancy and Professional Services spend</b>, additional approvals may be required.
-                        Refer to the relevant intranet guidance for further information. 
-                    </p>
-                </li>
-                <li>
-                    <p class="govuk-body">
-                        <b>External legal advice</b>
-                        </br>
-                        If your proposal requires external legal advice, approval may be required from the Government Legal Department (GLD) in line with HM Treasury requirements.
-                    </p>
-                </li>
-            </ul>
-        </div>
- 
-        <p class="govuk-body">
-            No longer need this?
-            <a class="govuk-link" href="" target="_blank" rel="noopener noreferrer">Withdraw business case.</a> 
-        </p>
-        
-    </details>
+        <h3 class='govuk-heading-s'>Additional approvals</h3>
+
+        <p class='govuk-body'>Additional approvals may also be required depending on the nature and value of your
+            proposal.</p>
+
+        <ul class='govuk-list govuk-list--bullet'>
+            <li class='govuk-body govuk-!-margin-bottom-4'><strong>Resource DEL Administration (RDEL
+                    Admin)</strong><br>
+                If your proposal includes <strong>£1 million or more of RDEL Admin spend</strong>, approval from the
+                Investment Sub-Committee (ISC) may be required. RDEL Admin is funding used for departmental running and
+                administration costs. Speak to your Finance Business Partner if you are unsure whether this applies.
+
+
+            </li>
+            <li class='govuk-body govuk-!-margin-bottom-4'><strong>Consultancy and Professional Services
+                    (C&PS)</strong>
+                <br> If your proposal includes <strong>more than £10,000 of Consultancy and Professional Services (C&PS)
+                    spend, </strong>
+                additional approvals may be required. Consultancy and Professional Services involves bringing in
+                external expertise, specialist knowledge or a supplier to deliver a specific piece of work. Refer to the
+                relevant <a class='govuk-link' href='" + external_links.government_legal_department + "' target='_blank'
+                    rel='noopener noreferrer'>intranet guidance</a>.
+            </li>
+            <li class='govuk-body govuk-!-margin-bottom-4'><strong>External legal advice</strong></br>If your
+                proposal
+                requires external legal advice, approval may
+                be required from the Government Legal Department (GLD) in line with HM Treasury requirements.</p>
+        </ul>
+        "
+    }
+    }
+    ]
+    }) }}
+</div>
 
 {% endblock %}
