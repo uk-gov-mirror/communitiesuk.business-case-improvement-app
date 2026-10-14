@@ -9,7 +9,7 @@ from apps.word_doc_services.word_tables.table_definitions import (
     HEADER_DIRECTION
 )
 
-from apps.word_doc_services.common_resources import _regular_font_name
+from apps.word_doc_services.common_resources import _regular_font_name, _bold_font_name
 
 from apps.word_doc_services.word_tables.table_common_resources import (
     _max_table_width_as_value,
@@ -62,7 +62,8 @@ class GenericTable():
             p = tbl.cell(content.row - 1, content.column - 1).paragraphs[0]
             r = p.add_run(content.content)
             r.italic = content.is_italic
-            r.font.name = _regular_font_name
+            r.bold = content.is_bold
+            r.font.name = _bold_font_name if content.is_bold else _regular_font_name
             r.font.size = Pt(12)
 
         # Widths have to be set per cell, not per column (a fun little gotcha).

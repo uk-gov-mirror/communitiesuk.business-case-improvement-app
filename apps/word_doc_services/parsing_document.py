@@ -1,7 +1,9 @@
 
 from docx.document import Document
 from docx.text.paragraph import Paragraph
+from docx.text.run import Run
 from docx.table import Table
+from docx.shared import Pt
 
 import json
 import logging
@@ -12,6 +14,8 @@ from ..triage.models import (
     BusinessCaseResponseSection,
     BusinessCaseResponseSummary,
 )
+
+from .common_resources import _bold_font_name, get_mhclg_green_rgb
 
 model_exception_string: str = "Exception occurred submitting summary data to the {} model.\nException: {}"
 
@@ -152,14 +156,14 @@ def parse_word_document(doc: Document, business_case_response: BusinessCaseRespo
             if not content or not content.style:
                 continue
 
-            if isinstance(content, Paragraph) and content.style.name == "Heading 1":
+            if isinstance(content, Paragraph) and content_is_a_header(content.runs[0]):
                 if (content_text := escaped_string(content.text)) != "":
                     temp_section.add_section_header(content_text)
                     content = next(content_stream, None)
                     
                 while content is not None:
-                    if content.style and isinstance(content, Paragraph):
-                        if content.style.name == "Heading 1":
+                    if isinstance(content, Paragraph):
+                        if content_is_a_header(content.runs[0]):
                             break # new section, end current section
                         else:
                             if (content_text := escaped_string(content.text)) != "":
@@ -174,6 +178,21 @@ def parse_word_document(doc: Document, business_case_response: BusinessCaseRespo
 
     summary_section = _get_summary_data(doc)
     submit_data_to_models(summary_section, document_sections, business_case_response)
+
+
+'''
+Summary:
+    Check if the formatting of the paragraph run matches a header formatting
+    If so then return that it matches and can be considered a header
+'''
+def content_is_a_header(r: Run) -> bool:
+    return (
+        r.font.bold == True
+        and r.font.italic == False
+        and r.font.name == _bold_font_name
+        and r.font.color.rgb == get_mhclg_green_rgb()
+        and r.font.size == Pt(16)
+    )
 
 
 '''

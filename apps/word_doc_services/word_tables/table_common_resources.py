@@ -11,6 +11,8 @@ from apps.word_doc_services.common_resources import(
     _regular_font_name
 )
 
+from apps.word_doc_services.common_resources import get_financial_year
+
 '''
 This file is for generic variables, values and methods used in Table creation, and not
 used anywhere else.
@@ -33,6 +35,10 @@ def get_blue_help_box_background_rgb() -> RGBColor:
 def get_help_box_footer_font_colour_rgb() -> RGBColor:
     return translate_hex_to_rgb(_help_box_footer_font_colour_hex)
 
+
+def get_fy_and_relative_next_fy(fy_offset: int = 0):
+    fy = get_financial_year(fy_offset)
+    return f"{str(fy)[-2:]}/{str(fy + 1)[-2:]}"
 
 '''
 Summary:

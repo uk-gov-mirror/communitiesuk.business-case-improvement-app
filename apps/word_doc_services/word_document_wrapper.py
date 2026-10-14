@@ -85,7 +85,9 @@ class BusinessCaseWordDocumentWrapper:
         r.font.italic = False
         r.font.name = _bold_font_name
 
-
+    '''
+    ! Changes here will impact parsing_document.py content_is_a_header
+    '''
     def add_h2_section_header(self, header_text: str):
         p = self.get_basic_paragraph(add_spacing=True)
         r = p.add_run(header_text)

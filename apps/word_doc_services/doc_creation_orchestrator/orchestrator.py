@@ -1,6 +1,5 @@
 
-from enum import IntEnum, auto
-
+from .enums import RouteChosen
 from .sections import (
     Section, 
     ParticipantsAndOrganisationalDetails,
@@ -19,11 +18,6 @@ from .sections import (
 
 from apps.word_doc_services.word_document_wrapper import BusinessCaseWordDocumentWrapper
 from apps.triage.triage_data import TriageData
-
-class RouteChosen(IntEnum):
-    Procurement = auto()
-    Grants = auto()
-    Undetermined= auto()
 
 '''
 List of all the sections that need to go into a template.

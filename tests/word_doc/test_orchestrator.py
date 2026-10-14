@@ -41,7 +41,7 @@ def test_orchestrator_for_procurement_route():
     # Act
     orc.populate_word_doc()
     doc = orc.wrapper.doc
-    
+
     p = doc.paragraphs[0]
     r = p.runs[0]
 

@@ -35,7 +35,7 @@ QUESTIONS = [
         "hint": '<div class="govuk-inset-text">This is the total cost of your proposal over its full lifetime, including VAT. Select one option:</div>',
         "choices": [
             (AnswerConstants.BELOW_12K.value, "Below £12,000"),
-            (AnswerConstants.BETWEEN_12K_AND_2M.value, "Between £12,001 and £2million"),
+            (AnswerConstants.BETWEEN_12K_AND_2M.value, "Between £12,000 and £2million"),
             (AnswerConstants.ABOVE_2M.value, "Above £2million")
         ],
         "help_text": f"""
@@ -292,7 +292,7 @@ QUESTIONS = [
                 "Departmental Strategy & Governance",
             ),
             ("Deputy Prime Minister's Data Unit", "Deputy Prime Minister's Data Unit"),
-            ("Digital", AnswerConstants.DIGITAL_STRING),
+            ("Digital", AnswerConstants.DIGITAL_STRING.value),
             ("Digital Process Improvement", "Digital Process Improvement"),
             ("Elections Directorate", "Elections Directorate"),
             ("Executive Team", "Executive Team"),
@@ -492,7 +492,7 @@ QUESTIONS = [
         "slug": hire_contracted_workers_to_fill_temporary_capacity_gap_notice,
         "title": 'What you need to know',
         "type": "radio",
-        "hint": """<p class="govuk-body">You selected "Hire contracted workers to fill a temporary capacity gap". This is otherwise known as Contingent labour. </p>
+        "hint": """<p class="govuk-body">You selected "Hire contracted workers to fill a temporary capacity gap". This is otherwise known as Contingent labour. </p>
         <p class="govuk-body">Before continuing, we need to check whether you need:</p>
         <p class="govuk-body"><strong>Contingent labour</strong> (temporary people working as part of your team), or</p>
         <p class="govuk-body"><strong>Consultancy and Professional Services (C&PS)</strong> (external advice, expertise or specialist services).</p>
@@ -650,7 +650,7 @@ QUESTIONS = [
         ],
         "choice_hints": {
             formula_grant_choice: "Funding allocated using an agreed formula or criteria.",
-            grant_aid_choice: "Funding provided to an arm’s length body to support its core functions.",
+            grant_aid_choice: "Funding provided to an arm's length body to support its core functions.",
             general_grant_choice: "Funding provided to deliver a specific project, service or set of outcomes."
         },
 
@@ -659,7 +659,7 @@ QUESTIONS = [
             <p>Different grant routes have different rules, approvals and reporting requirements.</p>
             
             <p><strong>Formula Grant</strong> Funding is distributed using an agreed methodology or formula. Recipients do not compete for funding and the amount awarded is determined by the agreed approach.</p>
-            <p><strong>Grant in Aid Funding</strong> provided to an arm’s length body to support its ongoing operations and core responsibilities.</p>
+            <p><strong>Grant in Aid Funding</strong> provided to an arm's length body to support its ongoing operations and core responsibilities.</p>
             <p><strong>General Grant</strong> Funding provided to deliver a specific activity, project, service or policy outcome. This is the most common grant route.</p>
 
             <p><strong>Not sure?</strong></p>

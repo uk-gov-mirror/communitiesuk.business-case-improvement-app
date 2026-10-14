@@ -1,5 +1,6 @@
 from enum import IntEnum, auto
 from dataclasses import dataclass, field
+from .table_common_resources import get_fy_and_relative_next_fy
 
 class TABLE_DEFINITION(IntEnum):
     AUTHOR_SHOULD_COMPLETE_SECTION = auto()
@@ -61,11 +62,11 @@ TABLE_REGISTRY = [
             "Type of business case:"
         ],
         extra_content=[
-        _ExtraCellContent(
-            row=4,
-            column=2,
-            content="List any additional people who helped draft, develop or review this business case before it was submitted for approval. You don't need to include anyone listed in sections 9 and 10."
-        )
+            _ExtraCellContent(
+                row=4,
+                column=2,
+                content="List any additional people who helped draft, develop or review this business case before it was submitted for approval. You don't need to include anyone listed in sections 9 and 10."
+            )
         ]
     ),
     _TableContent(
@@ -139,9 +140,9 @@ TABLE_REGISTRY = [
             "Total (£m)"
         ],
         extra_content=[
-            _ExtraCellContent(row=1, column=2, content="FY-X", is_italic=False, is_bold=True),
-            _ExtraCellContent(row=1, column=3, content="FY-Y", is_italic=False, is_bold=True),
-            _ExtraCellContent(row=1, column=4, content="FY-Z", is_italic=False, is_bold=True)
+            _ExtraCellContent(row=1, column=2, content=f"FY{get_fy_and_relative_next_fy()}", is_italic=False, is_bold=True),
+            _ExtraCellContent(row=1, column=3, content=f"FY{get_fy_and_relative_next_fy(1)}", is_italic=False, is_bold=True),
+            _ExtraCellContent(row=1, column=4, content=f"FY{get_fy_and_relative_next_fy(2)}", is_italic=False, is_bold=True)
         ]
     ),
     _TableContent(
