@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
-    
+from .flow import get_first_question_slug, get_next
+
 class BusinessCaseTriageResponse(models.Model):
     """
     Stores a user's answers for one Business Case triage journey.
@@ -21,9 +22,27 @@ class BusinessCaseTriageResponse(models.Model):
     class Meta:
         ordering = ["-started_at"]
 
+    """returns only the active question slugs based on given answers."""
+    def _get_active_path(self, answers: dict) -> set:
+        active_slugs = set()
+        curr = get_first_question_slug()
+
+        while curr and curr != "calculate-result":
+            active_slugs.add(curr)
+            if curr not in answers:
+                break
+            try:
+                curr = get_next(curr, answers[curr])
+            except KeyError:
+                break
+
+        return active_slugs
+
     def set_answer(self, question_slug: str, value: str):
-        self.answers[question_slug] = value
-        # self.save()
+        answers = dict(self.answers or {})
+        answers[question_slug] = value
+        active_slugs = self._get_active_path(answers)
+        self.answers = {slug: answers[slug] for slug in active_slugs if slug in answers}
 
     def get_answer(self, question_slug: str) -> str:
         return self.answers.get(question_slug, "")

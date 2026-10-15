@@ -241,6 +241,11 @@ def test_procurement_template_route(client, db):
         provide_a_high_level_summary: "*",
     }
 
+    session = BusinessCaseTriageResponse.objects.last()
+    if session:
+        session.answers = answers
+        session.save()
+
     for slug in QUESTION_SLUGS:
         answer = answers.get(slug)
         if answer:
@@ -266,6 +271,43 @@ def test_procurement_template_route(client, db):
     assert business_case.created_at is not None
     assert business_case.modified_at is not None
     assert business_case.deleted_at is None
+
+
+def test_going_back_cleans_up_abandoned_route_answers(client, db):
+    client.get(reverse("triage:start"))
+
+    answers = {
+        total_value_of_business_case: "between-12k-and-2m",
+        novel_repercussive_contentious_hmt_consent: "no",
+        is_this_request_a_pilot: "no",
+        making_a_change_to_or_additional_money_for_existing_business_case: "no",
+        any_other_business_cases_that_are_connected_to_this_work: "*",
+        is_this_request_a_pilot: "yes",
+        novel_repercussive_contentious_hmt_consent_notice: "*",
+    }
+
+    session = BusinessCaseTriageResponse.objects.last()
+    if session:
+        session.answers = answers
+        session.save()
+
+    for slug in QUESTION_SLUGS:
+        answer = answers.get(slug)
+        if answer:
+            client.post(
+                reverse("triage:question", kwargs={"slug": slug}),
+                data={"answer": answer},
+            )
+
+    session = BusinessCaseTriageResponse.objects.filter(completed_at__isnull=False).last()
+    assert session is not None
+    assert session.result != "in-progress"
+    assert session.result != ""
+    assert session.answers == {
+            total_value_of_business_case: "between-12k-and-2m",
+            novel_repercussive_contentious_hmt_consent: "no",
+            is_this_request_a_pilot: "yes",
+        }
 
 
 #  Result pages
