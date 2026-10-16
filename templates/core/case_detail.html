@@ -58,7 +58,7 @@
 
     {% if uploaded_response_summary %}
 
-    <div class="case-detail__summary-panel">
+    <div class="case-detail__summary-panel govuk-!-margin-bottom-6">
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
           <h2 class="govuk-heading-m">Summary</h2>
@@ -69,19 +69,47 @@
           {% endfor %}
         </div>
         <div class="govuk-grid-column-one-third">
-          <!-- TODO: Summary information -->
+        {{ govukSummaryList({
+          "classes": "govuk-summary-list--no-border summary-list--stacked",
+          "rows": [
+            {
+              "key": { "text": "Whole life cost" },
+              "value": { "text": uploaded_response_summary.whole_of_life_cost }
+            },
+            {
+              "key": { "text": "Directorate" },
+              "value": { "text": uploaded_response_summary.directorate }
+            },
+            {
+              "key": { "text": "SRO/SCS" },
+              "value": { "text": uploaded_response_summary.sro_scs }
+            },
+            {
+              "key": { "text": "Approved by SRO/SCS" },
+              "value": { "text": uploaded_response_summary.approved_by_sro_scs.strftime('%-d %B %Y') if uploaded_response_summary.approved_by_sro_scs else '-' }
+            },
+            {
+              "key": { "text": "Lead SME" },
+              "value": { "text": business_case.lead_contact }
+            },
+            {
+              "key": { "text": "Author" },
+              "value": { "text": uploaded_response_summary.author }
+            }
+          ]
+        }) }}
         </div>
       </div>
 
-      <hr class="govuk-section-break govuk-section-break--visible">
+      <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible">
 
       <div class="govuk-grid-row">
-        <div class="govuk-grid-column-one-half">
-          <h3 class="govuk-heading-s govuk-!-margin-bottom-1">Approved business case</h3>
+        <div class="govuk-grid-column-two-thirds">
+          <h3 class="govuk-heading-s">Approved business case</h3>
           <a class="govuk-link" href="{{ url('case-response-download', pk=business_case.pk, response_id=latest_response.pk) }}">{{ latest_response.original_filename or "Download" }}</a>
         </div>
-        <div class="govuk-grid-column-one-half">
-          <h3 class="govuk-heading-s govuk-!-margin-bottom-1">File upload date</h3>
+        <div class="govuk-grid-column-one-third govuk-!-text-align-right">
+          <h3 class="govuk-heading-s">File upload date</h3>
           <p class="govuk-body">{{ latest_response.created_at.strftime("%-d %B %Y at %H:%M:%S") }}</p>
         </div>
       </div>
@@ -102,6 +130,7 @@
 
     {{ govukAccordion({
     "id": "case-detail-reupload",
+    "classes": "accordion-no-show-all-toggle",
     "items": [
       {"heading": {"text": "Make a change to this business case"}, "content": {"html": reupload_content}}
       ]
@@ -139,7 +168,6 @@
     }) }} TODO: Insert content here - raised as separate ticket due to complexity -->
 
     {% endif %} 
-
   </div>
 </div>
 
@@ -185,4 +213,3 @@
   })();
 </script>
 {% endblock %}
-
