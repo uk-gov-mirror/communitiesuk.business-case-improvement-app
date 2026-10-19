@@ -136,8 +136,32 @@ QUESTIONS = [
     },
     {
         "slug": any_other_business_cases_that_are_connected_to_this_work,
-        "title": "Are there any other business cases that are in draft or review connected to this work or initiative?",
+        "title": "Is anyone else working on a related business case?",
         "type": "radio",
+        "hint": f"""
+            <div class="govuk-inset-text">
+                <p class="govuk-!-margin-bottom-2">This could be work that:</p>
+                <ul class="govuk-list govuk-list--bullet">
+                    <li>supports the same project or programme</li>
+                    <li>contributes to the same outcomes</li>
+                    <li>forms part of the same overall piece of work</li>
+                    <li>is being developed by another team</li>
+                </ul>
+            </div>
+            """,
+        "help_text": f"""
+            <p class="govuk-body">We ask this because there may be several business cases linked to the same piece of work.</p>
+            <p class="govuk-body">Understanding these connections helps reviewers:</p>
+            <ul class="govuk-list govuk-list--bullet">
+                <li>understand the full scope of the work</li>
+                <li>identify dependencies between projects</li>
+                <li>understand the total expected investment</li>
+                <li>assess whether related business cases should be considered together</li>
+            </ul>
+            <p class="govuk-body">Select <strong>Yes</strong> if you know of any related business cases, even if they are owned or being developed by another team.</p>
+            <p class="govuk-body"><strong>Not sure?</strong></p>
+            <p class="govuk-body">If you think there may be related business cases, select <strong>Yes</strong> and provide any information you have when drafting the business case. You do not need to know all the details.</p>
+        """,
         "choices":[
             ("yes", "Yes"),
             ("no", "No")
