@@ -21,7 +21,7 @@ class TriageData():
 
     @property
     def is_part_of_wider_programme_with_existing_fbc(self) -> bool:
-        return self.triage_data.get(part_of_wider_programme_with_existing_fbc, None) == "yes"
+        return self.triage_data.get(changing_or_asking_for_additional_money_for_existing_business_case, None) == "yes"
 
     @property
     def does_involve_digital(self) -> bool:

@@ -56,14 +56,33 @@ QUESTIONS = [
         """,
     },
     {
-        "slug": part_of_wider_programme_with_existing_fbc,
-        "title": "Is this request part of a wider programme with an existing FBC?",
+        "slug": changing_or_asking_for_additional_money_for_existing_business_case,
+        "title": "Are you making a change to, or asking for additional money for an existing business case?",
         "type": "radio",
-        "help_text": "We ask this to make sure spend is routed through the correct approvals process. If this work is part of a wider piece of activity, or if multiple related pieces of spend together exceed approval thresholds, you should answer Yes, even if this individual business case is for a smaller amount.",
         "choices": [
             ("yes", "Yes"),
-            ("no", "No")
-        ]
+            ("no", "No"),
+            ("i-dont-know", "I don't know")
+        ],
+        "help_text": f"""
+            <p class="govuk-body">We ask this because changes to an existing approved business case may not require a completely new business case.</p>
+            <p class="govuk-body">In some cases, you may be able to update the existing business case and provide an addendum that explains the proposed changes.</p>
+            <p class="govuk-body">Select <strong>Yes</strong> if:</p>
+            <ul class="govuk-list govuk-list--bullet">
+                <li>you are requesting additional funding for an existing project or programme</li>
+                <li>you are changing the scope, timeline or outcomes of an approved business case</li>
+                <li>the work relates to an existing approved business case</li>
+                <li>you are updating an existing proposal rather than creating a new one</li>
+            </ul>
+            <p class="govuk-body">Select <strong>No</strong> if:</p>
+            <ul class="govuk-list govuk-list--bullet">
+                <li>this is a new proposal</li>
+                <li>the work is not covered by an existing approved business case</li>
+                <li>no previous approval has been given for the work</li>
+            </ul>
+            <p class="govuk-body"><strong>Not sure?</strong></p>
+            <p class="govuk-body">Speak to your Finance Business Partner (FBP), a Commercial colleague, or the project or programme owner before continuing.</p>
+        """
     },
     {
         "slug": does_request_involve_anything_digital,
@@ -727,11 +746,12 @@ QUESTIONS = [
 
 ROUTING = {
     # work-type branches first
-    (total_value_of_business_case, AnswerConstants.BELOW_12K): part_of_wider_programme_with_existing_fbc,
+    (total_value_of_business_case, AnswerConstants.BELOW_12K): changing_or_asking_for_additional_money_for_existing_business_case,
     (total_value_of_business_case, AnswerConstants.BETWEEN_12K_AND_2M): novel_repercussive_contentious_hmt_consent,
     (total_value_of_business_case, AnswerConstants.ABOVE_2M): "calculate-result",
-    (part_of_wider_programme_with_existing_fbc, "yes"): "calculate-result",
-    (part_of_wider_programme_with_existing_fbc, "no"): does_request_involve_anything_digital,
+    (changing_or_asking_for_additional_money_for_existing_business_case, "yes"): "calculate-result",
+    (changing_or_asking_for_additional_money_for_existing_business_case, "no"): does_request_involve_anything_digital,
+    (changing_or_asking_for_additional_money_for_existing_business_case, "i-dont-know"): does_request_involve_anything_digital,
     (does_request_involve_anything_digital, "yes"): "calculate-result",
     (does_request_involve_anything_digital, "no"): "calculate-result",
     (novel_repercussive_contentious_hmt_consent, "no"): is_this_request_a_pilot,
