@@ -20,6 +20,7 @@ def external_links(request):
             "hr_business_partners_email" : "mailto:HRBusinessPartners@communities.gov.uk",
             "grants_vs_procurement" : "https://mhclg.sharepoint.com.mcas.ms/:w:/s/GrantsCommunityHub/IQCEOEB002TlT4K7bZREYk5qAcqTojmwzoPK0jEJp0cWZ1A?e=Yzk8nN&isSPOFile=1&ovuser=REMOVED&wdExp=TEAMS-TREATMENT&web=1&clickparams=REMOVED",
             "grants_hub" : "https://mhclg.sharepoint.com.mcas.ms/sites/GrantsCommunityHub",
-            "digital_front_door_email" : "mailto:DigitalFrontDoor@communities.gov.uk"
+            "digital_front_door_email" : "mailto:DigitalFrontDoor@communities.gov.uk",
+            "feedback_form" : "https://mcas-proxyweb.mcas.ms/certificate-checker?login=false&originalUrl=https%3A%2F%2Fforms.cloud.microsoft.mcas.ms%2Fe%2FGsGYMBgyY3%3FMcasTsid%3D20596&McasCSRF=REMOVED",
         }
     }
