@@ -82,7 +82,7 @@ class TriageData():
             }
             
         return (not self.is_novel and
-                not self.is_pilot and
+                self.is_pilot or not self.is_pilot and # basically double check it's been answered
                 not self.is_existing_programme and
                 self.where_is_the_budget_held != "" and
                 correct_options_chosen and
