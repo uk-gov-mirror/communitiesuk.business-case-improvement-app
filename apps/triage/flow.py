@@ -216,7 +216,8 @@ QUESTIONS = [
             (procure_goods_and_services_from_third_party, Markup('<strong>Buy goods or services from an external supplier</strong>')),
             (commission_research, Markup('<strong>Commission research</strong>')),
             (hire_contracted_workers_to_fill_temporary_capacity_gap, Markup('<strong>Hire contractors, agency staff or consultants to fill a temporary capacity gap</strong>')),
-            (grant_choice, Markup('<strong>Provide a grant or transfer funding to another organisation</strong>'))
+            (grant_choice, Markup('<strong>Provide a grant or transfer funding to another organisation</strong>')),
+            (procuring_something_else, Markup('<strong>Something else</strong>'))
         ],
         "choice_hints": {
             procure_goods_and_services_from_third_party : "For example, buying software, equipment or a service from a supplier.",
@@ -356,7 +357,7 @@ QUESTIONS = [
                 "Departmental Strategy & Governance",
             ),
             ("Deputy Prime Minister's Data Unit", "Deputy Prime Minister's Data Unit"),
-            ("Digital", AnswerConstants.DIGITAL_STRING.value),
+            (AnswerConstants.DIGITAL_STRING, AnswerConstants.DIGITAL_STRING.value),
             ("Digital Process Improvement", "Digital Process Improvement"),
             ("Elections Directorate", "Elections Directorate"),
             ("Executive Team", "Executive Team"),
@@ -399,7 +400,7 @@ QUESTIONS = [
         ],
     },
     {
-        "slug": give_your_bjc_a_name,
+        "slug": give_your_bjc_a_title,
         "title": "Give your business case a title",
         "type": "input",
         
@@ -557,7 +558,7 @@ QUESTIONS = [
         "slug": hire_contracted_workers_to_fill_temporary_capacity_gap_notice,
         "title": 'What you need to know',
         "type": "radio",
-        "hint": """<p class="govuk-body">You selected "Hire contracted workers to fill a temporary capacity gap". This is otherwise known as Contingent labour. </p>
+        "hint": """<p class="govuk-body">You selected "Hire contracted workers to fill a temporary capacity gap". This is otherwise known as Contingent labour.</p>
         <p class="govuk-body">Before continuing, we need to check whether you need:</p>
         <p class="govuk-body"><strong>Contingent labour</strong> (temporary people working as part of your team), or</p>
         <p class="govuk-body"><strong>Consultancy and Professional Services (C&PS)</strong> (external advice, expertise or specialist services).</p>
@@ -794,24 +795,25 @@ ROUTING = {
     (which_option_describes_what_you_are_trying_to_do, commission_research): "calculate-result",
     (which_option_describes_what_you_are_trying_to_do, procure_goods_and_services_from_third_party): which_best_describes_your_spend,
     (which_option_describes_what_you_are_trying_to_do, hire_contracted_workers_to_fill_temporary_capacity_gap): hire_contracted_workers_to_fill_temporary_capacity_gap_notice,
-    (hire_contracted_workers_to_fill_temporary_capacity_gap_notice, "yes"): give_your_bjc_a_name,
+    (which_option_describes_what_you_are_trying_to_do, procuring_something_else): give_your_bjc_a_title,
+    (hire_contracted_workers_to_fill_temporary_capacity_gap_notice, "yes"): give_your_bjc_a_title,
     (hire_contracted_workers_to_fill_temporary_capacity_gap_notice, "no"): are_you_procuring_consulting_and_professional_services_notice,
-    (which_best_describes_your_spend, spend_on_corporate_activities): give_your_bjc_a_name,
+    (which_best_describes_your_spend, spend_on_corporate_activities): give_your_bjc_a_title,
     (which_best_describes_your_spend, procuring_something_else): are_you_procuring_consulting_and_professional_services,
     (are_you_procuring_consulting_and_professional_services, "no"): we_want_to_continue_improving_our_service,
     (are_you_procuring_consulting_and_professional_services, "yes"): are_you_procuring_consulting_and_professional_services_notice,
     (are_you_procuring_consulting_and_professional_services_notice, "*"): we_want_to_continue_improving_our_service,
-    (we_want_to_continue_improving_our_service, "*"): give_your_bjc_a_name,
-    (give_your_bjc_a_name, "*"): provide_a_high_level_summary,
+    (we_want_to_continue_improving_our_service, "*"): give_your_bjc_a_title,
+    (give_your_bjc_a_title, "*"): provide_a_high_level_summary,
     (provide_a_high_level_summary, "*"): "calculate-result",
     (which_option_describes_what_you_are_trying_to_do, grant_choice): grant_notice,
     (grant_notice, "*"): grant_covered_countries,
     (grant_covered_countries, "*"): eligible_organisations,
     (eligible_organisations, "*"): grant_routes,
-    (grant_routes, formula_grant_choice): funding_allocation,
-    (grant_routes, grant_aid_choice): give_your_bjc_a_name,
-    (grant_routes, general_grant_choice): give_your_bjc_a_name,
-    (funding_allocation, "*"): give_your_bjc_a_name,
+    (grant_routes, general_grant_choice): funding_allocation,
+    (grant_routes, grant_aid_choice): give_your_bjc_a_title,
+    (grant_routes, formula_grant_choice): give_your_bjc_a_title,
+    (funding_allocation, "*"): give_your_bjc_a_title,
 }
 
 

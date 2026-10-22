@@ -1,6 +1,6 @@
 from enum import Enum
 from .slugs import *
-from .triage_data import TriageData
+from apps.triage.triage_data import TriageData
 
 # because routing requires very specific checks, setting here to reduce likelihood of unknowing changes
 class AnswerConstants(str, Enum):
@@ -30,10 +30,17 @@ def get_result_from_answers(answers: dict) -> str:
         
         if triage_data.is_procurement_route_completed:
             return get_procurement_exit(triage_data)
-        else:
-            if triage_data.is_three_stage_process_novel_or_pilot:
-                return "you-need-to-follow-a-three-stage-process-novel-or-pilot"
-            return "we-could-not-find-the-right-process-for-you"
+        
+        if triage_data.is_general_route_completed:
+            return get_general_exit(triage_data)
+        
+        if triage_data.is_grants_route_completed:
+            return "exit-to-download-template-grant-route"
+        
+        if triage_data.is_three_stage_process_novel_or_pilot:
+            return "you-need-to-follow-a-three-stage-process-novel-or-pilot"
+        
+        return "we-could-not-find-the-right-process-for-you"
 
     if total_value == AnswerConstants.BELOW_12K:
         return determine_is_less_than_12k_exit_route(triage_data)
@@ -51,23 +58,22 @@ def determine_is_less_than_12k_exit_route(triage_data: TriageData) -> str:
 
 
 def get_procurement_exit(triage_data: TriageData) -> str:
-    best_describes_your_situation: str  = triage_data.which_option_best_describes_what_is_trying_to_be_done
-    best_describes_your_spend: str = triage_data.which_option_best_describes_the_spend
-
-    if triage_data.where_is_the_budget_held == AnswerConstants.DIGITAL_STRING:
-        return "we-could-not-find-the-right-process-for-you"
     
-    if best_describes_your_situation == procure_goods_and_services_from_third_party:
-        if best_describes_your_spend == spend_on_corporate_activities:
-            return "exit-to-download-template-corporate-spend-fbp-route"
-        if best_describes_your_spend == procuring_something_else:
-            return "exit-to-download-template-procurement-route" 
+    if triage_data.where_is_the_budget_held == AnswerConstants.DIGITAL_STRING.value:
+        return "digital-exit-for-procurement-route"
 
-    if best_describes_your_situation == hire_contracted_workers_to_fill_temporary_capacity_gap:
+    return "exit-to-download-template-procurement-route"
+
+
+def get_general_exit(triage_data: TriageData):
+
+    if triage_data.which_option_best_describes_the_spend == spend_on_corporate_activities:
+        return "exit-to-download-template-corporate-spend-fbp-route"
+
+    if triage_data.which_option_best_describes_what_is_trying_to_be_done == hire_contracted_workers_to_fill_temporary_capacity_gap:
         return "exit-to-download-template-hrbp-contingent-labour-route"
 
-    if best_describes_your_situation == grant_choice:
-        return "exit-to-download-template-grant-route"
- 
+    if triage_data.which_option_best_describes_what_is_trying_to_be_done == procuring_something_else:
+        return "general-exit-for-something-else"
+    
     return "we-could-not-find-the-right-process-for-you"
-

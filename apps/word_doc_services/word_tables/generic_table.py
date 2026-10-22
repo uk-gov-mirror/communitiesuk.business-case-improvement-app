@@ -76,4 +76,4 @@ class GenericTable():
 
         for r in tbl.rows:
             r.height_rule = WD_ROW_HEIGHT_RULE.AT_LEAST
-            r.height = Inches(0.4) 
+            r.height = Inches(0.4)

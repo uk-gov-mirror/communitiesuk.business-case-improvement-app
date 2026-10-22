@@ -13,7 +13,8 @@ from .sections import (
     SubjectMatterExpert,
     SroOrScsApproval,
     SupportingDocuments,
-    HeaderSection
+    HeaderSection,
+    EconomicCase
 )
 
 from apps.word_doc_services.word_document_wrapper import BusinessCaseWordDocumentWrapper
@@ -37,8 +38,30 @@ sections_per_template: dict[RouteChosen, list[type[Section]]] = {
         SroOrScsApproval,
         SupportingDocuments
     ],
-    RouteChosen.Grants:[
-
+    RouteChosen.Grants: [
+        ParticipantsAndOrganisationalDetails,
+        ExecutiveSummarySection,
+        EconomicCase,
+        CommercialCase,
+        FinancialCase,
+        ManagementCase,
+        OtherBusinessCases,
+        SubjectMatterExpert,
+        SroOrScsApproval,
+        SupportingDocuments
+    ],
+    RouteChosen.General: [
+        ParticipantsAndOrganisationalDetails,
+        ExecutiveSummarySection,
+        StrategicCase,
+        OptionsAnalysis,
+        CommercialCase,
+        FinancialCase,
+        ManagementCase,
+        OtherBusinessCases,
+        SubjectMatterExpert,
+        SroOrScsApproval,
+        SupportingDocuments
     ]
 }
 
@@ -47,7 +70,6 @@ class WordDocumentOrchestrator():
     def __init__(self, answers: dict[str, str]):
         self.triage_data: TriageData = TriageData(answers)
         self.sections_required: list[Section] = []
-        self.route: RouteChosen
         self.wrapper: BusinessCaseWordDocumentWrapper = BusinessCaseWordDocumentWrapper()
 
     '''
@@ -60,12 +82,18 @@ class WordDocumentOrchestrator():
         if route == RouteChosen.Undetermined:
             return
 
-        self.sections_required = [c() for c in sections_per_template[route]]
+        self.sections_required = [c(route) for c in sections_per_template[route]]
          
 
     def __determine_route(self) -> RouteChosen:
         if self.triage_data.is_procurement_route_completed:
             return RouteChosen.Procurement
+        
+        if self.triage_data.is_grants_route_completed:
+            return RouteChosen.Grants
+
+        if self.triage_data.is_general_route_completed:
+            return RouteChosen.General
 
         return RouteChosen.Undetermined
 
@@ -123,7 +151,7 @@ class WordDocumentOrchestrator():
         self.__create_what_youll_be_asked()
         self.__create_before_you_start()
         # add section is a new page before the main content
-        self.wrapper.doc.add_section()
+        self.wrapper.add_empty_paragraph()
         self.wrapper.add_h1_section_header(business_case_title)
 
         # loop each section, and for each one call the method for creating the section.

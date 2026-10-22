@@ -37,7 +37,7 @@ class TriageData():
 
     @property
     def business_case_title(self) -> str:
-        return self.triage_data.get(give_your_bjc_a_name, "")
+        return self.triage_data.get(give_your_bjc_a_title, "")
 
     @property
     def which_option_best_describes_the_spend(self) -> str:
@@ -54,6 +54,26 @@ class TriageData():
     @property
     def which_option_best_describes_what_is_trying_to_be_done(self) -> str:
         return self.triage_data.get(which_option_describes_what_you_are_trying_to_do, "")
+
+    @property
+    def grant_covered_countries(self) -> str:
+        return self.triage_data.get(grant_covered_countries, "")
+
+    @property
+    def eligible_organisations(self):
+        return self.triage_data.get(eligible_organisations, "")
+
+    @property
+    def grant_routes(self):
+        return self.triage_data.get(grant_routes, "")
+
+    @property
+    def funding_allocation(self):
+        return self.triage_data.get(funding_allocation, "")
+
+    @property
+    def is_contingent_labour(self) -> bool:
+        return self.triage_data.get(hire_contracted_workers_to_fill_temporary_capacity_gap_notice, "") == "Yes"
 
     @property
     def is_commission_research(self) -> bool:
@@ -75,20 +95,49 @@ class TriageData():
     '''
     @property
     def is_procurement_route_completed(self) -> bool:
-        correct_options_chosen = self.which_option_best_describes_what_is_trying_to_be_done in {
-                procure_goods_and_services_from_third_party,
-                hire_contracted_workers_to_fill_temporary_capacity_gap,
-                grant_choice
-            }
-            
+
         return (not self.is_novel and
                 self.is_pilot or not self.is_pilot and # basically double check it's been answered
                 not self.is_existing_programme and
                 self.where_is_the_budget_held != "" and
-                correct_options_chosen and
+                self.which_option_best_describes_the_spend != "" and
+                self.which_option_best_describes_what_is_trying_to_be_done == procure_goods_and_services_from_third_party and
                 self.is_corporate_spend_or_procurement and
                 self.business_case_title != "" and
+                self.summary != "") and (self.where_is_the_budget_held == "Digital" 
+                                            or self.which_option_best_describes_the_spend != spend_on_corporate_activities)
+    
+    @property
+    def is_general_route_completed(self) -> bool:
+        return (not self.is_novel and
+                not self.is_pilot and
+                not self.is_existing_programme and
+                self.where_is_the_budget_held != "Digital" and
+                self.which_option_best_describes_what_is_trying_to_be_done == hire_contracted_workers_to_fill_temporary_capacity_gap
+                    or self.which_option_best_describes_what_is_trying_to_be_done == procuring_something_else
+                    or self.which_option_best_describes_the_spend == spend_on_corporate_activities and
+                self.business_case_title != "" and
                 self.summary != "")
+
+    @property
+    def is_grants_route_completed(self) -> bool:
+        funding_question_handled_correctly: bool = (
+            self.grant_routes == general_grant_choice and self.funding_allocation != "" 
+            or self.grant_routes != general_grant_choice)
+
+        return(
+            not self.is_novel and
+            not self.is_pilot and
+            not self.is_existing_programme and
+            self.where_is_the_budget_held != "" and
+            self.which_option_best_describes_what_is_trying_to_be_done == grant_choice and
+            self.grant_covered_countries != "" and
+            self.eligible_organisations != "" and
+            self.grant_routes != "" and
+            funding_question_handled_correctly and
+            self.business_case_title != "" and
+            self.summary != "")
+
 
     def get_answer_string(self, slug: str) -> str:
         return self.triage_data.get(slug, "")

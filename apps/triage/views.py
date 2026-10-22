@@ -15,7 +15,7 @@ from .flow import (
     get_business_case_type_from_result_slug,
 )
 from .models import BusinessCase, BusinessCaseTriageResponse
-from .slugs import give_your_bjc_a_name, where_is_the_budget_held, provide_a_high_level_summary
+from .slugs import give_your_bjc_a_title, where_is_the_budget_held, provide_a_high_level_summary
 
 def _get_lead_contact(request) -> str:
     if request.user.is_authenticated:
@@ -111,7 +111,7 @@ def question(request, slug: str):
             triage_session.completed_at = timezone.now()
             triage_session.save()
 
-            business_case_name = triage_session.answers.get(give_your_bjc_a_name, "")
+            business_case_name = triage_session.answers.get(give_your_bjc_a_title, "")
             business_case_type = get_business_case_type_from_result_slug(result_slug, "")
             if business_case_type != "":
                 BusinessCase.objects.get_or_create(

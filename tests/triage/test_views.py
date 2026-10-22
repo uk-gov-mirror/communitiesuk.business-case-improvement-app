@@ -109,7 +109,7 @@ def test_procurement_template_exit_loads(client):
 
 def test_procurement_route_digital_spend_page_loads(client):
     resp = client.get(
-        reverse("triage:result", kwargs={"slug": "procurement_route_digital_spend"})
+        reverse("triage:result", kwargs={"slug": "digital-exit-for-procurement-route"})
     )
     assert resp.status_code == 200
 
@@ -237,7 +237,7 @@ def test_procurement_template_route(client, db):
         where_is_the_budget_held: "*",
         which_option_describes_what_you_are_trying_to_do: procure_goods_and_services_from_third_party,
         which_best_describes_your_spend: spend_on_corporate_activities,
-        give_your_bjc_a_name: "*",
+        give_your_bjc_a_title: "*",
         provide_a_high_level_summary: "*",
     }
 
@@ -258,7 +258,7 @@ def test_procurement_template_route(client, db):
     assert session is not None
     assert session.result != "in-progress"
     assert session.result != ""
-    assert session.answers.get(give_your_bjc_a_name) == "*"
+    assert session.answers.get(give_your_bjc_a_title) == "*"
     
     business_case = BusinessCase.objects.last()
     assert business_case is not None

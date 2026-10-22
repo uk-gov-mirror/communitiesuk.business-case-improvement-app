@@ -177,12 +177,10 @@ def test_procurement_routes_to_fbp():
         "no",
         "no",
         "no",
+        "no", # 22
         "Any Answer",
-        "Any Answer",
-        procure_goods_and_services_from_third_party,
+        procure_goods_and_services_from_third_party, # 25
         spend_on_corporate_activities,
-        "no",
-        "Any Answer",
         "title",
         "details"
     ]
@@ -240,7 +238,7 @@ def test_procurement_routes_to_hrbp_labour():
     assert result == "exit-to-download-template-hrbp-contingent-labour-route"
 
 
-def test_procurement_routes_including_digital_routes_away_from_procurement():
+def test_procurement_routes_including_digital_routes_through_digital_path():
     # arrange
     procurement_answers = [
         "between-12k-and-2m",
@@ -248,7 +246,7 @@ def test_procurement_routes_including_digital_routes_away_from_procurement():
         "no",
         "no",
         "Any Answer",
-        AnswerConstants.DIGITAL_STRING,
+        AnswerConstants.DIGITAL_STRING.value,
         procure_goods_and_services_from_third_party,
         spend_on_corporate_activities,
         "title",
@@ -259,7 +257,7 @@ def test_procurement_routes_including_digital_routes_away_from_procurement():
     result = get_routing_exit_page(procurement_answers)
 
     # assert
-    assert result == "we-could-not-find-the-right-process-for-you"
+    assert result == "digital-exit-for-procurement-route"
 
 
 def test_3_stage_process_for_novel():
@@ -361,6 +359,7 @@ def test_grant_including_general_grant_choice_routes():
         "Any Answer",
         "Any Answer",
         general_grant_choice,
+        "competitive",
         "title",
         "details"
     ]
@@ -394,3 +393,24 @@ def get_routing_exit_page(responses: list) -> str:
         result = ""
 
     return result
+
+
+def test_general_route_to_something_else():
+    # arrange
+    procurement_answers = [
+        "between-12k-and-2m",
+        "no",
+        "no",
+        "no",
+        "no", # 22
+        "Any Answer",
+        procuring_something_else, # 25
+        "title",
+        "details"
+    ]
+
+    # act
+    result = get_routing_exit_page(procurement_answers)
+
+    # assert
+    assert result == "general-exit-for-something-else"
