@@ -145,7 +145,6 @@ def question(request, slug: str):
     )
 
 
-
 def result(request, slug):
     try:
         if request.method == "POST":
@@ -176,8 +175,8 @@ def result(request, slug):
             )
         return render(request, f"triage/results/{slug}.html", {"error": ""})
     except Exception as e:
-            logger.exception(f"Document generation failed or slug '{slug}': {e}")
-            raise Http404
+        logger.exception(f"Document generation failed or slug '{slug}': {e}")
+        raise Http404
 
 
 def debug_session(request):
