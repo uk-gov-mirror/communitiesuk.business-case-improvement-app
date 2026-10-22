@@ -15,7 +15,13 @@
     <p class="govuk-body">Note: once you download your template, keep a copy somewhere safe.
         If it is lost or deleted, you'll need to return to this service and complete the questions again to generate a new one.
     </p>
-    <p class=govuk-body>*Download template*</p>
+    
+    <form method="post">
+    <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+    <button type="submit" class="govuk-button" data-module="govuk-button">
+        Download template
+    </button>
+    </form>
 
     <h2 class="govuk-body">Before you start drafting</h2>
 

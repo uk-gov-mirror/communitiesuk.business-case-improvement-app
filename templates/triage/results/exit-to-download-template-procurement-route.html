@@ -28,7 +28,12 @@
     </strong>
 </div>
 
-<button type="submit" class="govuk-button" data-module="govuk-button">*Download template*</button>
+<form method="post">
+  <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+  <button type="submit" class="govuk-button" data-module="govuk-button">
+    Download template
+  </button>
+</form>
 
 <div class="govuk-accordion accordion-no-show-all-toggle" data-module="govuk-accordion" id="accordion-default">
     <div class="govuk-accordion__section">

@@ -1,7 +1,12 @@
-from django.shortcuts import redirect, render
+import io
+import logging
+from django.shortcuts import render, redirect
+from django.http import JsonResponse, FileResponse, Http404
 from django.utils import timezone
-from django.http import JsonResponse, Http404
-from django.shortcuts import redirect
+from django.utils.text import slugify
+
+from apps.word_doc_services.doc_creation_orchestrator.orchestrator import WordDocumentOrchestrator
+logger = logging.getLogger(__name__)
 
 from .flow import (
     get_first_question_slug,
@@ -122,6 +127,8 @@ def question(request, slug: str):
                 )
 
             request.session["business_case_title"] = business_case_name
+            request.session["answers"] = triage_session.answers
+            request.session["business_case_type"] = business_case_type
 
             return redirect("triage:result", slug=result_slug)
 
@@ -140,9 +147,35 @@ def question(request, slug: str):
 
 def result(request, slug):
     try:
-        return render(request, f"triage/results/{slug}.html")
+        if request.method == "POST":
+            answers = request.session.get("answers")
+            if not answers:
+                return render(
+                    request, 
+                    f"triage/results/{slug}.html", 
+                    {"error": f"No saved answers found."}
+                )
+            
+            case_type = request.session.get("business_case_type")
+            file_prefix = slugify(case_type) if case_type else slug
+            filename = f"{file_prefix}_template.docx"
+
+            orc = WordDocumentOrchestrator(answers)
+            orc.populate_word_doc()
+
+            buffer = io.BytesIO()
+            orc.wrapper.doc.save(buffer)
+            buffer.seek(0)
+
+            return FileResponse(
+                buffer,
+                as_attachment=True,
+                filename=filename,
+                content_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+            )
+        return render(request, f"triage/results/{slug}.html", {"error": ""})
     except Exception as e:
-        print(f"RESULT ERROR for slug '{slug}': {type(e).__name__}: {e}")
+        logger.exception(f"Document generation failed or slug '{slug}': {e}")
         raise Http404
 
 
