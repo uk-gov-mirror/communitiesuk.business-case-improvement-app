@@ -413,4 +413,4 @@ def test_general_route_to_something_else():
     result = get_routing_exit_page(procurement_answers)
 
     # assert
-    assert result == "general-exit-for-something-else"
+    assert result == "exit-to-download-template-for-general-something-else"

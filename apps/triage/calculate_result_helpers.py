@@ -1,6 +1,7 @@
 from enum import Enum
 from .slugs import *
 from apps.triage.triage_data import TriageData
+from apps.triage.triage_data import TriageData
 
 # because routing requires very specific checks, setting here to reduce likelihood of unknowing changes
 class AnswerConstants(str, Enum):
@@ -74,6 +75,6 @@ def get_general_exit(triage_data: TriageData):
         return "exit-to-download-template-hrbp-contingent-labour-route"
 
     if triage_data.which_option_best_describes_what_is_trying_to_be_done == procuring_something_else:
-        return "general-exit-for-something-else"
+        return "exit-to-download-template-for-general-something-else"
     
     return "we-could-not-find-the-right-process-for-you"

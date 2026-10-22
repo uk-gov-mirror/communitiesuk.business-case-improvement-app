@@ -1,6 +1,8 @@
 def external_links(request):
     return {
         "links": {
+            "business_justification_case_guidance": "https://mhclg.sharepoint.com/sites/ProjectDeliveryNetwork/SitePages/Business-Justification-Cases.aspx",
+            "finance_knowledge_centre": "https://mhclg.sharepoint.com/sites/FinanceKnowledgeCentre",
             "project_delivery_hub": "https://mhclg.sharepoint.com.mcas.ms/sites/ProjectDeliveryNetwork/SitePages/Project-Delivery-HUB.aspx",
             "finance_business_partner_email": "fbp@communities.gov.uk",
             "p2p": "https://mhclg.sharepoint.com.mcas.ms/sites/FinanceKnowledgeCentre/SitePages/Purchase-to-Pay-(P2P).aspx",

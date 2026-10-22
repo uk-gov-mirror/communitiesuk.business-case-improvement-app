@@ -1,0 +1,139 @@
+{% extends "layouts/timeline_layout.html" %}
+{% from "govuk_frontend_jinja/templates/components/accordion/macro.html" import govukAccordion %}
+
+{% block main_content %}
+    <h2 class="govuk-heading-m">Download your business case template</h2>
+
+    <p class="govuk-body">Use this Word document to draft your business case</p>
+    <p class="govuk-body">Once you download the template, save a copy somewhere safe. If it is lost or deleted, you will need to return to this service and complete the questions again to generate a new copy.</p>
+
+    <div class="govuk-warning-text">
+        <span class="govuk-warning-text__icon" aria-hidden="true">!</span>
+        <strong class="govuk-warning-text__text">
+            <span class="govuk-visually-hidden">Warning</span>
+            When you download the template, you will be recorded as the lead contact for this business case in the service
+            listing page. You can change the contact name when you upload your finalised business case.
+        </strong>
+    </div>
+
+    <form method="post">
+        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+        <button type="submit" class="govuk-button" data-module="govuk-button">
+            Download template
+        </button>
+    </form>
+
+    <div class="govuk-accordion accordion-no-show-all-toggle" data-module="govuk-accordion" id="accordion-default">
+    <div class="govuk-accordion__section">
+        <div class="govuk-accordion__section-header">
+            <h2 class="govuk-accordion__section-heading">
+                <span class="govuk-accordion__section-button" id="accordion-default-heading-1">
+                    Before you start drafting
+                </span>
+            </h2>
+        </div>
+        <div id="accordion-default-content-1" class="govuk-accordion__section-content">
+            <h3 class="govuk-heading-s">1. Speak to the right people early</h3>
+
+            <p class="govuk-body">Business cases are developed collaboratively. Contact the people who will advise on,
+                review and approve your proposal as early as possible. You should contact:</p>
+
+            <ul class="govuk-list govuk-list--bullet">
+                <li class="govuk-body govuk-!-margin-bottom-4">
+                    <strong>Finance business partner (FBP)</strong><br>
+                    Explain your proposal and the total funding requested. Your Finance Business Partner will act as your Lead Subject Matter Expert (SME). They will:
+                    <ul class="govuk-list--bullet">
+                        <li>confirm funding is available</li>
+                        <li>assess the proposal against Accounting Officer standards</li>
+                        <li>help you develop your business case</li>
+                        <li>identify any additional approvals or assurance requirements</li>
+                        <li>provide a recommendation on whether the proposal should proceed</li>
+                    </ul>
+                </li>
+                <li class="govuk-body govuk-!-margin-bottom-4">
+                    <strong>Senior Responsible Owner (SRO) or Senior Civil Servant (SCS)</strong> Speak to the person
+                    with delegated authority to approve this spend. Let them know about your proposal early and that you
+                    will be seeking their approval.
+                </li>
+                <li class="govuk-body govuk-!-margin-bottom-4">
+                    <strong>Digital Front Door (DFD)</strong> If your proposal involves digital services, software,
+                    platforms, systems, technology or data, contact the Digital Front Door team. They oversee digital
+                    spend across the department and will advise on any assurance requirements. Depending on the nature
+                    and value of your proposal, you may also need to attend the Digital Pipeline Assurance Board. If this
+                    applies, the DFD team will arrange this.
+                </li>
+            </ul>
+
+            <h3 class="govuk-heading-s">2. Allow enough time</h3>
+
+            <p class="govuk-body">Additional approvals and assurance activities may be required depending on your
+                proposal.
+            </p>
+            <p class="govuk-body">The end-to-end process can take <strong>16 weeks or longer,</strong> so engage the
+                right people early. They can help you understand the requirements, identify any additional Subject Matter Experts
+                (SMEs) you need to involve and avoid delays later in the process.</p>
+
+            <h3 class="govuk-heading-s">3. Use supporting guidance</h3>
+            <p class="govuk-body">Review the available guidance before drafting your business case.</p>
+            <p class="govuk-body">This will help you understand the information reviewers and approvers expect to see.</p>
+
+            <p class="govuk-body">Further guidance:</p>
+            <div class="govuk-list govuk-list--bullet">
+                <li><a class="govuk-link" href="{{external_links.business_justification_case_guidance}}" target="_blank"
+                    rel="noopener noreferrer">
+                    Business Justification Case guidance</a></li>
+                <li><a class="govuk-link" href="{{external_links.finance_knowledge_centre}}" target="_blank"
+                    rel="noopener noreferrer">
+                    Finance guidance</a></li>
+            </div>
+
+           
+            <h3 class="govuk-heading-s">4. Obtain assurance and approval</h3>
+            <p class="govuk-body">Your Lead SME and any additional Subject Matter Experts must review and sign off your business case.</p>
+            <p class="govuk-body">Once it is complete, share the business case with the relevant approvers.</p>
+            <p class="govuk-body">See <strong>Who approves my business case?</strong> below for more information.</p>
+
+            <h3 class="govuk-heading-s">5. Upload your approved business case</h3>
+            <p class="govuk-body">Once all required approvals have been received, return to this service and upload your
+                approved business case.</p>
+            <p class="govuk-body">You must upload it here so it can be recorded centrally.</p>
+
+            <h3 class="govuk-heading-s">How to return to the service</h3>
+            <p class="govuk-body">Use the unique link at the bottom of your business case template.</p>
+            <p class="govuk-body">You can also find the business case on the service homepage and select it to return to the upload page.</p>
+        </div>
+    </div>
+</div>
+
+<div class="govuk-accordion accordion-no-show-all-toggle" data-module="govuk-accordion" id="accordion-default">
+    <div class="govuk-accordion__section">
+        <div class="govuk-accordion__section-header">
+            <h2 class="govuk-accordion__section-heading">
+                <span class="govuk-accordion__section-button" id="accordion-default-heading-1">
+                    Who approves my business case?
+                </span>
+            </h2>
+        </div>
+        <div id="accordion-default-content-1" class="govuk-accordion__section-content">
+            <p class="govuk-body">After receiving assurance sign-off from your Lead SME and Finance Business Partner
+                (FBP), you will need approval from your Senior Responsible Owner (SRO) or Senior Civil Servant (SCS).</p>
+
+            <h3 class="govuk-heading-s">Additional approvals</h3>
+
+            <p class="govuk-body">Depending on the nature and value of your proposal, additional approvals may also be required.</p>
+            
+            <p class="govuk-body">These may include:</p>
+            <ul class="govuk-list govuk-list--bullet">
+                <li>Digital assurance</li>
+                <li>Consultancy and Professional Services (C&PS)</li>
+                <li>External legal advice</li>
+                <li>Investment Sub-Committee (ISC)</li>
+                <li>Other approval boards relevant to your proposal</li>
+            </ul>
+
+            <p class="govuk-body">Your Finance Business Partner will help you identify any additional approvals that apply.</p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
