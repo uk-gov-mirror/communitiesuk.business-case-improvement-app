@@ -185,7 +185,7 @@ def result(request, slug):
         return render(request, f"triage/results/{slug}.html", {"error": ""})
 
     except Exception as e:
-            logger.exception(f"Document generation failed for slug '{slug}': {e}")
+            logger.exception(f"Document generation failed or slug '{slug}': {e}")
             raise Http404
 
 
