@@ -1,6 +1,6 @@
 import io
 from django.shortcuts import render, redirect
-from django.http import JsonResponse, FileResponse
+from django.http import JsonResponse, FileResponse, Http404
 from django.utils import timezone
 from django.utils.text import slugify
 from apps.word_doc_services.doc_creation_orchestrator.orchestrator import WordDocumentOrchestrator
@@ -144,19 +144,26 @@ def question(request, slug: str):
         },
     )
 
+def result(request, slug):
+    try:
+        return render(request, f"triage/results/{slug}.html")
+    except Exception as e:
+        print(f"RESULT ERROR for slug '{slug}': {type(e).__name__}: {e}")
+        raise Http404
+
 
 def result(request, slug):
-    if request.method == "POST":
-        answers = request.session.get("answers")
+    try:
+        if request.method == "POST":
 
-        if not answers:
-            return render(
-                request, 
-                f"triage/results/{slug}.html", 
-                {"error": f"No saved answers found."}
-            )
-
-        try:
+            answers = request.session.get("answers")
+            if not answers:
+                return render(
+                    request, 
+                    f"triage/results/{slug}.html", 
+                    {"error": f"No saved answers found."}
+                )
+            
             case_type = request.session.get("business_case_type")
             file_prefix = slugify(case_type) if case_type else slug
             filename = f"{file_prefix}_template.docx"
@@ -174,15 +181,12 @@ def result(request, slug):
                 filename=filename,
                 content_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
             )
-        except Exception as e:
-            logger.exception(f"Document generation failed for slug '{slug}': {e}")
-            return render(
-                request, 
-                f"triage/results/{slug}.html", 
-                {"error": "Failed to generate document."}
-            )
+        
+        return render(request, f"triage/results/{slug}.html", {"error": ""})
 
-    return render(request, f"triage/results/{slug}.html", {"error": ""})
+    except Exception as e:
+            logger.exception(f"Document generation failed for slug '{slug}': {e}")
+            raise Http404
 
 
 def debug_session(request):
