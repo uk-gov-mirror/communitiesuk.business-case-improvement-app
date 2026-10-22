@@ -144,12 +144,6 @@ def question(request, slug: str):
         },
     )
 
-def result(request, slug):
-    try:
-        return render(request, f"triage/results/{slug}.html")
-    except Exception as e:
-        print(f"RESULT ERROR for slug '{slug}': {type(e).__name__}: {e}")
-        raise Http404
 
 
 def result(request, slug):
