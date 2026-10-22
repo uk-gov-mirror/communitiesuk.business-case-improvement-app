@@ -155,7 +155,6 @@ def result(request, slug):
 def result(request, slug):
     try:
         if request.method == "POST":
-
             answers = request.session.get("answers")
             if not answers:
                 return render(
@@ -181,9 +180,7 @@ def result(request, slug):
                 filename=filename,
                 content_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
             )
-        
         return render(request, f"triage/results/{slug}.html", {"error": ""})
-
     except Exception as e:
             logger.exception(f"Document generation failed or slug '{slug}': {e}")
             raise Http404
