@@ -45,12 +45,7 @@ QUESTIONS = [
             <li>which business case route you need to follow</li>
             <li>what approvals may be required</li>
         </ul>
-        <p>The total value should include all expected costs over the lifetime of the proposal, including:</p>
-        <ul class="govuk-list govuk-list--bullet">
-            <li>whether you need a business case</li>
-            <li>which business case route you need to follow</li>
-            <li>what approvals may be required</li>
-        </ul>
+        <p>The total value should include all expected costs over the lifetime of the proposal.</p>
         <p>Speak to your Finance Business Partner (FBP) or a Commercial colleague before continuing.</p>
         <p>If you're not sure who to contact, visit the <a class="govuk-link" href="{external_links('').get("links", {}).get("business_cases", "")}" target="_blank" rel="noopener noreferrer">Project Delivery Hub</a> to find the right Subject Matter Expert (SME) for advice and support.</p>
         """,
