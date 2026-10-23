@@ -45,12 +45,7 @@ QUESTIONS = [
             <li>which business case route you need to follow</li>
             <li>what approvals may be required</li>
         </ul>
-        <p>The total value should include all expected costs over the lifetime of the proposal, including:</p>
-        <ul class="govuk-list govuk-list--bullet">
-            <li>whether you need a business case</li>
-            <li>which business case route you need to follow</li>
-            <li>what approvals may be required</li>
-        </ul>
+        <p>The total value should include all expected costs over the lifetime of the proposal.</p>
         <p>Speak to your Finance Business Partner (FBP) or a Commercial colleague before continuing.</p>
         <p>If you're not sure who to contact, visit the <a class="govuk-link" href="{external_links('').get("links", {}).get("business_cases", "")}" target="_blank" rel="noopener noreferrer">Project Delivery Hub</a> to find the right Subject Matter Expert (SME) for advice and support.</p>
         """,
@@ -141,7 +136,7 @@ QUESTIONS = [
             </ul>
 
             <p><strong>Not sure?</strong></p>
-            <p>Speak to your <a class="govuk-link" href="{external_links('').get("links", {}).get("subject_matter_expert_assurance", "")}" target="_blank" rel="noopener noreferrer">Finance Business Partner (FBP) or a Commercial colleague</a> before continuing.</p>
+            <p>Speak to your <a class="govuk-link" href="{external_links('').get("links", {}).get("subject_matter_expert_assurance", "")}" target="_blank" rel="noopener noreferrer">Finance Business Partner (FBP)</a>, a Commercial colleague or the project or programme owner before continuing.</p>
             """
     },
     {
@@ -337,12 +332,11 @@ QUESTIONS = [
     },
     {
         "slug": where_is_the_budget_held,
-        "title": "Where is the budget held?",
+        "title": "Which directorate holds the budget?",
         "type": "select",
         "hint": Markup(
-            '<div class="govuk-inset-text"><p>Select the directorate that holds the budget and is financially accountable for this spend.</p></div>'
+            '<div class="govuk-inset-text">Select the directorate that is responsible for the budget and accountable for this spend.</div>'
         ),
-        "help_text": "This information does not influence the type of business case template you need, but it does help us to understand how many business cases are in development and how we make improvements to this service.",
         "choices": [
             ("Analysis and Data", "Analysis and Data"),
             ("Building Design and Construction", "Building Design and Construction"),
@@ -398,6 +392,12 @@ QUESTIONS = [
             ("Resettlement", "Resettlement"),
             ("Social Housing", "Social Housing"),
         ],
+        "help_text": """
+            <p>We ask this so we can identify the teams responsible for funding and approving the proposal.</p>
+            <p>This information helps ensure the right people are involved as the business case progresses.</p>
+            <p><strong>Not sure?</strong></p>
+            <p>If you're unsure which directorate holds the budget, speak to your Finance Business Partner (FBP), budget holder, or line manager before continuing.</p>
+        """
     },
     {
         "slug": give_your_bjc_a_title,
