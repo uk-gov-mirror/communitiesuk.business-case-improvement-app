@@ -12,7 +12,7 @@ def external_links(request):
             "digital_front_door": "https://intranet.communities.gov.uk/find-teams/digital-front-door/",
             "feedback_survey": "https://forms.office.com.mcas.ms/Pages/ResponsePage.aspx?id=EGg0v32c3kOociSi7zmVqGAkEPlcQ5NPoeljmLYYJyNURUZXSldLN1dENU1VWjFGWEU0VEJRUVI4Ni4u",
             "full_business_case_template": "https://mhclg.sharepoint.com.mcas.ms/:w:/r/sites/ProjectDeliveryNetwork/_layouts/15/Doc.aspx?sourcedoc=%7BED164C68-A84D-491E-A7BE-5408B486FC40%7D&file=Full%20Business%20Case%20%5Btemplate%20ver.%202.8%5D.docx&action=default&mobileredirect=true",
-            "isc_secretariat_email": "ISCSecretariat@communities.gov.uk",
+            "isc_secretariat_email": "mailto:ISCSecretariat@communities.gov.uk",
             "digital_business_case_email": "mailto:digitalbusinesscase@communities.gov.uk",
             "procurement_grant_guidance": "https://mhclg.sharepoint.com.mcas.ms/:w:/s/ProjectDeliveryNetwork/IQDAf9MAU0gHS6zhpYksvCZ7Ad0j_RIviCXp8FOiN4yuD_s?e=mCSYTt",
             "template_library": "https://mhclg.sharepoint.com.mcas.ms/sites/ProjectDeliveryNetwork/SitePages/Template-l.aspx",
