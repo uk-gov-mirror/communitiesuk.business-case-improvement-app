@@ -1,0 +1,33 @@
+{% extends "layouts/base_layout.html" %}
+
+{% block content %}
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            {% block main_content %}{% endblock %}
+        </div>
+
+        <div class="govuk-grid-column-one-third">
+            {% block timeline %}
+                {% from "components/macros.html" import hmrcTimeline %}
+                <div class="timeline-compact">
+                    {{ hmrcTimeline({
+                        "header": "The process",
+                        "headingLevel": "2",
+                        "events": [
+                            { "title": 
+                                "Establish the need for a business case" },
+                            { "title":
+                                "Download business case template" },
+                            { "title":
+                                "Draft in Word" },
+                            { "title": 
+                                "Seek approvals outside this service" },
+                            { "title":
+                                "Upload approved business case in the service for central logging" }
+                        ]
+                    }) }}
+                </div>
+            {% endblock %}
+        </div>
+    </div>
+{% endblock %}

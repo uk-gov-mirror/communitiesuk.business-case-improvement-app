@@ -44,6 +44,11 @@
 {% endmacro %}
 
 {% macro hmrcTimeline(params) %}
+{% if params.header %}
+    <h2 class="govuk-heading-m" style="margin-top: 5px; margin-bottom: 8px;">
+        {{ params.header }}
+    </h2>
+{% endif %}
 <ol class="hmrc-timeline">
     {% for event in params.events %}
     <li class="hmrc-timeline__event">
