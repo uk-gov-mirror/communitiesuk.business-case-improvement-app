@@ -336,3 +336,99 @@ Import and call the macro at the top of your template:
 {{ govuk_button("Continue", classes="govuk-button--secondary") }}
 ```
 
+* * *
+
+## Deployment
+
+The application is deployed to three AWS environments. Each has its own AWS account, ECR repository and ECS service. Deployments are run by GitHub Actions; you shouldn't need to push images or update services by hand.
+
+| Environment | GitHub environment | How it's deployed                    | What can be deployed           | Approval needed |
+|-------------|--------------------|--------------------------------------|--------------------------------|-----------------|
+| Dev         | `aws-dev`          | Manually, from the Actions tab       | Any branch, tag or commit      | No              |
+| Test        | `aws-test`         | Automatically on every merge to `main` (or manually) | `main`, or any ref if run manually | No |
+| Production  | `aws-prod`         | Manually, from a release tag         | Published releases only        | **Yes**         |
+
+Every deployment runs the full test suite first. If the tests fail, nothing is deployed.
+
+### Branches and pull requests
+
+Work happens on a branch named after the ticket, e.g. `DPI-123-add-login`. When it's ready, open a pull request into `main`.
+
+- Tests run automatically on every pull request.
+- **A pull request can't be merged until the tests pass.** Direct pushes to `main` are blocked.
+- Merging into `main` deploys to Test automatically.
+
+### Deploying to Dev
+
+Use Dev to try out a branch in a deployed environment before (or during) review.
+
+1. Push your branch to GitHub.
+2. Go to **Actions → Deploy to Dev → Run workflow**.
+3. Enter your branch name (or a tag or commit SHA) and click **Run workflow**.
+
+> **Dev is shared.** Whoever deploys last wins. Let the team know in the Slack channel or Teams Chat before deploying your branch, so you don't overwrite someone else's testing.
+
+### Deploying to Test
+
+Test always gets the latest `main` automatically when a pull request is merged. You don't need to do anything.
+
+To put a different version on Test (for example, to check an older release), go to **Actions → Deploy to Test → Run workflow** and enter the branch, tag or commit SHA. The next merge to `main` will replace it.
+
+### Releasing to Production
+
+Production is only ever deployed from a published GitHub Release, and every deployment must be approved.
+
+**1. Check Test.** Make sure the version currently on Test (the latest `main`) is the one you want to release.
+
+**2. Create a release.**
+
+1. Go to **Releases → Draft a new release**.
+2. Click **Choose a tag** and type a new version number, e.g. `v1.3.0`. Set the target to `main`.
+3. Click **Generate release notes** and edit them if needed.
+4. Click **Publish release**. This does **not** deploy anything on its own.
+
+We use [semantic versioning](https://semver.org/):
+
+**3. Start the deployment.**
+
+1. Go to **Actions → Deploy to Production → Run workflow**.
+2. In the **Use workflow from** dropdown, switch to the **Tags** tab and choose your release, e.g. `v1.0.0`. Don't choose a branch; the workflow will reject it.
+3. Click **Run workflow**.
+
+The workflow checks that the tag is a published release (not a draft or pre-release), then runs the tests.
+
+**4. Get it approved.** Once the tests pass, the run pauses with **Waiting for review**. One of the required reviewers opens the run, clicks **Review deployments**, ticks `aws-prod` and clicks **Approve and deploy**. You should not approve your own deployment.
+
+The run summary shows the version, commit and image deployed.
+
+### Rolling back Production
+
+Run **Deploy to Production** again and choose the previous release tag in the **Use workflow from** dropdown. It goes through tests and approval like any other deployment.
+
+> Only tags created after the current deployment workflows were added can be deployed this way, because the workflow file has to exist at that tag.
+
+### Notifications
+- Production reviewers are notified by GitHub when a deployment is waiting for their approval.
+
+### Troubleshooting
+
+| Symptom                                                  | Likely cause                                                                                   |
+|----------------------------------------------------------|------------------------------------------------------------------------------------------------|
+| Merge button is disabled on a pull request               | Tests are failing or still running, or the branch is behind `main` and needs updating          |
+| Production run fails with "Select a release tag"         | The workflow was run from a branch; choose the tag in **Use workflow from**                     |
+| Production run fails with "No published GitHub Release"  | The tag exists but no release was published for it, or the release is still a draft            |
+| Production run fails with "is marked as a pre-release"   | Edit the release and untick **Set as a pre-release**                                            |
+| Fails at **Configure AWS credentials**                   | The IAM role's trust policy doesn't allow this GitHub environment; check the role in that account |
+| Stuck on **Wait until ECS service stable**               | New tasks are failing to start; check the ECS service events and container logs in CloudWatch  |
+
+### Pipeline reference (for maintainers)
+
+| Workflow file                          | Purpose                                                                     |
+|----------------------------------------|-----------------------------------------------------------------------------|
+| `.github/workflows/test.yml`           | Runs tests on pull requests; also called by every deploy workflow           |
+| `.github/workflows/deploy-dev.yml`     | Manual deploy of any ref to Dev                                             |
+| `.github/workflows/deploy-test.yml`    | Deploys `main` to Test on merge; can also be run manually                   |
+| `.github/workflows/deploy-prod.yml`    | Manual deploy of a release tag to Production                                |
+| `.github/workflows/_deploy.yml`        | Shared build, push and ECS deploy steps (not run directly)                  |
+
+Each GitHub environment (`aws-dev`, `aws-test`, `aws-prod`) holds its own `AWS_ROLE_TO_ASSUME`, `ECR_REPOSITORY`, `ECS_CLUSTER` and `ECS_SERVICE` secrets and an `AWS_REGION` variable. Production approvers are managed under **Settings → Environments → aws-prod → Required reviewers**.

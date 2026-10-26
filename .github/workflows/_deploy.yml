@@ -1,0 +1,105 @@
+name: Deploy (reusable)
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        description: GitHub Environment name (aws-dev, aws-test, aws-prod)
+        required: true
+        type: string
+      ref:
+        description: Branch, tag or commit SHA to deploy
+        required: true
+        type: string
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    name: Deploy ${{ inputs.ref }} to ${{ inputs.environment }}
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    concurrency:
+      group: deploy-${{ inputs.environment }}
+      cancel-in-progress: false
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd  # v6.0.2
+        with:
+          ref: ${{ inputs.ref }}
+
+      - name: Compute image metadata
+        id: meta
+        run: |
+          echo "sha=$(git rev-parse --short=12 HEAD)" >> "$GITHUB_OUTPUT"
+          echo "full_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          echo "timestamp=$(date -u +'%Y-%m-%d-%H-%M-%S')" >> "$GITHUB_OUTPUT"
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@8df5847569e6427dd6c4fb1cf565c83acfa8afa7 # v6.0.0
+        with:
+          aws-region: ${{ vars.AWS_REGION }}
+          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+          role-session-name: Deploy-${{ inputs.environment }}-${{ github.run_id }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@183a1442edf41672e66566b7fc560e297a290896  # v2.1.1
+
+      - name: Build, tag, and push image to Amazon ECR
+        id: build-image
+        env:
+          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          REPOSITORY: ${{ secrets.ECR_REPOSITORY }}
+          SHA: ${{ steps.meta.outputs.sha }}
+          FULL_SHA: ${{ steps.meta.outputs.full_sha }}
+          TIMESTAMP: ${{ steps.meta.outputs.timestamp }}
+          REF: ${{ inputs.ref }}
+        run: |
+          IMAGE="$REGISTRY/$REPOSITORY"
+          docker build -f Dockerfile \
+            -t "$IMAGE:$SHA" \
+            -t "$IMAGE:$TIMESTAMP" \
+            -t "$IMAGE:latest" \
+            --label "org.opencontainers.image.revision=$FULL_SHA" \
+            --label "org.opencontainers.image.version=$REF" \
+            .
+          docker push --all-tags "$IMAGE"
+          echo "image=$IMAGE:$SHA" >> "$GITHUB_OUTPUT"
+
+      - name: Force deployment
+        env:
+          CLUSTER: ${{ secrets.ECS_CLUSTER }}
+          SERVICE: ${{ secrets.ECS_SERVICE }}
+        run: |
+          aws ecs update-service \
+            --cluster "$CLUSTER" \
+            --service "$SERVICE" \
+            --force-new-deployment > /dev/null
+
+      - name: Wait until ECS service stable
+        env:
+          CLUSTER: ${{ secrets.ECS_CLUSTER }}
+          SERVICE: ${{ secrets.ECS_SERVICE }}
+        run: |
+          aws ecs wait services-stable --cluster "$CLUSTER" --services "$SERVICE"
+
+      - name: Summary
+        env:
+          ENVIRONMENT: ${{ inputs.environment }}
+          REF: ${{ inputs.ref }}
+          SHA: ${{ steps.meta.outputs.sha }}
+          IMAGE: ${{ steps.build-image.outputs.image }}
+        run: |
+          {
+            echo "### Deployed to \`$ENVIRONMENT\`"
+            echo "- Ref: \`$REF\`"
+            echo "- Commit: \`$SHA\`"
+            echo "- Image: \`$IMAGE\`"
+          } >> "$GITHUB_STEP_SUMMARY"
+           

@@ -1,0 +1,29 @@
+name: Deploy to Dev
+run-name: Deploy ${{ inputs.ref }} to Dev (by @${{ github.actor }})
+
+on:
+  workflow_dispatch:
+    inputs:
+      ref:
+        description: Branch, tag or commit SHA to deploy (e.g. your ticket branch)
+        required: true
+        type: string
+        default: main
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  test:
+    uses: ./.github/workflows/test.yml
+    with:
+      ref: ${{ inputs.ref }}
+
+  deploy:
+    needs: test
+    uses: ./.github/workflows/_deploy.yml
+    with:
+      environment: aws-dev
+      ref: ${{ inputs.ref }}
+    secrets: inherit

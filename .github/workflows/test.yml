@@ -1,18 +1,28 @@
 name: Tests
 
 on:
-  push:
-    branches: [main, develop]
   pull_request:
-    branches: [main]
+  workflow_call:
+    inputs:
+      ref:
+        required: false
+        type: string
+        default: ''
+
+concurrency:
+  group: tests-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: true
 
 jobs:
   test:
+    name: test
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+        with: 
+          ref: ${{ inputs.ref }}
 
       - name: Set up Python
         uses: actions/setup-python@v5
