@@ -303,7 +303,7 @@ QUESTIONS = [
         "title": "Is your proposal novel, contentious, sets precedent, repercussive or requires HM Treasury consent because of legislation?",
         "type": "radio",
         "hint": '<div class="govuk-inset-text">This includes proposals that are new, high risk, likely to attract challenge or may require approval from HM Treasury.</div>',
-        "help_text": """<p><b>Does your proposal involve anything unusual, sensitive or likely to need additional approval?</b>
+        "help_text": f"""<p><b>Does your proposal involve anything unusual, sensitive or likely to need additional approval?</b>
         <p>We ask this because some proposals need additional review and approval before they can proceed. This includes proposals that are unusual, sensitive, high risk, or have wider implications beyond the project.</p>
 
         <p><b>What do these terms mean?</b></p>
@@ -321,7 +321,7 @@ QUESTIONS = [
         <p><b>Not sure?</b></p>
         <p>
             If you're unsure, speak to your Finance Business Partner (FBP) or contact the <a
-            class="govuk-link" href="mailto:ISCSecretariat@communities.gov.uk">
+            class="govuk-link" href="{external_links('').get("links", {}).get("isc_secretariat_email", "")}">
             Investment Sub-Committee (ISC) Secretariat</a> for advice. It's common to need support with this question.
         </p>""",
             "choices": [

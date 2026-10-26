@@ -56,7 +56,7 @@
             Delivery Hub</a>
         to identify the stage your proposal has reached.
     </li>
-    <li>If you're still unsure, contact the <a class='govuk-link' href='mailto:{{external_links.isc_secretariat_email}}'
+    <li>If you're still unsure, contact the <a class='govuk-link' href='{{external_links.isc_secretariat_email}}'
             target='_blank' rel='noopener noreferrer'>Investment Sub-Committee (ISC) Secretariat</a>.
         They can help you identify the correct starting template and explain the approval process.</li>
 </ul>
@@ -139,7 +139,7 @@
         "html": "<div class='govuk-details__text'>
             <h3 class='govuk-heading-s'>You need to go to Investment Sub-Committee (ISC).</h3>
             <p class='govuk-body'>Contact the <a class='govuk-link'
-                    href='mailto:{{external_links.isc_secretariat_email}}' target='_blank' rel='noopener noreferrer'>ISC
+                    href='" + external_links.isc_secretariat_email + "' target='_blank' rel='noopener noreferrer'>ISC
                     Secretariat</a>
                 to arrange an ISC slot.</p>
             <p class='govuk-body govuk-!-margin-bottom-2'>HM Treasury approval is also required if:</p>
@@ -208,6 +208,10 @@
         "html": "<div class='govuk-details__text'>
             <h3 class='govuk-heading-s'>You can go directly to your Senior Responsible Owner (SRO).</h3>
             <p class='govuk-body'>HM Treasury not required.</p>
+            <h3 class='govuk-heading-s'>Not sure?</h3>
+            <p class='govuk-body'>Contact your <a class='govuk-link'
+                    href='" + external_links.subject_matter_expert_assurance + "' target='_blank'
+                    rel='noopener noreferrer'>Finance Business Partner.</a></p>
         </div>"
         }
         }
