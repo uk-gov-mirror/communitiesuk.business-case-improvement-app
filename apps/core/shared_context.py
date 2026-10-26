@@ -4,6 +4,7 @@ def external_links(request):
             "business_justification_case_guidance": "https://mhclg.sharepoint.com/sites/ProjectDeliveryNetwork/SitePages/Business-Justification-Cases.aspx",
             "finance_knowledge_centre": "https://mhclg.sharepoint.com/sites/FinanceKnowledgeCentre",
             "project_delivery_hub": "https://mhclg.sharepoint.com.mcas.ms/sites/ProjectDeliveryNetwork/SitePages/Project-Delivery-HUB.aspx",
+            "project_delivery_hub_business_cases": "https://mhclg.sharepoint.com.mcas.ms/sites/ProjectDeliveryNetwork/SitePages/Business-cases.aspx?CT=1764606371897&OR=Teams-HL&clickparams=REMOVED&xsdata=REMOVED&ovuser=REMOVED&sdata=REMOVED&SafelinksUrl=https%3a%2f%2fmhclg.sharepoint.com%2fsites%2fProjectDeliveryNetwork%2fSitePages%2fBusiness-cases.aspx",
             "finance_business_partner_email": "fbp@communities.gov.uk",
             "p2p": "https://mhclg.sharepoint.com.mcas.ms/sites/FinanceKnowledgeCentre/SitePages/Purchase-to-Pay-(P2P).aspx",
             "speak_to_the_team": "https://intranet.communities.gov.uk/guidance/procurement-and-grants/procurement/buying-consultancy-and-professional-services/",
