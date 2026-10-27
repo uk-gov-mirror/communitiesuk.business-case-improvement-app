@@ -77,6 +77,19 @@ def test_case_detail_shows_business_case_name(client, business_case):
     assert business_case.name in response.content.decode()
 
 
+def test_case_detail_accepts_legacy_numeric_id(client, db):
+    triage_response = BusinessCaseTriageResponse.objects.create(session_key="legacy")
+    business_case = BusinessCase.objects.create(
+        id="123", business_case_triage_response=triage_response, name="Legacy case"
+    )
+
+    response = client.get(reverse("case-detail", kwargs={"pk": business_case.pk}))
+
+    assert response.status_code == 200
+    assert "Case reference number: 123" in response.content.decode()
+    assert business_case.name in response.content.decode()
+
+
 def test_case_detail_shows_type_status_and_reference_number(client, business_case):
     response = client.get(reverse("case-detail", kwargs={"pk": business_case.pk}))
     content = response.content.decode()

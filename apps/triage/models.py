@@ -1,6 +1,15 @@
+from string import ascii_uppercase, digits
+
 from django.db import models
 from django.utils import timezone
+from django.utils.crypto import get_random_string
+
 from .flow import get_first_question_slug, get_next
+
+
+def generate_business_case_id() -> str:
+    return get_random_string(10, allowed_chars=ascii_uppercase + digits)
+
 
 class BusinessCaseTriageResponse(models.Model):
     """
@@ -62,6 +71,12 @@ class BusinessCase(models.Model):
         UPLOADED = "Uploaded", "Uploaded"
         WITHDRAWN = "Withdrawn", "Withdrawn"
 
+    id = models.CharField(
+        primary_key=True,
+        max_length=10,
+        default=generate_business_case_id,
+        editable=False,
+    )
     name = models.CharField(max_length=255, blank=True, default="")
     directorate = models.CharField(max_length=255, blank=True, default="")
     type = models.CharField(max_length=255, blank=True, default="")

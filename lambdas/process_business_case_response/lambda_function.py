@@ -17,7 +17,7 @@ from config.aws import get_s3_client  # noqa: E402
 # Matches the naming convention written by apps/core/views.py:
 # response_{business_case_id}_{version}_{business_case_response_id}_{timestamp}.{ext}
 FILENAME_PATTERN = re.compile(
-    r"^response_\d+_\d+_(?P<business_case_response_id>\d+)_\d+\.\w+$"
+    r"^response_(?:[A-Z0-9]{10}|\d+)_\d+_(?P<business_case_response_id>\d+)_\d+\.\w+$"
 )
 
 
