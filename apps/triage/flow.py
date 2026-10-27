@@ -351,7 +351,7 @@ QUESTIONS = [
                 "Departmental Strategy & Governance",
             ),
             ("Deputy Prime Minister's Data Unit", "Deputy Prime Minister's Data Unit"),
-            (AnswerConstants.DIGITAL_STRING, AnswerConstants.DIGITAL_STRING.value),
+            (AnswerConstants.DIGITAL_STRING.value, AnswerConstants.DIGITAL_STRING.value),
             ("Digital Process Improvement", "Digital Process Improvement"),
             ("Elections Directorate", "Elections Directorate"),
             ("Executive Team", "Executive Team"),
@@ -820,6 +820,7 @@ ROUTING = {
 BUSINESS_CASE_EXIT_SCREEN_TYPES = {
     "exit-to-download-template-for-general-something-else": "General",
     "exit-to-download-template-procurement-route": "Procurement",
+    "digital-exit-for-procurement-route": "Digital budget - procurement",
     "exit-to-download-template-grant-route": "Grant",
     "exit-to-download-template-corporate-spend-fbp-route": "Corporate Spend FBP",
     "exit-to-download-template-hrbp-contingent-labour-route": "HRBP Contingent Labour",
