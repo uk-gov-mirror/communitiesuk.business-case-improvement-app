@@ -25,5 +25,6 @@ def external_links(request):
             "grants_hub" : "https://mhclg.sharepoint.com.mcas.ms/sites/GrantsCommunityHub",
             "digital_front_door_email" : "mailto:DigitalFrontDoor@communities.gov.uk",
             "feedback_form" : "https://mcas-proxyweb.mcas.ms/certificate-checker?login=false&originalUrl=https%3A%2F%2Fforms.cloud.microsoft.mcas.ms%2Fe%2FGsGYMBgyY3%3FMcasTsid%3D20596&McasCSRF=REMOVED",
+            "report_problem_form" : "https://forms.cloud.microsoft.mcas.ms/pages/responsepage.aspx?id=EGg0v32c3kOociSi7zmVqJmVEcirk-lMg6YXuC6nwfVUNTI3U0NTWU5XN1AwWFJUN0JCVkhMSzZTRC4u&route=shorturl",
         }
     }

@@ -180,3 +180,8 @@
   padding-top: 0;
   padding-bottom: 0;
 }
+
+.report-problem-banner {
+  background-color: #f1f6fb;
+  border-top: 1px solid #1D6FB8;
+}
