@@ -156,8 +156,7 @@ def result(request, slug):
                     {"error": f"No saved answers found."}
                 )
             
-            case_type = request.session.get("business_case_type")
-            file_prefix = slugify(case_type) if case_type else slug
+            file_prefix = request.session["business_case_title"]
             filename = f"{file_prefix}_template.docx"
 
             orc = WordDocumentOrchestrator(answers)
