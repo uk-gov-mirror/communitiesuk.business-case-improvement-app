@@ -241,12 +241,54 @@ QUESTIONS = [
     },
     {
         "slug": are_you_procuring_consulting_and_professional_services,
+        "hint": Markup('<div class="govuk-inset-text">'
+                       '<p class="govuk-body">Consultancy and professional services require additional approvals</p>'
+                        '<p class="govuk-body">If you need temporary staff to work as part of your team, you may need to speak to your HR Business Partner about contingent labour.</p>'
+            '</div>'),
         "title": "Are you procuring Consulting & Professional services?",
         "type": "radio",
         "choices": [
             ("yes", "Yes"),
             ("no", "No")
-        ]
+        ],
+        "help_title": "What do these terms mean?",
+        "help_text": """<p class="govuk-body"><strong>Contingent labour</strong></p>
+            <p class="govuk-body">Choose the contingent labour route if you need temporary people to work as part of your team and fill a resource or capacity gap.</p>
+            <p class="govuk-body">Examples include:</p>
+            <ul class="govuk-list govuk-list--bullet">
+                <li>maternity cover</li>
+                <li>temporary project support</li>
+                <li>additional administrative support</li>
+                <li>interim staff</li>
+            </ul>
+            <p class="govuk-body"><strong>Consultancy</strong></p>
+            <p class="govuk-body">Choose consultancy if you need external advice, expertise or recommendations to help inform decisions.</p>
+            <p class="govuk-body">Examples include:</p>
+            <ul class="govuk-list govuk-list--bullet">
+                <li>strategic planning</li>
+                <li>organisational change</li>
+                <li>market analysis</li>
+                <li>specialist policy advice</li>
+            </ul>
+
+
+            <p class="govuk-body"><strong>Professional services</strong></p>
+            <p class="govuk-body">Choose professional services if you need a supplier to carry out specialist work or deliver a specific outcome.</p>
+            <p class="govuk-body">Examples include:</p>
+            <ul class="govuk-list govuk-list--bullet">
+                <li>software development</li>
+                <li>cyber security services</li>
+                <li>systems integration</li>
+                <li>architecture, engineering or data science services</li>
+            </ul>
+
+            <p class="govuk-body"><strong>A simple way to tell the difference:</strong></p>
+            <p class="govuk-body"><strong>Contingent labour</strong> fills a temporary resource gap.</p>
+            <p class="govuk-body"><strong>Consultancy provides</strong> advice and expertise.</p>
+            <p class="govuk-body"><strong>Professional services</strong> delivers specialist work or outcomes.</p>
+            <p class="govuk-body"><strong>Not sure?</strong></p>
+            <p class="govuk-body">Speak to your Finance Business Partner (FBP), a Commercial colleague or the HR Business Partner (HRBP) team before continuing.</p>
+        """
     },
     {
         "slug": we_want_to_continue_improving_our_service,
