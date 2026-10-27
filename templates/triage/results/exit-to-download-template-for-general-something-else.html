@@ -1,7 +1,10 @@
 {% extends "layouts/timeline_layout.html" %}
 {% from "govuk_frontend_jinja/templates/components/accordion/macro.html" import govukAccordion %}
+{% from "components/exit_page_header.html" import exit_page_header %}
 
 {% block main_content %}
+    {{ exit_page_header(request.session.business_case_type, request.session.business_case_title, request.session.business_case_id) }}
+
     <h2 class="govuk-heading-m">Download your business case template</h2>
 
     <p class="govuk-body">Use this Word document to draft your business case</p>
@@ -115,8 +118,7 @@
             </h2>
         </div>
         <div id="accordion-default-content-1" class="govuk-accordion__section-content">
-            <p class="govuk-body">After receiving assurance sign-off from your Lead SME and Finance Business Partner
-                (FBP), you will need approval from your Senior Responsible Owner (SRO) or Senior Civil Servant (SCS).</p>
+            <p class="govuk-body">After receiving assurance sign-off from your Finance Business Partner (FBP) and any additional Subject Matter Experts (SMEs), you will need approval from your Senior Responsible Owner (SRO) or Senior Civil Servant (SCS).</p>
 
             <h3 class="govuk-heading-s">Additional approvals</h3>
 

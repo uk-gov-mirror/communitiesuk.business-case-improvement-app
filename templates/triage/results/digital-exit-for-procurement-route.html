@@ -1,12 +1,9 @@
 {% extends "layouts/timeline_layout.html" %}
 {% from "govuk_frontend_jinja/templates/components/accordion/macro.html" import govukAccordion %}
+{% from "components/exit_page_header.html" import exit_page_header %}
 
 {% block main_content %}
-    {% if request.session.business_case_title %}
-        <h1 class='govuk-heading-l'>{{ request.session.business_case_title }}</h1>
-    {% else %}
-        <h1 class='govuk-heading-l'>--- Business Case Title Placeholder ---</h1>
-    {% endif %}
+    {{ exit_page_header(request.session.business_case_type, request.session.business_case_title, request.session.business_case_id) }}
 
     <h2 class='govuk-heading-m'>Download your business case template</h2>
 

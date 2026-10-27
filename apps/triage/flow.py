@@ -818,6 +818,7 @@ ROUTING = {
 
 
 BUSINESS_CASE_EXIT_SCREEN_TYPES = {
+    "exit-to-download-template-for-general-something-else": "General",
     "exit-to-download-template-procurement-route": "Procurement",
     "exit-to-download-template-grant-route": "Grant",
     "exit-to-download-template-corporate-spend-fbp-route": "Corporate Spend FBP",

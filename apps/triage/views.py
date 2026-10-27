@@ -114,7 +114,7 @@ def question(request, slug: str):
             business_case_name = triage_session.answers.get(give_your_bjc_a_title, "")
             business_case_type = get_business_case_type_from_result_slug(result_slug, "")
             if business_case_type != "":
-                BusinessCase.objects.get_or_create(
+                bc, _  = BusinessCase.objects.get_or_create(
                     business_case_triage_response=triage_session,
                     defaults={
                         "name": business_case_name,
@@ -125,6 +125,8 @@ def question(request, slug: str):
                         "status": "Active",
                     },
                 )
+
+                request.session["business_case_id"] = bc.id
 
             request.session["business_case_title"] = business_case_name
             request.session["answers"] = triage_session.answers

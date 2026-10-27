@@ -1,14 +1,10 @@
 {% extends "layouts/timeline_layout.html" %}
 
+{% from "components/exit_page_header.html" import exit_page_header %}
+
 {% block main_content %}
 
-<span class="govuk-caption-l govuk-!-padding-bottom-2">Business Justification Case: Grants</span>
-{% if request.session.business_case_title %}
-<h1 class="govuk-heading-l">{{ request.session.business_case_title }}</h1>
-{% else %}
-<h1 class="govuk-heading-l">--- Business Case Title Placeholder ---</h1>
-{% endif %}
-<p class="govuk-body-s govuk-!-margin-bottom-0">Case reference number:</p>
+{{ exit_page_header(request.session.business_case_type, request.session.business_case_title, request.session.business_case_id) }}
 
 <hr class="govuk-section-break govuk-section-break--l govuk-section-break--visible">
 

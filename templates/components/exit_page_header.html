@@ -1,0 +1,16 @@
+{% macro exit_page_header(case_type, case_title, case_ref = "0") %}
+    <div>
+        <span class="govuk-caption-m govuk-!-padding-bottom-2">Business Justification Case: {{case_type}}</span>
+
+        {% if case_title %}
+            <h1 class="govuk-heading-l" style="margin-bottom: 10px; padding: 0px;">{{case_title}}</h1>
+        {% else %}
+            <h1 class="govuk-heading-l">--- Business Case Title Placeholder ---</h1>
+        {% endif %}
+
+        <p class="govuk-body" style="color: gray; font-size: 15px;">Case reference number: {{case_ref}}</p>
+    </div>
+
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" style="margin: 25px 0">
+
+{% endmacro %}
