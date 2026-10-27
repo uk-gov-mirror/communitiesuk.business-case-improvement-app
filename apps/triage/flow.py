@@ -240,12 +240,12 @@ QUESTIONS = [
         ]
     },
     {
-        "slug": are_you_procuring_consulting_and_professional_services,
+        "slug": are_you_buying_consultancy_or_professional_services,
         "hint": Markup('<div class="govuk-inset-text">'
                        '<p class="govuk-body">Consultancy and professional services require additional approvals</p>'
                         '<p class="govuk-body">If you need temporary staff to work as part of your team, you may need to speak to your HR Business Partner about contingent labour.</p>'
             '</div>'),
-        "title": "Are you procuring Consulting & Professional services?",
+        "title": "Are you buying consultancy or professional services?",
         "type": "radio",
         "choices": [
             ("yes", "Yes"),
@@ -841,9 +841,9 @@ ROUTING = {
     (hire_contracted_workers_to_fill_temporary_capacity_gap_notice, "yes"): give_your_bjc_a_title,
     (hire_contracted_workers_to_fill_temporary_capacity_gap_notice, "no"): are_you_procuring_consulting_and_professional_services_notice,
     (which_best_describes_your_spend, spend_on_corporate_activities): give_your_bjc_a_title,
-    (which_best_describes_your_spend, procuring_something_else): are_you_procuring_consulting_and_professional_services,
-    (are_you_procuring_consulting_and_professional_services, "no"): we_want_to_continue_improving_our_service,
-    (are_you_procuring_consulting_and_professional_services, "yes"): are_you_procuring_consulting_and_professional_services_notice,
+    (which_best_describes_your_spend, procuring_something_else): are_you_buying_consultancy_or_professional_services,
+    (are_you_buying_consultancy_or_professional_services, "no"): we_want_to_continue_improving_our_service,
+    (are_you_buying_consultancy_or_professional_services, "yes"): are_you_procuring_consulting_and_professional_services_notice,
     (are_you_procuring_consulting_and_professional_services_notice, "*"): we_want_to_continue_improving_our_service,
     (we_want_to_continue_improving_our_service, "*"): give_your_bjc_a_title,
     (give_your_bjc_a_title, "*"): provide_a_high_level_summary,
