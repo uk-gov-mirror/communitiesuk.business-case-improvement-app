@@ -30,12 +30,4 @@ jobs:
       environment: aws-test
       ref: ${{ inputs.ref || github.sha }}
     secrets: inherit
-
-  notify:
-    needs: [test, deploy]
-    if: ${{ failure() }}
-    uses: ./.github/workflows/_notify.yml
-    with:
-      title: Deploy to Test failed
-      ref: ${{ inputs.ref || github.sha }}
-    secrets: inherit
+    
