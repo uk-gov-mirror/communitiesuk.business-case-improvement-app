@@ -1,7 +1,9 @@
 name: Deploy to Test
-run-name: Deploy ${{ inputs.ref }} to Test (by @${{ github.actor }})
+run-name: Deploy ${{ inputs.ref || github.ref_name }} to Test (by @${{ github.actor }})
 
 on:
+  push:
+    branches: [main]
   workflow_dispatch:
     inputs:
       ref:
@@ -18,12 +20,22 @@ jobs:
   test:
     uses: ./.github/workflows/test.yml
     with:
-      ref: ${{ inputs.ref }}
+      ref: ${{ inputs.ref || github.sha }}
 
   deploy:
     needs: test
+    if: ${{ github.triggering_actor != 'dependabot[bot]' }}
     uses: ./.github/workflows/_deploy.yml
     with:
       environment: aws-test
-      ref: ${{ inputs.ref }}
+      ref: ${{ inputs.ref || github.sha }}
+    secrets: inherit
+
+  notify:
+    needs: [test, deploy]
+    if: ${{ failure() }}
+    uses: ./.github/workflows/_notify.yml
+    with:
+      title: Deploy to Test failed
+      ref: ${{ inputs.ref || github.sha }}
     secrets: inherit
